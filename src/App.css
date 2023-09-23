@@ -14,14 +14,14 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #eaecf9;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .App-link {
@@ -34,5 +34,123 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.title {
+  font-size: 35px;
+  margin: 50px 0;
+  /*animation: rainbow 5s linear infinite;*/
+  font-weight: bold;
+}
+
+.login {
+  position: absolute;
+  font-size: 20px;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}
+
+.box-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-color: #ffffff;
+  border: 1px solid #bdbdbd;
+  border-radius: 25px;
+  padding: 50px;
+}
+
+.box h2 {
+  font-size: 18pt; /* Set the font size for the titles */
+  margin: 10px 0;
+}
+
+.box p {
+  font-size: 12pt; /* Set the font size for the titles */
+  margin: 5px 0;
+}
+
+.box button {
+  font-size: 12pt; /* Set the font size for the titles */
+  padding: 6px 45px; /* Adjust padding to change button size */
+  margin-top: 10px;
+  margin-bottom: 5px;
+  color: #000000;
+  border: 1px solid #000000;
+  background-color: #ffffff; /* Button background color */
+  border-radius: 10px;
+}
+
+.box button:hover {
+  background-color: #c4c4c4; /* Button color on hover */
+}
+
+.box {
+  width: 180px;
+  padding: 20px;
+  border: 2px solid #000000;
+  background-color: #eaecf9;
+  color: #000000;
+  margin: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px; /* Rounded edges for the boxes */
+}
+
+.centered-button {
+  margin-top: 25px; /* Add space between boxes and the new button */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+}
+
+.large-button {
+  font-size: 16px; /* Increase font size for the large button */
+  padding: 12px 24px; /* Adjust padding for larger size */
+  background-color: #ffffff; /* Button background color */
+  color: #000000; /* Button text color */
+  border: 1px solid #000000;
+  cursor: default;
+  border-radius: 50px; /* Rounded edges for the boxes */
+}
+
+.large-button:hover {
+  background-color: #c4c4c4; /* Button color on hover */
+}
+
+.bottom-right-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 10px;
+}
+
+@keyframes rainbow {
+  0% {
+    color: #ff0000; /* Red */
+  }
+  14% {
+    color: #ff8000; /* Orange */
+  }
+  28% {
+    color: #ffff00; /* Yellow */
+  }
+  42% {
+    color: #00ff00; /* Green */
+  }
+  57% {
+    color: #0000ff; /* Blue */
+  }
+  71% {
+    color: #8000ff; /* Indigo */
+  }
+  85% {
+    color: #ff00ff; /* Violet */
+  }
+  100% {
+    color: #ff0000; /* Red */
   }
 }

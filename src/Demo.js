@@ -42,7 +42,41 @@ export const Demo = () => {
 
     // <button onClick={() => {addDevice()}}>Add Device</button>
     return (
-        <div>
+        <div className="App">
+            <div className="title">Cyber Savants Device Test Tracker</div>
+            <div className="login">Welcome, Cyber Savants.</div>
+            <div className="box-container">
+                <div className="box">
+                    <h2>Device 1</h2>
+                    <p>Status: Completed</p>
+                    <button>View tests</button>
+                </div>
+                <div className="box">
+                    <h2>Device 2</h2>
+                    <p>Status: In Progress</p>
+                    <button>View tests</button>
+                </div>
+                <div className="box">
+                    <h2>Device 3</h2>
+                    <p>Status: In Progress</p>
+                    <button>View tests</button>
+                </div>
+                <div className="box">
+                    <h2>Device 4</h2>
+                    <p>Status: Not Started</p>
+                    <button>View tests</button>
+                </div>
+            </div>
+            <div className="centered-button">
+                <button className="large-button">Add device</button>
+            </div>
+            <div className="bottom-right-button">
+                <button className="large-button">View archived devices</button>
+            </div>
+        </div>
+
+        /*
+        </div>
             CSUS Fall 2023
             <div>  
                <form onSubmit={handleSubmit}>   
@@ -73,7 +107,8 @@ export const Demo = () => {
                     )}
                </div>
             </div>
-        </div>
+       </div>
+        */
     )
 };
 
