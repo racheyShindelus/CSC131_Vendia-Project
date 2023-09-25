@@ -57,7 +57,7 @@ export const Demo = () => {
             <input type="text" placeholder="Search..." className="input" />
             <div className="home-btn-group">
             <button className="home-login button">Login</button>
-            <button className="button">Register</button>
+            <button className="home-login button">Register</button>
             </div>
         </header>
         <div className="home-features">
@@ -86,7 +86,7 @@ export const Demo = () => {
                 <span>Device 2</span>
                 <br></br>
                 </h2>
-                <span className="home-text14">Status: Completed</span>
+                <span className="home-text14">Status: In Progress</span>
                 <button type="button" className="button">
                 View tests
                 </button>
@@ -96,7 +96,7 @@ export const Demo = () => {
                 <span>Device 3</span>
                 <br></br>
                 </h2>
-                <span className="home-text18">Status: Completed</span>
+                <span className="home-text18">Status: In Progress</span>
                 <button type="button" className="button">
                 View tests
                 </button>
@@ -106,7 +106,7 @@ export const Demo = () => {
                 <span>Device 4</span>
                 <br></br>
                 </h2>
-                <span className="home-text22">Status: Completed</span>
+                <span className="home-text22">Status: Not Started</span>
                 <button type="button" className="button">
                 View tests
                 </button>

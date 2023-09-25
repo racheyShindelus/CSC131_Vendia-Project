@@ -144,12 +144,13 @@
   width: 100%;
   display: flex;
   align-items: center;
-  border: 2px solid #000000;
+  border-bottom: 2px solid #000000;
   justify-content: space-between;
   margin-bottom: 1%;
 }
 .home-text {
   margin-left: 3%;
+  margin-right: 5%;
 }
 .home-nav {
   display: flex;
@@ -163,6 +164,8 @@
 }
 .input {
   margin-left: 10%;
+  width: 300px;
+  font-size: 16px;
 }
 .home-org-text {
   margin-left: 3%;
@@ -183,7 +186,15 @@
   margin-left: 5%;
 }
 .home-login {
-  margin-right: 20%;
+  margin-right: 5%;
+  font-size: 15px;
+  width: 150px;
+  height: 35px;
+  background-color: #20349e;
+  color: #ffffff;
+  border-radius: 5px;
+  border-color: #20349e;
+  font-weight: bold;
 }
 .home-features {
   width: 70%;
@@ -192,7 +203,7 @@
   padding: 2%;
   max-width: var(--dl-size-size-maxwidth);
   border: 1px solid #000000;
-  background-color: #e6e6e6;
+  background-color: #eaecf9;
   border-radius: 25px;
   flex-direction: column;
 }
@@ -214,6 +225,7 @@
   margin-top: 25px;
   margin-left: 500px;
   background-color: #ffffff;
+  font-size: 16px;
 }
 .home-container2 {
   width: 1300px;
@@ -263,11 +275,10 @@
   transform: scale(1.02);
 }
 .home-text11 {
-  margin-bottom: var(--dl-space-space-twounits);
+  margin-bottom: 10px;
 }
 .home-text14 {
-  margin-top: 10;
-  margin-bottom: 10;
+  margin-bottom: 10px;
 }
 .home-device3 {
   width: 250px;
@@ -286,11 +297,10 @@
   transform: scale(1.02);
 }
 .home-text15 {
-  margin-bottom: var(--dl-space-space-twounits);
+  margin-bottom: 10px;
 }
 .home-text18 {
-  margin-top: 10;
-  margin-bottom: 10;
+  margin-bottom: 10px;
 }
 .home-device4 {
   width: 250px;
@@ -309,11 +319,10 @@
   transform: scale(1.02);
 }
 .home-text19 {
-  margin-bottom: var(--dl-space-space-twounits);
+  margin-bottom: 10px;
 }
 .home-text22 {
-  margin-top: 10;
-  margin-bottom: 10;
+  margin-bottom: 10px;
 }
 @media(max-width: 991px) {
   .home-text03 {
