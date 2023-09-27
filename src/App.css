@@ -14,7 +14,7 @@
   }
 }
 
-.App-header {
+.App-content {
   background-color: #eaecf9;
   min-height: 100vh;
   display: flex;
@@ -160,19 +160,10 @@
   display: flex;
   position: relative;
 }
-.home-home-text {
+.home-navbar-text {
   font-size: 20px;
-}
-.home-org-text {
-  font-size: 20px;
-  margin-left: 32px;
-}
-.home-arch-dev-text {
-  font-size: 20px;
-  margin-left: 32px;
-}
-.home-other-text {
-  font-size: 20px;
+  text-decoration: none;
+  color: inherit;
   margin-left: 32px;
 }
 .home-search-bar {
@@ -274,13 +265,23 @@
   transform: scale(1.02);
   box-shadow: 10px 10px 10px 0px rgba(0, 26, 255, 0.300);
 }
-.home-device1title {
+.home-device1 h2{
   margin-bottom: 15px;
   margin-top: 0px;
 }
-.home-device1status {
+.home-device1 p{
   font-size: 16px;
   margin-bottom: 18px;
+}
+.home-device1 button{
+  border-radius: 10px;
+  background-color: #f3f3f3;
+  width: 40%;
+  height: 35px;
+  font-size: 16px;
+}
+.home-device1 button:hover{
+  background-color: #dfdfdf;
 }
 .home-device1button {
   border-radius: 10px;
@@ -288,9 +289,6 @@
   width: 40%;
   height: 35px;
   font-size: 16px;
-}
-.home-device1button:hover {
-  background-color: #dfdfdf;
 }
 @media(max-width: 991px) {
   .home-test-devices-text {
