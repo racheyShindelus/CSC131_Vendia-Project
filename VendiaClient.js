@@ -1,11 +1,11 @@
 import { createVendiaClient } from "@vendia/client";
 
 const client = createVendiaClient({
-    apiUrl: `https://9m87ws3ni2.execute-api.us-west-2.amazonaws.com/graphql/`,
-    apiKey: 'H75K7g6idrFYrteXpJHxLxcJsVxNpq3odj7viWPKozDN', // <---- API key
+    apiUrl: `https://zc3kfaa6p7.execute-api.us-west-2.amazonaws.com/graphql/`,
+    apiKey: '7Wgz8nttNdnQKagjsRqXJVb96fokgfSf7kMdoA44U6Nw', // <---- API key
   })
 
-  export const vendiaClient = () => {
-    return {client};
-  }
-  
+export const vendiaClient = () =>
+{
+    return{client}
+}

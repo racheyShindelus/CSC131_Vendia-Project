@@ -1,11 +1,13 @@
 import './App.css';
-import { Demo } from './demo';
+import { Demo } from './Demo';
+import { DevicePage } from './DevicePage';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Demo/>
+        <DevicePage/>
+
       </header>
     </div>
   );
