@@ -1,11 +1,12 @@
-import './App.css';
-import { Demo } from './demo';
+import './login.css';
+import {Login} from './login';
+import {Register} from './signup'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Demo/>
+        <Register />
       </header>
     </div>
   );
