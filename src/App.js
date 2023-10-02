@@ -4,6 +4,7 @@ import { Demo } from './Demo';
 import Navbar from './Navbar';
 import Home from './Home';
 import Archive from './Archive'
+import DevicePage from './DevicePage';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route exact path="/Demo">
             <Demo/>
+          </Route>
+          <Route exact path="/DevicePage">
+            <DevicePage/>
           </Route>
         </Switch>
         {/* <Navbar onPageChange={handlePageChange}/>
