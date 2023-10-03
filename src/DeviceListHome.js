@@ -14,7 +14,7 @@ const DeviceListHome = (deviceProps) => {
             <div className="home-device1" key={myDevices.id}>
                 <h2>Device {myDevices.title}</h2>
                 <p>Status: {myDevices.status}</p>
-                <Link to="/DevicePage" className="home-navbar-text">View tests</Link>
+                <Link to="/DevicePage" className="home-device1button" type="button">View tests</Link>
                 {/* <button onClick={handleViewTests} type="button">
                 View tests
                 </button> */}

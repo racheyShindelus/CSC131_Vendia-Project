@@ -1,6 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { vendiaClient } from "./VendiaClient";
+import { vendiaClient } from "./vendiaClient";
+import "./Archive.css";
+import "./App.css";
 
 const { client } = vendiaClient();
 
@@ -36,9 +38,9 @@ export const DevicePage = () => {
 
 
     return(
-        
-        <div className="DevicePage">
-            <h1> Device1 </h1>
+        <div className="home-container">
+        <div className="archive">
+            <caption> Device1 </caption>
             <table>
                 <tr>
                     <th> TestID </th>
@@ -66,7 +68,7 @@ export const DevicePage = () => {
             </table>
             
         </div>
-
+        </div>
     )
 }
 
