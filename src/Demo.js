@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { vendiaClient } from "./vendiaClient";
+import './App.css'
 
 const { client }  = vendiaClient();
 
@@ -73,7 +74,7 @@ export const Demo = () => {
                     )}
                </div>
             </div>
-        </div>
+       </div>
     )
 };
 
