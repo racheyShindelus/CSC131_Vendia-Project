@@ -234,6 +234,7 @@
   padding-left: 3%;
   margin-top: 2%;
   border-radius: 25px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   flex-direction: column;
   background-color: #eaecf9;
 }

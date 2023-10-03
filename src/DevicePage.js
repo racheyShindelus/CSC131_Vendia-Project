@@ -40,8 +40,9 @@ export const DevicePage = () => {
     return(
         <div className="home-container">
         <div className="archive">
-            <caption> Device1 </caption>
+            
             <table>
+            <caption> Device #1 </caption>
                 <tr>
                     <th> TestID </th>
                     <th> OrgAssignment </th>
