@@ -21,8 +21,10 @@ const Navbar = () => {
                 className="home-search-bar input"
             />
             <div className="home-top-header-login">
-                <button className="home-login-button button">Login</button>
-                <button className="home-register-button button">Register</button>
+                {/* <button className="home-login-button button">Login</button>
+                <button className="home-register-button button">Register</button> */}
+                <Link to="/Login" className="home-login-button">Login</Link>
+                <Link to="/Register" className="home-register-button">Register</Link>
             </div>
         </header>
 

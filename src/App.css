@@ -198,6 +198,12 @@
   border-width: 1px;
   margin-right: 20px;
   background-color: #20349e;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000000;
+  text-decoration: none;
 }
 .home-login-button:hover {
   background-color: #20359ec2;
@@ -209,6 +215,12 @@
   font-size: 18px;
   font-weight: bold;
   background-color: #20349e;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000000;
+  text-decoration: none;
 }
 .home-register-button:hover {
   background-color: #20359ec2;
@@ -222,6 +234,7 @@
   padding-left: 3%;
   margin-top: 2%;
   border-radius: 25px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   flex-direction: column;
   background-color: #eaecf9;
 }
@@ -277,14 +290,14 @@
   box-shadow: 10px 10px 10px 0px rgba(0, 26, 255, 0.300);
 }
 .home-device1 h2{
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   margin-top: 0px;
 }
 .home-device1 p{
   font-size: 16px;
   margin-bottom: 18px;
 }
-.home-device1 button{
+/* .home-device1 button{
   border-radius: 10px;
   background-color: #f3f3f3;
   width: 40%;
@@ -293,13 +306,22 @@
 }
 .home-device1 button:hover{
   background-color: #dfdfdf;
-}
+} */
 .home-device1button {
+  display: flex;
+  color: inherit;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
   background-color: #f3f3f3;
+  border: 1px solid #000000;
   width: 40%;
   height: 35px;
-  font-size: 16px;
+  font-size: 18px;
+  text-decoration: none;
+}
+.home-device1button:hover {
+  background-color: #dfdfdf;
 }
 @media(max-width: 991px) {
   .home-test-devices-text {
