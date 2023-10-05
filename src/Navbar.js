@@ -1,6 +1,6 @@
 import './App.css'
 import { Link } from 'react-router-dom';
-
+import {AuthDetails} from './components/auth/AuthDetails'
 // const Navbar = ({onPageChange}) => {
 const Navbar = () => {
     return ( 
@@ -9,7 +9,7 @@ const Navbar = () => {
             <div className="home-top-header-nav">
                 <Link to="/" className="home-navbar-text">Home</Link>
                 <Link to="/Archive" className="home-navbar-text">Archived Devices</Link>
-                <Link to="/" className="home-navbar-text">Organization</Link>
+                <Link to="/DevicePage" className="home-navbar-text">Organization</Link>
                 <Link to="/Demo" className="home-navbar-text">Other</Link>
                 {/* <button onClick={() => onPageChange('home')} className="home-navbar-buttons">Home</button>
                 <button onClick={() => onPageChange('archive')} className="home-navbar-buttons">Archived Devices</button>
@@ -20,11 +20,10 @@ const Navbar = () => {
                 placeholder="Search..."
                 className="home-search-bar input"
             />
-            <div className="home-top-header-login">
+            <div>
                 {/* <button className="home-login-button button">Login</button>
                 <button className="home-register-button button">Register</button> */}
-                <Link to="/Login" className="home-login-button">Login</Link>
-                <Link to="/Register" className="home-register-button">Register</Link>
+                <AuthDetails/>
             </div>
         </header>
 
