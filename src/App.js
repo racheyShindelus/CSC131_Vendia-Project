@@ -1,4 +1,5 @@
 import './App.css';
+import {DataProvider} from './DataContext'
 import { useState } from 'react';
 import { Demo } from './Demo';
 import Navbar from './Navbar';
@@ -9,7 +10,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './login.css';
 import {Login} from './login';
 import {Register} from './signup'
-
+import { ProtectedRoute } from './ProtectedRoute';
+import { AuthProvider } from './AuthContext';
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
@@ -18,21 +20,14 @@ function App() {
   };
 
   return (
+   <AuthProvider>
+    <DataProvider>
     <Router>
       <div className="App">
         <Navbar/>
         <Switch>
           <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/Archive">
-            <Archive/>
-          </Route>
-          <Route exact path="/Demo">
-            <Demo/>
-          </Route>
-          <Route exact path="/DevicePage">
-            <DevicePage/>
+            <Login/>
           </Route>
           <Route exact path="/login">
             <Login/>
@@ -40,6 +35,10 @@ function App() {
           <Route exact path="/signup">
             <Register/>
           </Route>
+          <ProtectedRoute exact path="/Home" component={Home} />
+          <ProtectedRoute exact path="/Archive" component={Archive} />
+          <ProtectedRoute exact path="/Demo" component={Demo} />
+          <ProtectedRoute exact path="/DevicePage" component={DevicePage} />
         </Switch>
         {/* <Navbar onPageChange={handlePageChange}/>
         {currentPage === 'home' && <Home />}
@@ -49,6 +48,9 @@ function App() {
         </div>
       </div>
     </Router>
+    </DataProvider>
+  </AuthProvider>
+
   );
 }
 
