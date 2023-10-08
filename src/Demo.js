@@ -11,13 +11,20 @@ export const Demo = () => {
     const[testName, setTestName] = useState();
     const[testList, setTestList] = useState();
 
+    const[deviceName, setDeviceList] = useState();
+
     useEffect(() => {
-        const listTest = async () => {
-            const listTestResponse = await client.entities.test.list();
-            console.log(listTestResponse?.items);
-            setTestList(listTestResponse?.items);
+        // const listTest = async () => {
+        //     const listTestResponse = await client.entities.test.list();
+        //     console.log(listTestResponse?.items);
+        //     setTestList(listTestResponse?.items);
+        // }
+        // listTest();
+        const listDevices = async () => {
+            const listDevicesResponse = await client.entities.devices.list();
+            setDeviceList(listDevicesResponse?.items);
         }
-        //listTest();
+        listDevices();
     }, [])
 
     const addDevice = async () => {
@@ -26,6 +33,8 @@ export const Demo = () => {
             TestName: testName
         })
         console.log(addDeviceResponse);
+        // const response = await client.entities.devices.list();
+        // console.log(response);
     }
 
     const handleDeviceChange = (event) => {
@@ -66,9 +75,11 @@ export const Demo = () => {
                     <input type="submit" />
                </form>
                <div>
-                    {testList?.map((item, index) => (
+                    {/* {testList?.map((item, index) => ( */}
+                    {deviceName?.map((item, index) => (
                         <div key={index}>   
-                            {item?.Device}
+                            {/* {item?.Device} */}
+                            {item?.DeviceName}
                         </div>
                     )
                     )}

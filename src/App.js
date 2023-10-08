@@ -31,7 +31,8 @@ function App() {
           <Route exact path="/Demo">
             <Demo/>
           </Route>
-          <Route exact path="/DevicePage">
+          {/* <Route exact path="/DevicePage"> */}
+          <Route path="/DevicePage/:DeviceName/:DeviceTitle">
             <DevicePage/>
           </Route>
           <Route exact path="/login">
@@ -41,10 +42,6 @@ function App() {
             <Register/>
           </Route>
         </Switch>
-        {/* <Navbar onPageChange={handlePageChange}/>
-        {currentPage === 'home' && <Home />}
-        {currentPage === 'archive' && <Archive />}
-        {currentPage === 'demo' && <Demo />} */}
         <div className="App-content">
         </div>
       </div>

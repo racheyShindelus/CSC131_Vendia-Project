@@ -1,14 +1,17 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { vendiaClient } from "./vendiaClient";
+import { Link } from 'react-router-dom';
 import "./Archive.css";
 import "./App.css";
 
-const { client } = vendiaClient();
+import { useParams } from 'react-router-dom';
 
+const { client } = vendiaClient();
 
 export const DevicePage = () => {
 
+    let { DeviceName, DeviceTitle } = useParams();
     const[testList, setTestList] = useState();
 
     useEffect(() => {
@@ -16,7 +19,7 @@ export const DevicePage = () => {
             const filteredTestList = await client.entities.test.list({
                 filter: {
                   Device: {
-                    contains: 'Device1',
+                    contains: DeviceName.toString(),
                   }
                 },
               })
@@ -35,14 +38,14 @@ export const DevicePage = () => {
             return 'false'
     }
 
-
-
     return(
         <div className="home-container">
         <div className="archive">
-            
             <table>
-            <caption> Device #1 </caption>
+            <div>
+                <Link to="/" className="home-return-to-home-button">Back to Home</Link>
+            </div>
+            <caption> {DeviceTitle} </caption>
                 <tr>
                     <th> TestID </th>
                     <th> OrgAssignment </th>
@@ -54,7 +57,8 @@ export const DevicePage = () => {
                 </tr>   
 
                 <tbody>
-                    {testList?.map((test) => (
+                    {/* {testList?.map((test) => ( */}
+                    {testList?.sort((a, b) => a.TestID - b.TestID).map((test) => (
                         <tr>
                             <td> {test?.TestID} </td>
                             <td> {test?.OrgAssignment} </td>
@@ -67,7 +71,6 @@ export const DevicePage = () => {
                     ))}
                 </tbody>
             </table>
-            
         </div>
         </div>
     )
