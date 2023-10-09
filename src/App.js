@@ -1,4 +1,3 @@
-import './App.css';
 import {DataProvider} from './DataContext'
 import { useState } from 'react';
 import { Demo } from './Demo';
@@ -7,7 +6,6 @@ import Home from './Home';
 import Archive from './Archive'
 import DevicePage from './DevicePage';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './login.css';
 import {Login} from './login';
 import {Register} from './signup'
 import { ProtectedRoute } from './ProtectedRoute';
@@ -18,8 +16,8 @@ function App() {
   const handlePageChange = (page) => {
       setCurrentPage(page);
   };
-
   return (
+    
    <AuthProvider>
     <DataProvider>
     <Router>
@@ -50,7 +48,7 @@ function App() {
     </Router>
     </DataProvider>
   </AuthProvider>
-
+      
   );
 }
 

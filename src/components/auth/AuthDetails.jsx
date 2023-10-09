@@ -2,34 +2,36 @@ import React, {useEffect,useState} from 'react'
 import {auth} from '../../firebase'
 import { onAuthStateChanged, signOut} from "firebase/auth"
 import {Link, Redirect} from 'react-router-dom'
-import '../../App.css'
 import { useAuth } from '../../AuthContext'
-
+import { useData } from '../../DataContext'
 
 export const AuthDetails = () => {
-    const [redirect, setRedirect] = useState(false)
-    const {authUser} = useAuth()
-    const userSignOut =() =>{
-        signOut(auth).then(() => {
-            console.log('Sign out successful')
-            setRedirect(true)
-        }).catch((error) => console.log(error))
+    const [redirect, setRedirect] = useState(false);
+    const { authUser } = useAuth();
+    const { userData } = useData();
+  
+    const userSignOut = () => {
+      signOut(auth).then(() => {
+        console.log('Sign out successful');
+        setRedirect(true);
+      }).catch((error) => console.log(error));
     }
-    if(redirect){
-        return <Redirect to='/login'/>
+  
+    if (redirect) {
+      return <Redirect to='/login' />;
     }
+  
     return (
-        <form>
-            {authUser ? 
-                <div className="home-top-header-login">
-                    <p>Signed In as {authUser.email}</p>
-                    <button onClick = {userSignOut} className="home-login-button">Sign Out</button>
-                </div> : 
-                <div className="home-top-header-login">
-                    <Link to="/login" className="home-login-button">Login</Link>
-                    <Link to="/signup" className="home-register-button">Register</Link>
-                </div>}
-        </form>
-    )
-
-}
+      <form>
+        {authUser ?
+          <div className="flex relative items-center flex-row justify-between">
+            <p>Signed in as {userData? userData.displayName: 'Loading...'}</p>
+            <button onClick={userSignOut} className="text-white w-32 h-10 text-lg font-bold border ml-8 mr-5 bg-indigo-800 flex items-center justify-center no-underline">Sign Out</button>
+          </div> :
+          <div className="flex relative items-center flex-row justify-between">
+            <Link to="/login" className="text-white w-32 h-10 text-lg font-bold border mr-5 bg-indigo-800 flex items-center justify-center no-underline">Login</Link>
+            <Link to="/signup" className="text-white w-32 h-10 text-lg font-bold bg-indigo-800 flex items-center justify-center no-underline">Register</Link>
+          </div>}
+      </form>
+    );
+  }

@@ -7,14 +7,13 @@ export const AuthProvider = ({ children }) => {
         const listen = auth.onAuthStateChanged((user)=>{
             if(user) {
                 setAuthUser(user)
-                console.log(user)
             } else {
                 setAuthUser(null)
-                console.log(user)
             }
         })
         return listen;
     }, [])
+    console.log(authUser)
     return(
     <AuthContext.Provider value={{authUser}}>
       {children}
