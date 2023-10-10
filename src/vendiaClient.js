@@ -7,4 +7,7 @@ const client = createVendiaClient({
 
 export const vendiaClient = () => {
     return {client};
+
 };
+
+

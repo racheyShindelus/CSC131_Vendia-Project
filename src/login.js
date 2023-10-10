@@ -1,17 +1,14 @@
 import React from 'react';
 import { SignIn } from './components/auth/SignIn'
-import './login.css'
 
 export const Login = () => {
     return (
-        <div className ='login--container'>
-            <header className = 'login--header'>
-                <h1>Cyber Savants Test Tracker</h1>
-            </header>
-            <div className = 'login--box'>
-                <h1 className = 'login--box--header'>Login</h1>
-                <SignIn/>
-            </div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-300">
+        <div className="login-box border-2 border-black flex flex-col relative p-10 bg-white">
+          <h1 className="login-box-header border-b-2 border-black pb-2 text-xl font-semibold">Login</h1>
+          <SignIn />
         </div>
-    )
-}
+      </div>
+    );
+  };
+
