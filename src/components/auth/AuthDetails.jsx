@@ -1,6 +1,7 @@
 import React, {useEffect,useState} from 'react'
 import {auth} from '../../firebase'
 import { onAuthStateChanged, signOut} from "firebase/auth"
+
 import {Link, Redirect} from 'react-router-dom'
 import { useAuth } from '../../AuthContext'
 import { useData } from '../../DataContext'
@@ -35,3 +36,4 @@ export const AuthDetails = () => {
       </form>
     );
   }
+

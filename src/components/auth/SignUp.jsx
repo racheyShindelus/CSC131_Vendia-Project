@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
@@ -89,3 +90,4 @@ export const SignUp = () => {
       </div>
     );
   };
+

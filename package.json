@@ -1,4 +1,5 @@
 {
+
   "name": "csc131",
   "version": "0.1.0",
   "private": true,
@@ -46,4 +47,5 @@
   "devDependencies": {
     "tailwindcss": "^3.3.3"
   }
+
 }
