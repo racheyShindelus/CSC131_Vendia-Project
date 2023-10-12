@@ -15,8 +15,9 @@ export const Demo = () => {
             const listTestResponse = await client.entities.test.list();
             console.log(listTestResponse?.items);
             setTestList(listTestResponse?.items);
+            console.log(testList);
         }
-        //listTest();
+        listTest();
     }, [])
 
     const addDevice = async () => {

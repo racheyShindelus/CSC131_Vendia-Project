@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { vendiaClient } from "./vendiaClient";
-import './App.css'
+import { vendiaClient } from "./VendiaClient";
 
 const { client }  = vendiaClient();
 
@@ -16,8 +15,9 @@ export const Demo = () => {
             const listTestResponse = await client.entities.test.list();
             console.log(listTestResponse?.items);
             setTestList(listTestResponse?.items);
+            console.log(testList);
         }
-        //listTest();
+        listTest();
     }, [])
 
     const addDevice = async () => {
@@ -74,7 +74,6 @@ export const Demo = () => {
                     )}
                </div>
             </div>
-       </div>
+        </div>
     )
 };
-

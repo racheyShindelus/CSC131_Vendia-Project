@@ -2,6 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { vendiaClient } from "./VendiaClient";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import Button from '@mui/material/Button';
 
 const { client } = vendiaClient();
 
@@ -9,6 +11,7 @@ const { client } = vendiaClient();
 export const DevicePage = () => {
 
     const [testList, setTestList] = useState([]);
+    const [selectedIDs, setSelectedIDs] = useState([]);
 
     useEffect(() => {
         const filterTests = async () => {
@@ -30,20 +33,20 @@ export const DevicePage = () => {
         
     }, [])
 
-    const processRowUpdate = React.useCallback(
+    const editRow = React.useCallback(
         async (row) => {
 
-            const response = await row;
-            const response2 = await client.entities.test.update({
-                _id: response.ID,
-                Device: response.Device,
-                TestID: response.TestID,
-                OrgAssignment: response.OrgAssignment,
-                TestName: response.TestName,
-                TestMethod: response.TestMethod,
-                Notes: response.Notes,
-                Completed: response.Completed,
-                UpdatedBy: response.UpdatedBy
+            const oldRow = await row;
+            const newRow = await client.entities.test.update({
+                _id: oldRow.ID,
+                Device: oldRow.Device,
+                TestID: oldRow.TestID,
+                OrgAssignment: oldRow.OrgAssignment,
+                TestName: oldRow.TestName,
+                TestMethod: oldRow.TestMethod,
+                Notes: oldRow.Notes,
+                Completed: oldRow.Completed,
+                UpdatedBy: oldRow.UpdatedBy
                 
 
               });
@@ -56,6 +59,13 @@ export const DevicePage = () => {
         [],
 
     );
+
+
+    const deleteRow = () =>
+    {
+        selectedIDs.forEach((index) => console.log(index));
+    }
+
 
 
 
@@ -107,16 +117,25 @@ export const DevicePage = () => {
         <div className="DevicePage">
             <h1> Device1 </h1>
             <div>
+
+                <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
+                    Remove Entry
+                </Button>
                 <DataGrid
                 rows = {rows}
                 columns = {columns}
                 
-                getRowId={(rows) =>  rows?.TestID}
+                getRowId={(rows) =>  rows?.ID}
                 disableColumnFilter
                 disableColumnSelector
                 disableDensitySelector
+                checkboxSelection
+                disableRowSelectionOnClick
+                onRowSelectionModelChange={(IDs) => {
+                    setSelectedIDs(IDs);
+                }}
                 slots={{ toolbar: GridToolbarQuickFilter }}
-                processRowUpdate={processRowUpdate}
+                processRowUpdate={editRow}
                 onProcessRowUpdateError={handleProcessRowUpdateError}
                 
                 />
