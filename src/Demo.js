@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import { vendiaClient } from "./vendiaClient";
-import DeviceForm from './AddDevice';
+import DeviceForm from './AddTest';
 
 // const { client } = vendiaClient();
 

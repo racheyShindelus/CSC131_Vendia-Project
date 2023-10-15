@@ -3,13 +3,9 @@ import React, { useState } from 'react';
 function DeviceForm({ onAddDevice }) {
   const [device, setDevice] = useState({
     deviceName: '',
-    deviceID: '',
-    testName: '',
-    orgAssignment: '',
-    testMethod: '',
-    notes: '',
-    updatedBy: '',
-    completed: false,
+    completion: false,
+    archived: false,
+    deviceTitle: '',
   });
 
   const handleChange = (e) => {
@@ -27,13 +23,9 @@ function DeviceForm({ onAddDevice }) {
     onAddDevice(device);
     setDevice({
       deviceName: '',
-      deviceID: '',
-      testName: '',
-      orgAssignment: '',
-      testMethod: '',
-      notes: '',
-      updatedBy: '',
-      completed: false,
+      completion: false,
+      archived: false,
+      deviceTitle: '',
     });
   };
 
@@ -48,81 +40,39 @@ function DeviceForm({ onAddDevice }) {
             name="deviceName"
             value={device.deviceName}
             onChange={handleChange}
+            required
           />
         </label>
       </div>
       <div>
         <label>
-          Device ID:
-          <input
-            type="number"
-            name="deviceID"
-            value={device.deviceID}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Test Name:
-          <input
-            type="text"
-            name="testName"
-            value={device.testName}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Org Assignment:
-          <input
-            type="text"
-            name="orgAssignment"
-            value={device.orgAssignment}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Test Method:
-          <input
-            type="text"
-            name="testMethod"
-            value={device.testMethod}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Notes:
-          <textarea
-            name="notes"
-            value={device.notes}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Updated By:
-          <input
-            type="text"
-            name="updatedBy"
-            value={device.updatedBy}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Completed:
+          Completion:
           <input
             type="checkbox"
-            name="completed"
-            checked={device.completed}
+            name="completion"
+            checked={device.completion}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Archived:
+          <input
+            type="checkbox"
+            name="archived"
+            checked={device.archived}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Device Title:
+          <input
+            type="text"
+            name="deviceTitle"
+            value={device.deviceTitle}
             onChange={handleChange}
           />
         </label>
@@ -149,8 +99,10 @@ function AddDevice() {
       <ul>
         {devices.map((device, index) => (
           <li key={index}>
-            <strong>Device Name:</strong> {device.deviceName}, <strong>Device ID:</strong> {device.deviceID},{' '}
-            <strong>Completed:</strong> {device.completed ? 'Yes' : 'No'}
+            <strong>Device Name:</strong> {device.deviceName},{' '}
+            <strong>Completion:</strong> {device.completion ? 'Yes' : 'No'},{' '}
+            <strong>Archived:</strong> {device.archived ? 'Yes' : 'No'},{' '}
+            <strong>Device Title:</strong> {device.deviceTitle}
           </li>
         ))}
       </ul>
