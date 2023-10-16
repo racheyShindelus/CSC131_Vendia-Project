@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
+
 import {Redirect} from 'react-router-dom'
 import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore'
 import { auth, db } from "../../firebase";
@@ -78,3 +79,4 @@ export const SignIn = () => {
     </div>
   );
 };
+
