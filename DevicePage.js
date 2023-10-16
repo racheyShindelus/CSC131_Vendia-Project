@@ -4,6 +4,7 @@ import { vendiaClient } from "./VendiaClient";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Button from '@mui/material/Button';
+import { filterStateInitializer } from "@mui/x-data-grid/internals";
 
 const { client } = vendiaClient();
 
@@ -21,7 +22,7 @@ export const DevicePage = () => {
                     contains: 'Device1',
                   }
                 },
-              })
+              });
 
             //console.log(filteredTestList?.items);
             setTestList(filteredTestList?.items);
@@ -33,8 +34,9 @@ export const DevicePage = () => {
         
     }, [])
 
-    const editRow = React.useCallback(
-        async (row) => {
+
+
+    const editRow = async (row) => {
 
             const oldRow = await row;
             const newRow = await client.entities.test.update({
@@ -55,17 +57,29 @@ export const DevicePage = () => {
 
             //console.log(' ');
             return row;
-        },
-        [],
+        };
 
-    );
+    
+   const deleteRow = async () => {
+          var tests = client.entities.test;
+            
+
+          //selectedIDs.forEach((index) => tests.remove(index));
+          //console.log(await tests?.list());
+
+          const temp =  await tests?.list({
+            filter: {
+              Device: {
+                contains: 'Device1'
+              }
+            }
+          });  
 
 
-    const deleteRow = () =>
-    {
-        selectedIDs.forEach((index) => console.log(index));
-    }
-
+            
+          setSelectedIDs([]);
+          setTestList(temp?.items);
+        }
 
 
 
