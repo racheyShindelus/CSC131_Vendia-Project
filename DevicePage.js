@@ -4,98 +4,46 @@ import { vendiaClient } from "./VendiaClient";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Button from '@mui/material/Button';
-import { filterStateInitializer } from "@mui/x-data-grid/internals";
+//import { filterStateInitializer } from "@mui/x-data-grid/internals";
 
 const { client } = vendiaClient();
 
-
 export const DevicePage = () => {
 
-    const [testList, setTestList] = useState([]);
-    const [selectedIDs, setSelectedIDs] = useState([]);
+    const [rows, setRows] = useState([]);
+    const [rowSelection, setRowSelection] = useState([]);
 
     useEffect(() => {
-        const filterTests = async () => {
-            const filteredTestList = await client.entities.test.list({
+        const loadData = async () => {
+            const tempFilteredTestList = await client.entities.test.list({
                 filter: {
                   Device: {
                     contains: 'Device1',
                   }
                 },
-              });
-
-            //console.log(filteredTestList?.items);
-            setTestList(filteredTestList?.items);
-
-        }
-        //console.log({testList});
-
-        filterTests();
-        
-    }, [])
+            });
 
 
-
-    const editRow = async (row) => {
-
-            const oldRow = await row;
-            const newRow = await client.entities.test.update({
-                _id: oldRow.ID,
-                Device: oldRow.Device,
-                TestID: oldRow.TestID,
-                OrgAssignment: oldRow.OrgAssignment,
-                TestName: oldRow.TestName,
-                TestMethod: oldRow.TestMethod,
-                Notes: oldRow.Notes,
-                Completed: oldRow.Completed,
-                UpdatedBy: oldRow.UpdatedBy
+            const tempRows = tempFilteredTestList?.items.map((test) => ({
+                ID: test._id,
+                //Device: test.Device,
+                TestID: test.TestID,
+                OrgAssignment: test.OrgAssignment,
+                TestName: test.TestName,
+                TestMethod: test.TestMethod,
+                Notes: test.Notes,
+                Completed: removeNull(test.Completed),
+                UpdatedBy: test.UpdatedBy
                 
+            }));
+            setRows(tempRows);
+            //console.log(tempRows);
 
-              });
- 
-
-
-            //console.log(' ');
-            return row;
-        };
-
-    
-   const deleteRow = async () => {
-          var tests = client.entities.test;
-            
-
-          selectedIDs.forEach((index) => tests.remove(index));
-          console.log(await tests?.list());
-
-          const temp =  await tests?.list({
-            filter: {
-              Device: {
-                contains: 'Device1'
-              }
-            }
-          });  
-
-
-            
-          setSelectedIDs([]);
-          setTestList(temp?.items);
         }
 
-
-
-    const handleProcessRowUpdateError = React.useCallback((error) => {
-        console.log(error.message);
-      }, []);
-    
-
-    const removeNull = (value) =>
-    {
-        if(typeof(value) === 'boolean')
-            return true;
-        else
-            return false;
-    }
-    
+        loadData();
+        console.log('loadData')
+    }, []);
 
     const columns = [
         {field: 'ID', headerName: 'ID', width: 300, editable: false},
@@ -108,65 +56,106 @@ export const DevicePage = () => {
         {field: 'Completed', headerName: 'Completed', width: 90, editable: true,},
         {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 90, editable: true,},
     ];
-    
-   
-    const rows = testList?.map((test) => ({
-        ID: test._id,
-        //Device: test.Device,
-        TestID: test.TestID,
-        OrgAssignment: test.OrgAssignment,
-        TestName: test.TestName,
-        TestMethod: test.TestMethod,
-        Notes: test.Notes,
-        Completed: removeNull(test.Completed),
-        UpdatedBy: test.UpdatedBy
-        
-    }));
-    
-    
-      
-    //console.log(testList);
-    return(
-        
-        <div className="DevicePage">
-            <h1> Device1 </h1>
-            <div>
 
-              <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
-                  Remove Entry
-              </Button>
-              <DataGrid
+    const removeNull = (value) =>
+    {
+        if(typeof(value) === 'boolean')
+            return true;
+        else
+            return false;
+    }
+
+    const editRow = async (row) => {
+        const oldRow = await row;
+        const newRow = await client.entities.test.update({
+            ID: oldRow.ID,
+            //Device: oldRow.Device,
+            TestID: oldRow.TestID,
+            OrgAssignment: oldRow.OrgAssignment,
+            TestName: oldRow.TestName,
+            TestMethod: oldRow.TestMethod,
+            Notes: oldRow.Notes,
+            Completed: oldRow.Completed,
+            UpdatedBy: oldRow.UpdatedBy
+                
+            });    
+ 
+            return row;
+    };
+
+    const deleteRow = async () =>
+    {
+        var table = client.entities.test;
+        
+        for (let i = 0; i < rowSelection.length; i++) 
+        {
+            await table.remove(rowSelection[i]);
+        }
+
+        const tempFilteredTestList = await client.entities.test.list({
+            filter: {
+              Device: {
+                contains: 'Device1',
+              }
+            },
+        });
+
+        const tempRows = tempFilteredTestList?.items.map((test) => ({
+            ID: test._id,
+            //Device: test.Device,
+            TestID: test.TestID,
+            OrgAssignment: test.OrgAssignment,
+            TestName: test.TestName,
+            TestMethod: test.TestMethod,
+            Notes: test.Notes,
+            Completed: removeNull(test.Completed),
+            UpdatedBy: test.UpdatedBy
+            
+        }));
+        setRows(tempRows);
+        
+    };
+
+    const handleProcessRowUpdateError = React.useCallback((error) => {
+        console.log(error.message);
+      }, []);
+
+
+    return (
+        <div>
+            Device1
+            <div>
+            <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
+                Remove Entry
+            </Button>
+            <DataGrid
                 rows = {rows}
                 columns = {columns}
-                
-                initialState={{
-                  columns: {
-                    columnVisibilityModel: {
-                      // Hide columns status and traderName, the other columns will remain visible
-                      ID: false,
-                    },
-                  },
-                }}
-
                 getRowId={(rows) =>  rows?.ID}
+                initialState={{
+                    columns: {
+                      columnVisibilityModel: {
+                        // Hide columns status and traderName, the other columns will remain visible
+                        ID: false,
+                      },
+                    },
+                  }}
+
                 disableColumnFilter
                 disableColumnSelector
                 disableDensitySelector
-                checkboxSelection
                 disableRowSelectionOnClick
-                onRowSelectionModelChange={(IDs) => {
-                    setSelectedIDs(IDs);
-                }}
+
+                checkboxSelection
+                onRowSelectionModelChange={(newRowSelection) => {
+                    setRowSelection(newRowSelection);
+                  }}
                 slots={{ toolbar: GridToolbarQuickFilter }}
                 processRowUpdate={editRow}
                 onProcessRowUpdateError={handleProcessRowUpdateError}
                 
-                />
+            />
             </div>
-            
-            
         </div>
-
     )
 }
-
