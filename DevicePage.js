@@ -64,8 +64,8 @@ export const DevicePage = () => {
           var tests = client.entities.test;
             
 
-          //selectedIDs.forEach((index) => tests.remove(index));
-          //console.log(await tests?.list());
+          selectedIDs.forEach((index) => tests.remove(index));
+          console.log(await tests?.list());
 
           const temp =  await tests?.list({
             filter: {
@@ -99,7 +99,7 @@ export const DevicePage = () => {
 
     const columns = [
         {field: 'ID', headerName: 'ID', width: 300, editable: false},
-        {field: 'Device', headerName: 'Device', width: 90, editable: false},
+        //{field: 'Device', headerName: 'Device', width: 90, editable: false},
         {field: 'TestID', headerName: 'TestID', width: 90, editable: false},
         {field: 'OrgAssignment', headerName: 'OrgAssignment', width: 150, editable: true,},
         {field: 'TestName', headerName: 'TestName', width: 90, editable: true,},
@@ -112,7 +112,7 @@ export const DevicePage = () => {
    
     const rows = testList?.map((test) => ({
         ID: test._id,
-        Device: test.Device,
+        //Device: test.Device,
         TestID: test.TestID,
         OrgAssignment: test.OrgAssignment,
         TestName: test.TestName,
@@ -132,13 +132,22 @@ export const DevicePage = () => {
             <h1> Device1 </h1>
             <div>
 
-                <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
-                    Remove Entry
-                </Button>
-                <DataGrid
+              <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
+                  Remove Entry
+              </Button>
+              <DataGrid
                 rows = {rows}
                 columns = {columns}
                 
+                initialState={{
+                  columns: {
+                    columnVisibilityModel: {
+                      // Hide columns status and traderName, the other columns will remain visible
+                      ID: false,
+                    },
+                  },
+                }}
+
                 getRowId={(rows) =>  rows?.ID}
                 disableColumnFilter
                 disableColumnSelector
