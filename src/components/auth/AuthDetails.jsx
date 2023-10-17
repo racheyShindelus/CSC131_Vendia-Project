@@ -8,7 +8,7 @@ import { useData } from '../../DataContext'
 
 export const AuthDetails = () => {
     const [redirect, setRedirect] = useState(false);
-    const { authUser } = useAuth();
+    const { authUser, loading } = useAuth();
     const { userData } = useData();
   
     const userSignOut = () => {
@@ -27,13 +27,13 @@ export const AuthDetails = () => {
         {authUser ?
           <div className="flex relative items-center flex-row justify-between">
             <p>Signed in as {userData? userData.displayName: 'Loading...'}</p>
-            <button onClick={userSignOut} className="text-white w-32 h-10 text-lg font-bold border ml-8 mr-5 bg-indigo-800 flex items-center justify-center no-underline">Sign Out</button>
-          </div> :
+            <button onClick={userSignOut} className="text-white w-32 h-10 text-lg font-bold border ml-8 mr-5 bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Sign Out</button>
+          </div> : !loading &&
           <div className="flex relative items-center flex-row justify-between">
-            <Link to="/login" className="text-white w-32 h-10 text-lg font-bold border mr-5 bg-indigo-800 flex items-center justify-center no-underline">Login</Link>
-            <Link to="/signup" className="text-white w-32 h-10 text-lg font-bold bg-indigo-800 flex items-center justify-center no-underline">Register</Link>
+            <Link to="/login" className="text-white w-32 h-10 text-lg font-bold border mr-5 bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Login</Link>
+            <Link to="/signup" className="text-white w-32 h-10 text-lg font-bold bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Register</Link>
           </div>}
       </form>
     );
-  }
+  } 
 
