@@ -5,6 +5,7 @@ import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Button from '@mui/material/Button';
 //import { filterStateInitializer } from "@mui/x-data-grid/internals";
+//test
 
 const { client } = vendiaClient();
 
