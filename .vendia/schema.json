@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vendia Share JSON schema",
+  "type": "object",
+  "x-vendia-indexes": {
+    "Devices-DeviceName-index": [
+      {
+        "type": "Devices",
+        "property": "DeviceName"
+      }
+    ]
+  },
+  "x-vendia-acls": {
+    "Test-acls": {
+      "type": "Test"
+    },
+    "Devices-acls": {
+      "type": "Devices"
+    }
+  },
+  "properties": {
+    "Test": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Device": {
+            "title": "Device",
+            "type": "string"
+          },
+          "TestID": {
+            "title": "TestID",
+            "type": "integer"
+          },
+          "OrgAssignment": {
+            "title": "OrgAssignment",
+            "type": "string"
+          },
+          "TestName": {
+            "title": "TestName",
+            "type": "string"
+          },
+          "TestMethod": {
+            "title": "TestMethod",
+            "type": "string"
+          },
+          "Notes": {
+            "title": "Notes",
+            "type": "string"
+          },
+          "Completed": {
+            "title": "Completed",
+            "description": "",
+            "type": "boolean"
+          },
+          "UpdatedBy": {
+            "title": "UpdatedBy",
+            "type": "string"
+          }
+        },
+        "required": [],
+        "x-vendia-unique": []
+      },
+      "title": "Test"
+    },
+    "Devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "DeviceName": {
+            "title": "Device Name",
+            "description": "",
+            "type": "string"
+          },
+          "Completion": {
+            "title": "Completion ",
+            "description": "",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "Archived": {
+            "title": "Archived",
+            "type": "boolean",
+            "description": ""
+          },
+          "DeviceTitle": {
+            "title": "Device Title",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "required": [
+          "DeviceName"
+        ],
+        "x-vendia-unique": [
+          "DeviceName"
+        ]
+      },
+      "description": "Lists all individual devices to be used for testing.",
+      "title": "Devices"
+    }
+  }
+}
