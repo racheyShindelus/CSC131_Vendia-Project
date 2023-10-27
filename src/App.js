@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import Home from './Home';
 import Archive from './Archive'
 import DevicePage from './DevicePage';
+import Organizations from './Organizations';
+import Search from './Search';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {Login} from './login';
 import {Register} from './signup'
@@ -16,8 +18,15 @@ function App() {
   const handlePageChange = (page) => {
       setCurrentPage(page);
   };
+
+  const [searchResults, setSearchResults] = useState([]);
+  
+  const handleSearch = (query) => {
+    // Implement your search logic here, e.g., making an API request.
+    // Update the searchResults state with the search results.
+  };
+
   return (
-    
    <AuthProvider>
     <DataProvider>
     <Router>
@@ -36,6 +45,8 @@ function App() {
           <ProtectedRoute exact path="/Home" component={Home} />
           <ProtectedRoute exact path="/Archive" component={Archive} />
           <ProtectedRoute exact path="/Demo" component={Demo} />
+          <ProtectedRoute exact path="/Organizations" component={Organizations} />
+          <ProtectedRoute exact path="/Search" component={Search} />
           <ProtectedRoute exact path="/DevicePage/:DeviceName/:DeviceTitle" component={DevicePage} />
         </Switch>
         <div className="App-content">

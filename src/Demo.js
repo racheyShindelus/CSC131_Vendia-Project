@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import { vendiaClient } from "./vendiaClient";
 import DeviceForm from './AddTest';
+import { Link } from 'react-router-dom';
 import AddTest from './AddTest';
 import AddDevice from './AddDevice';
 import './App.css'
@@ -24,27 +25,36 @@ export const Demo = () => {
   }, []); // Dependencies array should be empty since you're only running this once
 
   return (
-    // <div>
-    //   <h1>Device Management</h1>
-    //   <button onClick={toggleForm}>Create Device</button> {/* Button to toggle form */}
-    //   {showForm && <DeviceForm />} {/* Conditionally render the form */}
-    // </div>
-    <div className="home-container">
-    <div className="archive">
-        {/* <caption>React App</caption> */}
-        <div className="add-devices-page">
-            <AddTest />
-            <AddDevice />
-        </div>
 
-        {/* <div>
-            <button onClick={handleShowTestForm}>Show Test Form</button>
-            <button onClick={handleShowDeviceForm}>Show Device Form</button>
+    <div className="min-h-full">
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Add Tests/Devices</h1>
         </div>
-        {showTestForm && <AddTest />}
-        {showDeviceForm && <AddDevice />} */}
+      </header>
+      <main>
+        <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
+            <div>
+              <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
+            </div>
+            <div className="add-devices-page">
+                <AddTest />
+                <AddDevice />
+            </div>
+
+        </div>
+      </main>
     </div>
-    </div>
+
+    // <div className="home-container">
+    // <div className="archive">
+    //     {/* <caption>React App</caption> */}
+    //     <div className="add-devices-page">
+    //         <AddTest />
+    //         <AddDevice />
+    //     </div>
+    // </div>
+    // </div>
   );
 };
 
