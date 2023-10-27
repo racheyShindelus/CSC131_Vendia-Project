@@ -38,6 +38,7 @@ function DeviceForm({ onAddDevice }) {
           <input
             type="text"
             name="deviceName"
+            class="ml-3 pl-2 pr-2 border border-black rounded focus:outline-none"
             value={device.deviceName}
             onChange={handleChange}
             required
@@ -50,6 +51,7 @@ function DeviceForm({ onAddDevice }) {
           <input
             type="checkbox"
             name="completion"
+            class="ml-2 h-5 w-5 text-indigo-600 rounded"
             checked={device.completion}
             onChange={handleChange}
           />
@@ -61,6 +63,7 @@ function DeviceForm({ onAddDevice }) {
           <input
             type="checkbox"
             name="archived"
+            class="ml-2 h-5 w-5 text-indigo-600 rounded"
             checked={device.archived}
             onChange={handleChange}
           />
@@ -72,13 +75,18 @@ function DeviceForm({ onAddDevice }) {
           <input
             type="text"
             name="deviceTitle"
+            class="ml-3 pl-2 pr-2 border border-black rounded focus:outline-none"
             value={device.deviceTitle}
             onChange={handleChange}
           />
         </label>
       </div>
       <div>
-        <button type="submit">Add Device</button>
+        <button
+          type="submit"
+          class="flex items-center justify-center w-32 h-9 text-base border-black rounded-2xl font-bold bg-indigo-800 text-white shadow-md no-underline hover:bg-indigo-900">
+            Add Device
+        </button>
       </div>
     </form>
   );
@@ -92,8 +100,8 @@ function AddDevice() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Device Management</h1>
+    <div className="p-4 pl-0">
+      <h1 className="text-2xl font-bold mb-4 underline">Device Management</h1>
       <DeviceForm onAddDevice={handleAddDevice} />
       <h2 className="text-xl font-semibold my-4">Added Devices:</h2>
       <ul className="list-disc ml-8">
