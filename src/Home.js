@@ -21,9 +21,9 @@ const Home = () => {
       </header>
       <main>
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
-            <Link to={`/Demo`} class="flex items-center justify-center mb-3 w-20 h-9 text-base ml-auto mr-7 mt-3 border-black rounded-2xl font-bold bg-indigo-800 text-white shadow-md no-underline hover:bg-indigo-900">
+            <Link to={`/Demo`} class="flex items-center justify-center mb-3 w-24 h-9 text-base ml-auto mr-7 mt-3 border-black rounded-2xl font-bold bg-indigo-800 text-white shadow-md no-underline hover:bg-indigo-900">
             {/* w-130 h-35 text-xl flex items-center justify-center font-bold no-underline mb-12 mt-0 rounded-20 bg-indigo-800 text-white shadow-md */}
-              <span class="text-current">+ Add</span>
+              <span class="text-current">+ Add new</span>
             </Link>
             <DeviceListHome devices={devices}/>
           </div>

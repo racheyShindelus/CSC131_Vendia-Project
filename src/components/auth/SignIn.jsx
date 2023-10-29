@@ -50,7 +50,10 @@ export const SignIn = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <form onSubmit={login} className="max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+      <form onSubmit={login} className="max-w-md px-4 pt-4 py-8 bg-white rounded-lg shadow-lg" style={{ display: 'block' }}>
+        <div>
+        Email
+        </div>
         <input
           type="text"
           placeholder="Email or Username..."
@@ -59,6 +62,9 @@ export const SignIn = () => {
           required
           className="w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
         />
+        <div>
+        Password
+        </div>
         <input
           type="password"
           placeholder="Password..."
