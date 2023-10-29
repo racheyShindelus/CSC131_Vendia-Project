@@ -12,18 +12,12 @@ import {Login} from './login';
 import {Register} from './signup'
 import { ProtectedRoute } from './ProtectedRoute';
 import { AuthProvider } from './AuthContext';
+
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
   const handlePageChange = (page) => {
       setCurrentPage(page);
-  };
-
-  const [searchResults, setSearchResults] = useState([]);
-  
-  const handleSearch = (query) => {
-    // Implement your search logic here, e.g., making an API request.
-    // Update the searchResults state with the search results.
   };
 
   return (

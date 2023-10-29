@@ -12,18 +12,16 @@ import { useAuth } from './AuthContext'
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
-  imageUrl:
-    'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max',
-
-//   imageUrl:
-//     'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg',
+  imageUrl: '',
+  // 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
+  // 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
 }
 
 const navigation = [
   { name: 'Home', to: '/Home', current: false },
   { name: 'Archived Devices', to: '/Archive', current: false },
   { name: 'Organization', to: '/Organizations', current: false },
-  { name: 'Search', to: '/Search', current: false },
+  { name: 'Search Tests', to: '/Search', current: false },
 ]
 
 const userNavigation = [
@@ -105,26 +103,30 @@ const Navbar = () => {
                       </div> */}
 
 
-                        {authUser ?
-                            <div className="flex relative items-center flex-row justify-between">
-                                <p className="text-white text-base">Signed in as{' '} 
-                                <strong className="font-bold text-base">
-                                    {userData? userData.displayName: 'Loading...'}
-                                </strong>
-                                </p>
-                            </div> : 
-                            <div className="text-white text-base">Welcome, please sign in</div>
-                        }
-
-
-                                    
+                      {authUser ?
+                          <div className="flex relative items-center flex-row justify-between">
+                              <p className="text-white text-base">Signed in as{' '} 
+                              <strong className="font-bold text-base">
+                                  {userData? userData.displayName: 'Loading...'}
+                              </strong>
+                              </p>
+                          </div> : 
+                          <div className="text-white text-base">Welcome, please sign in</div>
+                      }
+                      
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                            {/* <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" /> */}
+                            <img className="h-10 w-10 rounded-full" src={
+                            userData && userData.email.includes('csc131team7', 'admin')
+                            ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
+                            : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                            }
+                            alt="" />
                           </Menu.Button>
                         </div>
                         <Transition
