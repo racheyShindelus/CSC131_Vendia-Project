@@ -1,5 +1,6 @@
 import './App.css'
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import DeviceListHome from './DeviceListHome';
 
 const Home = () => {
@@ -19,9 +20,13 @@ const Home = () => {
         <div className="home-home-test-devices">
         <div className="home-test-devices-header">
         <h1 className="home-test-devices-text">Home - Test Devices</h1>
-            <button onClick={handleAddDevice} type="button" className="home-add-device-button button">
+            {/* <button onClick={handleAddDevice} type="button" className="home-add-device-button button">
             <span>Add device</span>
-            </button>
+            </button> */}
+
+            <Link to={`/Demo`} className="home-add-device-button button" type="button">
+            <span>Add device</span>
+            </Link>
         </div>
             <DeviceListHome devices={devices}/>
         </div>
