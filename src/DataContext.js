@@ -7,7 +7,7 @@ const DataContext = createContext();
 
 export function DataProvider({ children }) {
   const [userData, setUserData] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const listen = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -21,16 +21,20 @@ export function DataProvider({ children }) {
           if (userDocSnapshot.exists()) {
             const data = userDocSnapshot.data();
             setUserData(data);
+            setLoading(false);
             console.log('User data set:', data);
           } else {
             setUserData(null);
+            setLoading(false);
           }
         } catch (error) {
           console.log('Error getting user data:', error);
           setUserData(null);
+          setLoading(false);
         }
       } else {
         setUserData(null);
+        setLoading(false);
       }
     });
     return listen;
@@ -38,7 +42,7 @@ export function DataProvider({ children }) {
 
   return (
     <DataContext.Provider value={{userData}}>
-      {children}
+      {!loading && children}
     </DataContext.Provider>
   );
 }

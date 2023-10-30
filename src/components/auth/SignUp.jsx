@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-
 import { auth, db } from "../../firebase";
+import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
 import { Redirect } from 'react-router-dom';
+import {useAuth} from "../../AuthContext"
 
 export const SignUp = () => {
     const [userEmail, setUserEmail] = useState(null);
     const [userPassword, setUserPassword] = useState(null);
     const [error, setError] = useState(null);
     const [userUsername, setUserUsername] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-  
+    const {authUser} = useAuth();
     const register = async (e) => {
       e.preventDefault();
       try {
@@ -35,7 +35,6 @@ export const SignUp = () => {
             role: 'user',
             orgs: [0],
           });
-          setIsAuthenticated(true);
         } else {
           setError('Username is already taken.');
         }
@@ -47,13 +46,13 @@ export const SignUp = () => {
       }
     };
   
-    if (isAuthenticated) {
+    if (authUser) {
       return <Redirect to="/Home" />;
     }
   
     return (
-      <div className="flex items-center justify-center">
-        <form onSubmit={register} className="max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+        <form onSubmit={register} className="flex items-center justify-center flex-col max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+          <h1 className="mb-4 text-xl font-bold">Register</h1>
           <input
             type="text"
             placeholder="Username..."
@@ -86,8 +85,12 @@ export const SignUp = () => {
             {isLoading ? "Signing Up..." : "Sign Up"} 
           </button>
           {error && <div className="text-red-500">{error}</div>}
+            <div className="text-base">
+          Already have an account?  
+          <Link to= "/login" className ="text-base text-blue-500"> Sign In</Link>
+        </div>
         </form>
-      </div>
+        
     );
   };
 
