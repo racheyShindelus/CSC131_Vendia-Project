@@ -15,8 +15,6 @@ export const Login = () => {
               <SignIn />
             </div>
           </div>
-
-          {/* <SignIn /> */}
         </div>
       </div>
     );

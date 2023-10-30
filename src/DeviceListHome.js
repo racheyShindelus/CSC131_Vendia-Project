@@ -16,7 +16,7 @@ const DeviceListHome = (deviceProps) => {
     const currentItems = deviceName?.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
     const addDummyData = false;
-    const numDummyData = 10;
+    const numDummyData = 50;
 
     useEffect(() => {
         const listDevices = async () => {
