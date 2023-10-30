@@ -7,6 +7,10 @@ export const Register = () => {
         <div className="login-box border-2 border-black flex flex-col relative p-10 bg-white">
           <h1 className="login-box-header border-b-2 border-black pb-2 text-xl font-semibold">Register</h1>
           <SignUp />
+      <div className="flex items-center justify-center min-h-screen bg-gray-300">
+        <div className="login-box border-2 border-black flex flex-col relative p-10 bg-white">
+          <h1 className="login-box-header border-b-2 border-black pb-2 text-xl font-semibold">Register</h1>
+          <SignUp />
         </div>
       </div>
     );

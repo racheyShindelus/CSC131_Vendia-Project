@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { auth, db } from "../../firebase";
 import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
 import { Redirect } from 'react-router-dom';
 import {useAuth} from "../../AuthContext"
+=======
+
+import { auth, db } from "../../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
+import { Redirect } from 'react-router-dom';
+>>>>>>> upstream/Jeric
 
 export const SignUp = () => {
     const [userEmail, setUserEmail] = useState(null);
     const [userPassword, setUserPassword] = useState(null);
     const [error, setError] = useState(null);
     const [userUsername, setUserUsername] = useState(null);
+<<<<<<< HEAD
     const [isLoading, setIsLoading] = useState(false);
     const {authUser} = useAuth();
+=======
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+  
+>>>>>>> upstream/Jeric
     const register = async (e) => {
       e.preventDefault();
       try {
@@ -35,6 +49,10 @@ export const SignUp = () => {
             role: 'user',
             orgs: [0],
           });
+<<<<<<< HEAD
+=======
+          setIsAuthenticated(true);
+>>>>>>> upstream/Jeric
         } else {
           setError('Username is already taken.');
         }
@@ -46,13 +64,22 @@ export const SignUp = () => {
       }
     };
   
+<<<<<<< HEAD
     if (authUser) {
+=======
+    if (isAuthenticated) {
+>>>>>>> upstream/Jeric
       return <Redirect to="/Home" />;
     }
   
     return (
+<<<<<<< HEAD
         <form onSubmit={register} className="flex items-center justify-center flex-col max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
           <h1 className="mb-4 text-xl font-bold">Register</h1>
+=======
+      <div className="flex items-center justify-center">
+        <form onSubmit={register} className="max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+>>>>>>> upstream/Jeric
           <input
             type="text"
             placeholder="Username..."
@@ -85,6 +112,7 @@ export const SignUp = () => {
             {isLoading ? "Signing Up..." : "Sign Up"} 
           </button>
           {error && <div className="text-red-500">{error}</div>}
+<<<<<<< HEAD
             <div className="text-base">
           Already have an account?  
           <Link to= "/login" className ="text-base text-blue-500"> Sign In</Link>
@@ -122,3 +150,10 @@ export const SignUp = () => {
 //         </div>
 //     )
 // }
+=======
+        </form>
+      </div>
+    );
+  };
+
+>>>>>>> upstream/Jeric

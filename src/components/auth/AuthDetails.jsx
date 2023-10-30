@@ -1,7 +1,9 @@
 import React, {useEffect,useState} from 'react'
 import {auth} from '../../firebase'
 import { onAuthStateChanged, signOut} from "firebase/auth"
-
+import {Link, Redirect} from 'react-router-dom'
+import { useAuth } from '../../AuthContext'
+import { useData } from '../../DataContext'
 import {Link, Redirect} from 'react-router-dom'
 import { useAuth } from '../../AuthContext'
 import { useData } from '../../DataContext'
@@ -16,7 +18,20 @@ export const AuthDetails = () => {
         console.log('Sign out successful');
         setRedirect(true);
       }).catch((error) => console.log(error));
+    const [redirect, setRedirect] = useState(false);
+    const { authUser, loading } = useAuth();
+    const { userData } = useData();
+  
+    const userSignOut = () => {
+      signOut(auth).then(() => {
+        console.log('Sign out successful');
+        setRedirect(true);
+      }).catch((error) => console.log(error));
     }
+    if (redirect) {
+      return <Redirect to='/login' />;
+    }
+  
   
     if (redirect) {
       return <Redirect to='/login' />;

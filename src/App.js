@@ -37,6 +37,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Login/>
+            <Login/>
           </Route>
           <Route exact path="/login">
             <Login/>
@@ -59,6 +60,10 @@ function App() {
         </div>
       </div>
     </Router>
+    </DataProvider>
+  </AuthProvider>
+      
+
     </DataProvider>
   </AuthProvider>
       
