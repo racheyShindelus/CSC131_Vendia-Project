@@ -1,65 +1,25 @@
-import React, {useEffect, useState} from "react";
-import { vendiaClient } from "./vendiaClient";
-import "./Archive.css";
-import "./App.css";
+import './App.css'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import ArchiveList from './ArchiveList';
 
-const { client } = vendiaClient();
-
-export const Archive = () => {
-    
-    const [Archives, setArchives] = useState([]);
-
-    useEffect(() => {
-        const archivedDevices = async () => {
-            const archiveList = await client.entities.devices.list({
-                filter: {
-                    Archived: {
-                        eq: 'true',
-                    }
-                },
-            })
-            
-            setArchives(archiveList?.items);
-        }
-        archivedDevices();
-    }, [])
-
-    const boolToString = (value) => {
-        if(typeof(value) === 'boolean')
-            return 'true';
-        else   
-            return 'false';
-    }
-    
-  
-    
-    return ( 
-    <div className = "home-container">   
-    <div className = "archive">
-        <table>
-            <thead>
-                <tr>
-                    <th>Device Name</th>
-                    <th>Completion</th>
-                    <th>Archived</th>
-                    <th>Device Title</th>
-                </tr>
-            </thead>
-            <tbody>
-                {Archives?.map((device) => (                
-                <tr>
-                    <td>{device?.DeviceName}</td>
-                    <td>{device?.Completion}</td>
-                    <td>{boolToString(device?.Archived)}</td>
-                    <td>{device?.DeviceTitle}</td>
-                </tr>
-                ))}
-
-            </tbody>
-        </table>
-    </div>
-    </div>
-    );
+const Archive = () => {
+	const [devices, setDevices] = useState([
+		{title: '#', id: 1},
+		{title: '#', id: 2},
+		{title: '#', id: 3},
+		{title: '#', id: 4}
+	]);
+	
+	return (
+		<div className = "home-container">
+		<div className = "home-home-test-devices">
+		<div className = "home-test-devices-header">
+		<h1 className = "home-test-devices-text">Archived Devices</h1>
+		</div>
+			<ArchiveList devices = {devices}/>
+		</div>
+		</div>
+	);
 }
- 
 export default Archive;
