@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
-
+import { Link } from 'react-router-dom';
 import {Redirect} from 'react-router-dom'
 import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore'
 import { auth, db } from "../../firebase";
+import {useAuth} from "../../AuthContext"
 
 export const SignIn = () => {
   const [input, setInput] = useState(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const {authUser} = useAuth();
   const login = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -35,7 +35,6 @@ export const SignIn = () => {
           return;
         }
       }
-      setIsAuthenticated(true);
     } catch (error) {
       console.log(error);
       setError(error.message);
@@ -44,13 +43,13 @@ export const SignIn = () => {
     }
   };
 
-  if (isAuthenticated) {
+  if (authUser) {
     return <Redirect to="/Home" />;
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <form onSubmit={login} className="max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+      <form onSubmit={login} className="flex items-center justify-center flex-col max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+        <h1 className="mb-4 text-xl font-bold">Login</h1>
         <input
           type="text"
           placeholder="Email or Username..."
@@ -75,8 +74,44 @@ export const SignIn = () => {
           {isLoading ? 'Signing In...' : 'Sign In'}
         </button>
         {error && <div className="text-red-500">{error}</div>}
+        <div className="text-base">
+         Forgot Password? 
+           <Link to ="/forgotpassword" className =" text-base text-blue-500"> Reset Password </Link>
+        </div>
+        <div className="text-base">
+          Need an account? 
+          <Link to= "/signup" className ="text-base text-blue-500"> Sign Up</Link>
+        </div>
       </form>
-    </div>
   );
 };
 
+// import React, { useState } from 'react';
+// import { signInWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "../../firebase";
+// import '../../login.css'
+
+// export const SignIn = () => {
+//     const [email, setEmail] = useState("")
+//     const [password, setPassword] = useState("")
+//     const login = (e) => {
+//         e.preventDefault();
+//         signInWithEmailAndPassword(auth, email, password)
+//             .then((userCredential) => {
+//                 console.log(userCredential);
+//             })
+//             .catch((error) => {
+//                 console.log(error);
+//             })
+//     }
+//     return(
+//         <div className = 'signin--container'>
+//             <form onSubmit={login} className = 'login--fields'>
+//                 <input type= 'email' placeholder='Email...' value={email} onChange={(e)=>setEmail(e.target.value)}></input>
+//                 <input type= 'password' placeholder ='Password...'value={password} onChange={(e)=> setPassword(e.target.value)}></input>
+//                 <button className='signin--button' type = "submit">Sign In</button>
+
+//             </form>
+//         </div>
+//     )
+// }
