@@ -4,6 +4,7 @@ import { collection, doc, getDoc } from 'firebase/firestore'
 import { useAuth } from './AuthContext';
 
 const DataContext = createContext();
+var userDataTest = [];
 
 export function DataProvider({ children }) {
   const [userData, setUserData] = useState(null);
@@ -33,9 +34,10 @@ export function DataProvider({ children }) {
         setUserData(null);
       }
     });
+
     return listen;
   }, []);
-
+  userDataTest = userData;
   return (
     <DataContext.Provider value={{userData}}>
       {children}

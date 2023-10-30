@@ -5,6 +5,7 @@ import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import { useData } from "./DataContext";
 //import { filterStateInitializer } from "@mui/x-data-grid/internals";
 import "./Archive.css";
 import "./App.css";
@@ -12,7 +13,9 @@ import { useParams } from 'react-router-dom';
 
 const { client } = vendiaClient();
 
+
 export const DevicePage = () => {
+    const {userData} = useData();
 
     let { DeviceName, DeviceTitle } = useParams();
     const [rows, setRows] = useState([]);
@@ -43,12 +46,12 @@ export const DevicePage = () => {
             }));
             setRows(tempRows);
             //console.log(tempRows);
-
         }
-
+        //console.log(userData);
         loadData();
-        console.log('loadData')
-    }, []);
+    }, []); 
+
+    
 
     const columns = [
         {field: 'ID', headerName: 'ID', width: 300, editable: false},
@@ -59,7 +62,7 @@ export const DevicePage = () => {
         {field: 'TestMethod', headerName: 'TestMethod', width: 90, editable: true,},
         {field: 'Notes', headerName: 'Notes', width: 90, editable: true,},
         {field: 'Completed', headerName: 'Completed', width: 90, editable: true,},
-        {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 90, editable: true,},
+        {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 150, editable: true,},
     ];
 
     const removeNull = (value) =>
@@ -71,9 +74,9 @@ export const DevicePage = () => {
     }
 
     const editRow = async (row) => {
-        const oldRow = await row;
+        var oldRow = await row;
         const newRow = await client.entities.test.update({
-            ID: oldRow.ID,
+            _id: oldRow.ID,
             //Device: oldRow.Device,
             TestID: oldRow.TestID,
             OrgAssignment: oldRow.OrgAssignment,
@@ -81,9 +84,11 @@ export const DevicePage = () => {
             TestMethod: oldRow.TestMethod,
             Notes: oldRow.Notes,
             Completed: oldRow.Completed,
-            UpdatedBy: oldRow.UpdatedBy
+            UpdatedBy: userData.displayName
                 
             });    
+
+            oldRow.UpdatedBy = userData.displayName;
  
             return row;
     };
@@ -121,6 +126,17 @@ export const DevicePage = () => {
         
     };
 
+    const isOrgAssigned = (orgAssignment) =>
+    {
+        var output = false;
+        for (let i = 0; i < userData.orgs.length; i++)
+        {
+            if (orgAssignment === userData.orgs[i])
+                output = true;
+        }
+        return output;
+    }
+
     const handleProcessRowUpdateError = React.useCallback((error) => {
         console.log(error.message);
       }, []);
@@ -144,11 +160,11 @@ export const DevicePage = () => {
                     initialState={{
                         columns: {
                         columnVisibilityModel: {
-                            // Hide columns status and traderName, the other columns will remain visible
                             ID: false,
                         },
                         },
                     }}
+                    isCellEditable={(params) => isOrgAssigned(params.row.OrgAssignment) === true}
 
                     disableColumnFilter
                     disableColumnSelector
