@@ -49,10 +49,15 @@ function DeviceForm({ onAddDevice }) {
         <label>
           Completion:
           <input
-            type="checkbox"
+            // type="checkbox"
+            // name="completion"
+            // class="ml-2 h-5 w-5 text-indigo-600 rounded"
+            // checked={device.completion}
+            // onChange={handleChange}
+            type="number"
             name="completion"
-            class="ml-2 h-5 w-5 text-indigo-600 rounded"
-            checked={device.completion}
+            class="ml-2 pl-2 pr-2 w-16 border border-black rounded focus:outline-none"
+            value={device.completion}
             onChange={handleChange}
           />
         </label>

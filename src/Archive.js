@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { vendiaClient } from "./vendiaClient";
 import { Link } from 'react-router-dom';
+import ArchiveList from './ArchiveList';
 import "./Archive.css";
 import "./App.css";
 
@@ -8,34 +9,38 @@ const { client } = vendiaClient();
 
 export const Archive = () => {
     
-    const [Archives, setArchives] = useState([]);
+    // const [Archives, setArchives] = useState([]);
     
-    useEffect(() => {
-        const archivedDevices = async () => {
-            const archiveList = await client.entities.devices.list({
-                filter: {
-                    Archived: {
-                        eq: true
-                    }
-                },
-            })
+    // useEffect(() => {
+    //     const archivedDevices = async () => {
+    //         const archiveList = await client.entities.devices.list({
+    //             filter: {
+    //                 Archived: {
+    //                     eq: true
+    //                 }
+    //             },
+    //         })
             
-            setArchives(archiveList?.items);
-        }
-        archivedDevices();
-    }, [])
+    //         setArchives(archiveList?.items);
+    //     }
+    //     archivedDevices();
+    // }, [])
 
-    const boolToString = (value) => {
-        if(typeof(value) === 'boolean')
-            return 'true';
-        else   
-            return 'false';
-    }
+    // const boolToString = (value) => {
+    //     if(typeof(value) === 'boolean')
+    //         return 'true';
+    //     else   
+    //         return 'false';
+    // }
     
-  
+    const [devices, setDevices] = useState([
+		{title: '#', id: 1},
+		{title: '#', id: 2},
+		{title: '#', id: 3},
+		{title: '#', id: 4}
+	]);
     
     return (
-
     <div className="min-h-full">
         <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -44,8 +49,12 @@ export const Archive = () => {
         </header>
         <main>
             <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
+            <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
+            <ArchiveList devices = {devices}/>
+            </div>
+
+            {/* <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
                 <div>
-                    {/* <Link to="/Home" className="home-return-to-home-button">Back to Home</Link> */}
                     <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
                 </div>
                 <table>
@@ -68,7 +77,7 @@ export const Archive = () => {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div> */}
         </main>
     </div>
 

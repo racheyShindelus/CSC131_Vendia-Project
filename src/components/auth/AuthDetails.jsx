@@ -40,6 +40,7 @@ export const AuthDetails = () => {
             <Link to="/signup" className="text-white w-32 h-10 text-lg font-bold bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Register</Link> */}
             <Link to="/login" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Login</Link>
             <Link to="/signup" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Register</Link>
+            {/* <Link to="/forgotpassword" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Forgot Password</Link> */}
           </div>}
       </form>
     );

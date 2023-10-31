@@ -17,6 +17,8 @@ const user = {
   // 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
 }
 
+const substringsToCheck = ['csc131team7', 'admin'];
+
 const navigation = [
   { name: 'Home', to: '/Home', current: false },
   { name: 'Archived Devices', to: '/Archive', current: false },
@@ -122,7 +124,7 @@ const Navbar = () => {
                             <span className="sr-only">Open user menu</span>
                             {/* <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" /> */}
                             <img className="h-10 w-10 rounded-full" src={
-                            userData && userData.email.includes('csc131team7', 'admin')
+                            userData && substringsToCheck.some(substring => userData.email.includes(substring))
                             ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
                             : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
                             }
@@ -184,48 +186,90 @@ const Navbar = () => {
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                   {navigation.map((item) => (
-                    <Disclosure.Button
+                      // <Disclosure.Button
+                      //   key={item.name}
+                      //   as="a"
+                      //   to={item.to}
+                      //   className={classNames(
+                      //     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      //     'block rounded-md px-3 py-2 text-base font-medium'
+                      //   )}
+                      //   aria-current={item.current ? 'page' : undefined}
+                      // >
+                      //   {item.name}
+                      // </Disclosure.Button>
+
+                      <Link 
                       key={item.name}
-                      as="a"
-                      href={item.href}
+                      to={item.to}
                       className={classNames(
                         item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'block rounded-md px-3 py-2 text-base font-medium'
+                          'block rounded-md px-3 py-2 text-base font-medium'
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
-                      {item.name}
-                    </Disclosure.Button>
+                      <Disclosure.Button as="div">
+                        {item.name}
+                      </Disclosure.Button>
+                    </Link>
+
                   ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                      <img className="h-10 w-10 rounded-full" src={
+                        userData && substringsToCheck.some(substring => userData.email.includes(substring))
+                        ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
+                        : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                        }
+                      alt="" />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                      <div className="text-base font-medium leading-none text-white">{
+                      // userData.displayName
+                        userData
+                        ? userData.displayName
+                        : 'Placeholder'
+                      }</div>
+                      <div className="text-sm font-medium leading-none text-gray-400">{
+                      // userData.email
+                        userData
+                        ? userData.email
+                        : 'Placeholder'
+                      }</div>
                     </div>
-                    <button
+                    {/* <button
                       type="button"
                       className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
+                    </button> */}
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (
-                      <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                      >
+                      // <Disclosure.Button
+                      //   key={item.name}
+                      //   as="a"
+                      //   to={item.to}
+                      //   className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                      // >
+                      //   {item.name}
+                      // </Disclosure.Button>
+
+                    <Link 
+                    key={item.name}
+                      as="a"
+                      to={item.to}
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    >
+                      <Disclosure.Button as="div">
                         {item.name}
                       </Disclosure.Button>
+                    </Link>
+
                     ))}
                   </div>
                 </div>
