@@ -48,11 +48,11 @@ export const ArchiveTests = () => {
 	const columns = [
 		{field: 'ID', headerName: 'ID', width: 300, editable: false},
 		{field: 'TestID', headerName: 'TestID', width: 90, editable: false},
-		{field: 'OrgAssignment', headerName: 'OrgAssignment', width: 150, editable: true,},
-		{field: 'TestName', headerName: 'TestName', width: 90, editable: true,},
-		{field: 'TestMethod', headerName: 'TestMethod', width: 90, editable: true,},
-		{field: 'Notes', headerName: 'Notes', width: 90, editable: true,},
-		{field: 'UpdatedBy', headerName: 'UpdatedBy', width: 90, editable: true,},
+		{field: 'OrgAssignment', headerName: 'OrgAssignment', width: 150, editable: false,},
+		{field: 'TestName', headerName: 'TestName', width: 90, editable: false,},
+		{field: 'TestMethod', headerName: 'TestMethod', width: 90, editable: false,},
+		{field: 'Notes', headerName: 'Notes', width: 90, editable: false,},
+		{field: 'UpdatedBy', headerName: 'UpdatedBy', width: 90, editable: false,},
 	];
 
 	const removeNull = (value) => {

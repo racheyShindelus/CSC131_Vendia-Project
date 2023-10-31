@@ -15,7 +15,7 @@ const { client } = vendiaClient();
 
 const Organizations = ({history}) => {
   const { userData } = useData();
-  //const organization = ([{OrgName: "Org1", OrgID: 1, Users: ["1","2","3"]},{OrgName: "Org3", OrgID: 2, Users: ["1","2","3"]},{OrgName: "Org2", OrgID: 3, Users: ["1","2","3"]},])
+  const organization = ([{OrgName: "Org1", OrgID: 1, Users: ["1","2","3"]},{OrgName: "Org3", OrgID: 2, Users: ["1","2","3"]},{OrgName: "Org2", OrgID: 3, Users: ["1","2","3"]},])
   const [loading, setLoading] = useState(true);
   const [orgList, setOrgList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);

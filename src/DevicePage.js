@@ -165,7 +165,6 @@ export const DevicePage = () => {
                     <div>
                         <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
                     </div>
-                    {/* {DeviceTitle} */}
                     <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
                         Remove Entry
                     </Button>
