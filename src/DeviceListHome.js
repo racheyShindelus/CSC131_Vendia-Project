@@ -16,7 +16,7 @@ const DeviceListHome = (deviceProps) => {
     const currentItems = deviceName?.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
     const addDummyData = false;
-    const numDummyData = 10;
+    const numDummyData = 50;
 
     useEffect(() => {
         const listDevices = async () => {
@@ -36,19 +36,20 @@ const DeviceListHome = (deviceProps) => {
     }, [])
 
     return (
-        <div className="home-test-devices-container">
-            {currentItems?.map((item, index) => (
-            <div className="home-device1" key={index}>
-                <h2>#{index+1}: {item?.DeviceTitle}</h2>
-                <p>Status: {item?.Completion}%</p>
-                <Link to={`/DevicePage/${item?.DeviceName}/${item?.DeviceTitle}`} className="home-device1button" type="button">View tests</Link>
+        <div className="home-test-devices">
+            <div className="home-test-devices-container">
+                {currentItems?.map((item, index) => (
+                <div className="home-device1" key={index}>
+                    <h2>#{index+1}: {item?.DeviceTitle}</h2>
+                    <p>Status: {item?.Completion}%</p>
+                    <Link to={`/DevicePage/${item?.DeviceName}/${item?.DeviceTitle}`} className="home-device1button" type="button">View tests</Link>
+                </div>
+                ))}
             </div>
-            ))}
             <div>
-            <Pagination className="pagination" count={Math.ceil(deviceName?.length / itemsPerPage)} page={page} onChange={(event, value) => setPage(value)} />
+                <Pagination className="pagination" count={Math.ceil(deviceName?.length / itemsPerPage)} page={page} onChange={(event, value) => setPage(value)} />
             </div>
         </div>
-        
     );
 }
 

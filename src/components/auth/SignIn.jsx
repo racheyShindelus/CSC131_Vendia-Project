@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
-
+import {Link} from 'react-router-dom'
 import {Redirect} from 'react-router-dom'
 import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore'
 import { auth, db } from "../../firebase";
@@ -50,7 +50,10 @@ export const SignIn = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <form onSubmit={login} className="max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+      <form onSubmit={login} className="max-w-md px-4 pt-4 py-8 bg-white rounded-lg shadow-lg" style={{ display: 'block' }}>
+        <div>
+        Email
+        </div>
         <input
           type="text"
           placeholder="Email or Username..."
@@ -59,6 +62,9 @@ export const SignIn = () => {
           required
           className="w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
         />
+        <div>
+        Password
+        </div>
         <input
           type="password"
           placeholder="Password..."
@@ -74,6 +80,7 @@ export const SignIn = () => {
         >
           {isLoading ? 'Signing In...' : 'Sign In'}
         </button>
+        <Link to="/forgotpassword" className="block flex items-left w-36 px-0 mt-4 text-base text-gray-700 text-black">Forgot Password?</Link>
         {error && <div className="text-red-500">{error}</div>}
       </form>
     </div>
