@@ -155,13 +155,11 @@ const Navbar = () => {
                                   </Link>
                                 )}
                               </Menu.Item>
-                              
                             ))}
                             {/* <button onClick={handleSignOut} className="text-white w-32 h-10 text-lg font-bold border ml-8 mr-5 bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Sign Out</button> */}
+                            {/* <div className="items-left w-48 px-4 py-2 text-gray-700 hover:bg-gray-100 text-black"> */}
                             <AuthDetails />
-                          
-                          
-                          
+                            {/* </div> */}
                           
                           </Menu.Items>
                         </Transition>
@@ -208,11 +206,11 @@ const Navbar = () => {
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
+                      
                       <Disclosure.Button as="div">
                         {item.name}
                       </Disclosure.Button>
                     </Link>
-
                   ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">
@@ -258,7 +256,6 @@ const Navbar = () => {
                       // >
                       //   {item.name}
                       // </Disclosure.Button>
-
                     <Link 
                     key={item.name}
                       as="a"
@@ -271,6 +268,11 @@ const Navbar = () => {
                     </Link>
 
                     ))}
+
+                    {/* <div className="block rounded-md max-w-full px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                      <AuthDetails className="text-lg"/>
+                    </div> */}
+                    
                   </div>
                 </div>
               </Disclosure.Panel>
