@@ -1,7 +1,6 @@
 import React, {useEffect,useState} from 'react'
 import {auth} from '../../firebase'
 import { onAuthStateChanged, signOut} from "firebase/auth"
-
 import {Link, Redirect} from 'react-router-dom'
 import { useAuth } from '../../AuthContext'
 import { useData } from '../../DataContext'
@@ -33,6 +32,7 @@ export const AuthDetails = () => {
             </p>
             <button onClick={userSignOut} className="text-white w-32 h-10 text-lg font-bold border ml-8 mr-5 bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Sign Out</button> */}
           <button onClick={userSignOut} className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Sign out</button>
+          {/* <button onClick={userSignOut} className="block flex w-[160px] items-left text-sm">Sign out</button> */}
           </div> : !loading &&
           // <div className="flex relative items-center flex-row justify-between">
           <div className="flex relative items-center flex-col justify-between">

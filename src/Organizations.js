@@ -26,15 +26,15 @@ const Organizations = ({history}) => {
     Users: [],
   });
 
-  // useEffect(()=> {
-  //   const listOrgs = async () => {
-  //     const listOrg = await client.entities.organizations.list();
-  //     setOrgList(listOrg.items)
-  //     setLoading(false)
-  //   }
-  //   listOrgs();
-  //   console.log(orgList);
-  // }, [change])
+  useEffect(()=> {
+    const listOrgs = async () => {
+      const listOrg = await client.entities.organizations.list();
+      setOrgList(listOrg.items)
+      setLoading(false)
+    }
+    listOrgs();
+    console.log(orgList);
+  }, [change])
 
   const columns = [
     { field: 'OrgName', headerName: 'Org Name', flex:1 },
@@ -74,7 +74,7 @@ const Organizations = ({history}) => {
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Organizations</h1>
         </div>
       </header>
-      {loading ? <div>loading</div> : 
+      {loading ? <div>Loading</div> : 
       <main>
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
             <div className ="flex justify-between">
