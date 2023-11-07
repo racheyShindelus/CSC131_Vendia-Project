@@ -12,7 +12,7 @@ const ArchiveList = (deviceProps) => {
 	const [deviceName, setDeviceList] = useState();
 	const [page, setPage] = useState(1);
 	const itemsPerPage = 12;
-	const devices = deviceProps.devices;
+	// const devices = deviceProps.devices;
 	const currentItems = deviceName?.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
 	useEffect(() => {
@@ -38,7 +38,7 @@ const ArchiveList = (deviceProps) => {
 						#{index+1}: {item?.DeviceTitle}
 					</h2>
                     <p className="text-[16px] mb-[18px]">
-						Status: Device Archived
+						Status: Archived
 					</p>
                     <Link to={`/ArchiveTests/${item?.DeviceName}/${item?.DeviceTitle}`}
 					className="min-w-[40%] h-[35px] flex text-inherit text-[8px] sm:text-[10px] md:text-[12px] lg:text-[16px] xl:text-[16px] items-center justify-center rounded-[10px] bg-gray-200 border border-black no-underline hover:bg-gray-300"
