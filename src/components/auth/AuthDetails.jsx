@@ -5,7 +5,8 @@ import {Link, Redirect} from 'react-router-dom'
 import { useAuth } from '../../AuthContext'
 import { useData } from '../../DataContext'
 
-export const AuthDetails = () => {
+// export const AuthDetails = () => {
+export const AuthDetails = (props) => {
     const [redirect, setRedirect] = useState(false);
     const { authUser, loading } = useAuth();
     const { userData } = useData();
@@ -20,28 +21,27 @@ export const AuthDetails = () => {
     if (redirect) {
       return <Redirect to='/login' />;
     }
-  
+
     return (
       <form>
         {authUser ?
           <div className="flex relative items-center flex-row justify-between">
-            {/* <p className="text-base">Signed in as{' '} 
-              <strong className="font-bold text-base">
-                {userData? userData.displayName: 'Loading...'}
-              </strong>
-            </p>
-            <button onClick={userSignOut} className="text-white w-32 h-10 text-lg font-bold border ml-8 mr-5 bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Sign Out</button> */}
-          <button onClick={userSignOut} className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Sign out</button>
-          {/* <button onClick={userSignOut} className="block flex w-[160px] items-left text-sm">Sign out</button> */}
+            {props.isSpecial ? (
+                <button onClick={userSignOut} className="w-screen pr-[32px] mr-[2%] flex items-left rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign out</button>
+            ) : (
+                <button onClick={userSignOut} className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Sign out</button>
+            )}
           </div> : !loading &&
-          // <div className="flex relative items-center flex-row justify-between">
           <div className="flex relative items-center flex-col justify-between">
-            {/* <Link to="/login" className="text-white w-32 h-10 text-lg font-bold border mr-5 bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Login</Link>
-            <Link to="/signup" className="text-white w-32 h-10 text-lg font-bold bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Register</Link> */}
-            <Link to="/login" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Login</Link>
-            <Link to="/signup" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Register</Link>
-            {/* <Link to="/forgotpassword" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Forgot Password</Link> */}
-          </div>}
+            {props.isSpecial ? (
+              <><Link to="/login" className="w-screen pl-4 pr-[32px] mr-[2%] flex items-left rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Login</Link><Link to="/signup" className="w-screen pl-4 pr-[32px] mr-[2%] flex items-left rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Register</Link></>
+            ) : (
+              <><Link to="/login" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Login</Link><Link to="/signup" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Register</Link></>
+            )}
+            {/* <Link to="/login" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Login</Link>
+            <Link to="/signup" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Register</Link> */}
+          </div>
+        }
       </form>
     );
 } 

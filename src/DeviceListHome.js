@@ -39,7 +39,7 @@ const DeviceListHome = (deviceProps) => {
         <div>
             <div className="items-start w-auto pb-5 h-auto grid gap-y-[30px] grid-cols-4 grid-rows-3">
                 {currentItems?.map((item, index) => (
-                <div className="shadow-custom w-[90%] flex p-[16px] border border-gray-300 max-w-[MaxWidth] shadow-md transition-transform transition-shadow transition duration-300 items-start flex-col justify-start bg-white hover:scale-[1.02] hover:shadow-indigo-300" key={index}>
+                <div className="shadow-custom w-[90%] flex p-[16px] border border-gray-300 max-w-[MaxWidth] shadow-md transition-transform transition-shadow transition duration-300 items-start flex-col justify-start bg-white hover:scale-[1.02] hover:shadow-indigo-400" key={index}>
                     <h2 className="mb-[5px] text-[20px] mt-0 font-bold">
                         #{index+1}: {item?.DeviceTitle}
                     </h2>
