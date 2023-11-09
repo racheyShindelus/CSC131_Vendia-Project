@@ -18,6 +18,10 @@ const user = {
 
 const substringsToCheck = ['csc131team7', 'admin'];
 
+const adminPfp = 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Eo_circle_green_white_letter-a.svg'
+const userPfp = 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+const defaultPfp = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png'
+
 const navigation = [
   { name: 'Home', to: '/Home', current: false },
   { name: 'Archived Devices', to: '/Archive', current: false },
@@ -126,10 +130,18 @@ const Navbar = () => {
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
                             {/* <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" /> */}
-                            <img className="h-10 w-10 rounded-full" src={
-                            userData && substringsToCheck.some(substring => userData.email.includes(substring))
-                            ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
-                            : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                            <img className="h-10 w-10 rounded-full"
+                            // src={
+                            //   userData && substringsToCheck.some(substring => userData.email.includes(substring))
+                            //   ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
+                            //   : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                            // }
+                            src={
+                              userData
+                                ? substringsToCheck.some(substring => userData.email.includes(substring))
+                                  ? adminPfp
+                                  : userPfp
+                                : defaultPfp
                             }
                             alt="" />
                           </Menu.Button>
@@ -228,23 +240,31 @@ const Navbar = () => {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={
-                        userData && substringsToCheck.some(substring => userData.email.includes(substring))
-                        ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
-                        : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                      <img className="h-10 w-10 rounded-full"
+                        // src={
+                        //   userData && substringsToCheck.some(substring => userData.email.includes(substring))
+                        //   ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
+                        //   : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                        // }
+                        src={
+                          userData
+                            ? substringsToCheck.some(substring => userData.email.includes(substring))
+                              ? adminPfp
+                              : userPfp
+                            : defaultPfp
                         }
-                      alt="" />
+                      alt="N/A" />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">{
                         userData
                         ? userData.displayName
-                        : 'Placeholder'
+                        : 'Guest'
                       }</div>
                       <div className="text-sm font-medium leading-none text-gray-400">{
                         userData
                         ? userData.email
-                        : 'Placeholder'
+                        : 'No email available'
                       }</div>
                     </div>
                     {/* <button

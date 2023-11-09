@@ -74,7 +74,7 @@ const Organizations = ({history}) => {
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Organizations</h1>
         </div>
       </header>
-      {loading ? <div>Loading</div> : 
+      {loading ? <div className="mx-auto text-[20px] max-w-7xl px-4 py-2 sm:px-6 lg:px-8">Loading...</div> : 
       <main>
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
             <div className ="flex justify-between">
