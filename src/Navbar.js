@@ -8,16 +8,19 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useAuth } from './AuthContext'
+import { NavLink } from 'react-router-dom';
 
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
   imageUrl: '',
-  // 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
-  // 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
 }
 
 const substringsToCheck = ['csc131team7', 'admin'];
+
+const adminPfp = 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Eo_circle_green_white_letter-a.svg'
+const userPfp = 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+const defaultPfp = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/2048px-Default_pfp.svg.png'
 
 const navigation = [
   { name: 'Home', to: '/Home', current: false },
@@ -71,19 +74,29 @@ const Navbar = () => {
                             </Link>
                         ))} */}
                         {navigation.map((item) => (
-                          <Link
+                          // <Link
+                          //   key={item.name}
+                          //   to={item.to}
+                          //   className={classNames(
+                          //     item.current
+                          //       ? 'bg-gray-900 text-white'  // This is applied if item.current is true
+                          //       : 'text-gray-300 hover:bg-gray-700 hover:text-white',  // This is applied if item.current is false
+                          //     'rounded-md px-3 py-2 text-base font-medium' // These styles are applied unconditionally
+                          //   )}
+                          //   aria-current={item.current ? 'page' : undefined}
+                          // >
+                          //   {item.name}
+                          // </Link>
+
+                          <NavLink
                             key={item.name}
                             to={item.to}
-                            className={classNames(
-                              item.current
-                                ? 'bg-gray-900 text-white'  // This is applied if item.current is true
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',  // This is applied if item.current is false
-                              'rounded-md px-3 py-2 text-base font-medium' // These styles are applied unconditionally
-                            )}
-                            aria-current={item.current ? 'page' : undefined}
+                            className='rounded-md px-3 py-2 text-white text-base font-medium hover:bg-gray-700 hover:text-white'
+                            activeClassName='bg-gray-700 text-white'
+                            aria-current='page'
                           >
                             {item.name}
-                          </Link>
+                          </NavLink>
                         ))}
                         {(userData?.role === 'owner' || userData?.role === 'admin') && <Link to ='/AdminPage' className ='"text-lg text-black hover:scale-105 hover:text-blue-800'>Admin</Link>}
                       </div>
@@ -99,12 +112,6 @@ const Navbar = () => {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button> */}
-
-                      {/* <div class="text-white text-base">
-                        <AuthDetails />
-                      </div> */}
-
-
                       {authUser ?
                           <div className="flex relative items-center flex-row justify-between">
                               <p className="text-white text-base">Signed in as{' '} 
@@ -123,10 +130,18 @@ const Navbar = () => {
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
                             {/* <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" /> */}
-                            <img className="h-10 w-10 rounded-full" src={
-                            userData && substringsToCheck.some(substring => userData.email.includes(substring))
-                            ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
-                            : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                            <img className="h-10 w-10 rounded-full"
+                            // src={
+                            //   userData && substringsToCheck.some(substring => userData.email.includes(substring))
+                            //   ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
+                            //   : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                            // }
+                            src={
+                              userData
+                                ? substringsToCheck.some(substring => userData.email.includes(substring))
+                                  ? adminPfp
+                                  : userPfp
+                                : defaultPfp
                             }
                             alt="" />
                           </Menu.Button>
@@ -156,10 +171,8 @@ const Navbar = () => {
                                 )}
                               </Menu.Item>
                             ))}
-                            {/* <button onClick={handleSignOut} className="text-white w-32 h-10 text-lg font-bold border ml-8 mr-5 bg-indigo-800 flex items-center justify-center no-underline hover:bg-indigo-900">Sign Out</button> */}
-                            {/* <div className="items-left w-48 px-4 py-2 text-gray-700 hover:bg-gray-100 text-black"> */}
-                            <AuthDetails />
-                            {/* </div> */}
+
+                            <AuthDetails isSpecial={false} />
                           
                           </Menu.Items>
                         </Transition>
@@ -197,44 +210,61 @@ const Navbar = () => {
                       //   {item.name}
                       // </Disclosure.Button>
 
-                      <Link 
+                    //   <Link 
+                    //   key={item.name}
+                    //   to={item.to}
+                    //   className={classNames(
+                    //     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    //       'block rounded-md px-3 py-2 text-base font-medium'
+                    //   )}
+                    //   aria-current={item.current ? 'page' : undefined}
+                    //   >
+                    //   <Disclosure.Button as="div">
+                    //     {item.name}
+                    //   </Disclosure.Button>
+                    // </Link>
+
+                    <NavLink
                       key={item.name}
                       to={item.to}
-                      className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'block rounded-md px-3 py-2 text-base font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
+                      className='block rounded-md px-3 py-2 text-base text-gray-300 font-medium hover:bg-gray-700 hover:text-white'
+                      activeClassName='bg-gray-700 text-white'
+                      aria-current='page'
                     >
-                      
                       <Disclosure.Button as="div">
                         {item.name}
                       </Disclosure.Button>
-                    </Link>
+                    </NavLink>
                   ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={
-                        userData && substringsToCheck.some(substring => userData.email.includes(substring))
-                        ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
-                        : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                      <img className="h-10 w-10 rounded-full"
+                        // src={
+                        //   userData && substringsToCheck.some(substring => userData.email.includes(substring))
+                        //   ? 'https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2Fmeta-l.cdn.bubble.io%2Ff1512936020165x278911292087286720%2FA.png?w=64&h=64&auto=compress&dpr=1&fit=max'
+                        //   : 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
+                        // }
+                        src={
+                          userData
+                            ? substringsToCheck.some(substring => userData.email.includes(substring))
+                              ? adminPfp
+                              : userPfp
+                            : defaultPfp
                         }
-                      alt="" />
+                      alt="N/A" />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">{
-                      // userData.displayName
                         userData
                         ? userData.displayName
-                        : 'Placeholder'
+                        : 'Guest'
                       }</div>
                       <div className="text-sm font-medium leading-none text-gray-400">{
-                      // userData.email
                         userData
                         ? userData.email
-                        : 'Placeholder'
+                        : 'No email available'
                       }</div>
                     </div>
                     {/* <button
@@ -269,9 +299,7 @@ const Navbar = () => {
 
                     ))}
 
-                    {/* <div className="block rounded-md max-w-full px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
-                      <AuthDetails className="text-lg"/>
-                    </div> */}
+                      <AuthDetails isSpecial={true} />
                     
                   </div>
                 </div>
@@ -280,55 +308,7 @@ const Navbar = () => {
           )}
         </Disclosure>
         </div>
-
-        // <header className="z-10 sticky top-0 w-full flex overflow-auto items-center flex-col justify-start ">
-        //     <div className="overflow-auto w-full flex items-center pt-5 pb-5 border-b border-black bg-white px-8 justify-between">
-        //     <div className="flex relative space-x-8">
-        //         <h1 className="text-xl font-bold pr-20">Cyber Savants Test Tracker</h1>
-        //         <Link to="/Home" className="text-lg pl-20 text-black hover:scale-105 hover:text-blue-800">Home</Link>
-        //         <Link to="/Archive" className="text-lg text-black hover:scale-105 hover:text-blue-800">Archived Devices</Link>
-        //         <Link to="/DevicePage" className="text-lg text-black hover:scale-105 hover:text-blue-800">Organization</Link>
-        //         <Link to="/Demo" className="text-lg text-black hover:scale-105 hover:text-blue-800">Other</Link>
-        //         {(userData?.role === 'owner' || userData?.role === 'admin') && <Link to ='/AdminPage' className ='"text-lg text-black hover:scale-105 hover:text-blue-800'>Admin</Link>}
-        //     </div>
-        //     <input
-        //         type="text"
-        //         placeholder="Search..."
-        //         className="w-400 h-35 text-lg pl-10"
-        //     />
-        //     <div className="flex items-center space-x-4">
-        //         <AuthDetails />
-        //     </div>
-        //     </div>
-        // </header>
     );
 };
 
 export default Navbar;
-
-// import './App.css'
-// import { Link } from 'react-router-dom';
-
-// const Navbar = () => {
-//     return ( 
-//         <header data-role="Header" className="home-top-header">
-//             <h1 className="home-top-header-title">Cyber Savants Test Tracker</h1>
-//             <div className="home-top-header-nav">
-//                 <Link to="/" className="home-navbar-text">Home</Link>
-//                 <Link to="/Archive" className="home-navbar-text">Archived Devices</Link>
-//                 <Link to="/" className="home-navbar-text">Organization</Link>
-//                 <Link to="/Demo" className="home-navbar-text">Other</Link>
-//             </div>
-//             <input type="text"
-//                 placeholder="Search..."
-//                 className="home-search-bar input"
-//             />
-//             <div className="home-top-header-login">
-//                 <Link to="/Login" className="home-login-button">Login</Link>
-//                 <Link to="/Register" className="home-register-button">Register</Link>
-//             </div>
-//         </header>
-//     );
-// }
-
-// export default Navbar;
