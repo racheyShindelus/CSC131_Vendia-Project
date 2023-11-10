@@ -4,6 +4,7 @@ import { Demo } from './Demo';
 import Navbar from './Navbar';
 import Home from './Home';
 import Archive from './Archive'
+import ArchiveTests from'./ArchiveTests'
 import DevicePage from './DevicePage';
 import Organizations from './Organizations';
 import {OrganizationDetails} from "./components/orgs/OrganizationDetails"
@@ -21,15 +22,8 @@ function App() {
       setCurrentPage(page);
   };
 
-  const [searchResults, setSearchResults] = useState([]);
-  
-  const handleSearch = (query) => {
-    // Implement your search logic here, e.g., making an API request.
-    // Update the searchResults state with the search results.
-  };
-
   return (
-   <AuthProvider>
+    <AuthProvider>
     <DataProvider>
     <Router>
       <div className="App">
@@ -52,8 +46,9 @@ function App() {
           <ProtectedRoute exact path="/Archive" component={Archive} />
           <ProtectedRoute exact path="/Demo" component={Demo} />
           <ProtectedRoute exact path="/Organizations" component={Organizations} />
-          <ProtectedRoute exact path="/org/:id" component={OrganizationDetails} />
+          <ProtectedRoute exact path="/Organizations/:name" component={OrganizationDetails} />
           <ProtectedRoute exact path="/Search" component={Search} />
+          <ProtectedRoute exact path="/ArchiveTests/:DeviceName/:DeviceTitle" component={ArchiveTests}/>
           <ProtectedRoute exact path="/DevicePage/:DeviceName/:DeviceTitle" component={DevicePage} />
         </Switch>
         <div className="App-content">
@@ -62,12 +57,35 @@ function App() {
     </Router>
     </DataProvider>
   </AuthProvider>
-      
-
-    </DataProvider>
-  </AuthProvider>
-      
-
+  //  <AuthProvider>
+  //   <DataProvider>
+  //   <Router>
+  //     <div className="App">
+  //       <Navbar/>
+  //       <Switch>
+  //         <Route exact path="/">
+  //           <Login/>
+  //         </Route>
+  //         <Route exact path="/login">
+  //           <Login/>
+  //         </Route>
+  //         <Route exact path="/signup">
+  //           <Register/>
+  //         </Route>
+  //         <ProtectedRoute exact path="/Home" component={Home} />
+  //         <ProtectedRoute exact path="/Archive" component={Archive} />
+  //         <ProtectedRoute exact path="/Demo" component={Demo} />
+  //         <ProtectedRoute exact path="/Organizations" component={Organizations} />
+  //         <ProtectedRoute exact path="/Search" component={Search} />
+  //         <ProtectedRoute exact path="/ArchiveTests/:DeviceName/:DeviceTitle" component={ArchiveTests}/>
+  //         <ProtectedRoute exact path="/DevicePage/:DeviceName/:DeviceTitle" component={DevicePage} />
+  //       </Switch>
+  //       <div className="App-content">
+  //       </div>
+  //     </div>
+  //   </Router>
+  //   </DataProvider>
+  // </AuthProvider>
   );
 }
 

@@ -25,12 +25,13 @@ export const ForgotPassword = () => {
     )
   };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-300">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="flex items-center justify-center">
-      <form onSubmit={reset} className="flex items-center flex-col max-w-sm px-8 py-8 bg-white rounded-lg shadow-lg space-y-3">
-        <h1 className="flex pb-2 text-xl font-semibold justify-center">
+      <form onSubmit={reset} className="flex flex-col max-w-sm px-8 py-8 bg-white rounded-lg shadow-lg space-y-3">
+        {/* <h1 className="flex pb-2 text-xl font-semibold justify-center">
           Password Reset
-        </h1>
+        </h1> */}
+        <h1 className="flex items-center login-box-header border-b-2 border-black pb-3 text-2xl font-semibold">Password Reset</h1>
         {error && <div className="text-red-500">{error}</div>}
         {message && <div className = "text-green-500"> {message}</div>}
         <input
@@ -48,7 +49,7 @@ export const ForgotPassword = () => {
         >
           {isLoading ? 'Resetting...' : 'Reset'}
         </button>
-        <Link to="/login" className="text-blue-500 flex justify-center">Login</Link>
+        <Link to="/login" className="text-blue-500 flex justify-center">Back to Login</Link>
       </form>
     </div>
       </div>
