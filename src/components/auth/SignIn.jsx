@@ -11,7 +11,6 @@ export const SignIn = () => {
   const [error, setError] = useState(null);
   const {authUser} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-
   const login = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -81,8 +80,15 @@ export const SignIn = () => {
         </button>
         <Link to="/forgotpassword" className="block flex items-left w-36 px-0 mt-4 text-base text-gray-700 text-black">Forgot Password?</Link>
         {error && <div className="text-red-500">{error}</div>}
+        <div className="text-base">
+         Forgot Password? 
+           <Link to ="/forgotpassword" className =" text-base text-blue-500"> Reset Password </Link>
+        </div>
+        <div className="text-base">
+          Need an account? 
+          <Link to= "/signup" className ="text-base text-blue-500"> Sign Up</Link>
+        </div>
       </form>
-    </div>
   );
 };
 

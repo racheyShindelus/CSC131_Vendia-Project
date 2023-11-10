@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-
 import { auth, db } from "../../firebase";
+import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
 import { Redirect } from 'react-router-dom';
-import { useAuth } from '../../AuthContext';
+import {useAuth} from "../../AuthContext"
 
 export const SignUp = () => {
     const [userEmail, setUserEmail] = useState(null);
@@ -45,7 +45,6 @@ export const SignUp = () => {
         setIsLoading(false); 
       }
     };
-  
     if (authUser) {
       return <Redirect to="/Home" />;
     }
@@ -94,8 +93,12 @@ export const SignUp = () => {
             {isLoading ? "Signing Up..." : "Sign Up"} 
           </button>
           {error && <div className="text-red-500">{error}</div>}
+            <div className="text-base">
+          Already have an account?  
+          <Link to= "/login" className ="text-base text-blue-500"> Sign In</Link>
+        </div>
         </form>
-      </div>
+        
     );
   };
 

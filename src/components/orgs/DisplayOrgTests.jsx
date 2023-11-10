@@ -158,7 +158,6 @@ export const DisplayOrgTests = ({org}) => {
     const handleProcessRowUpdateError = React.useCallback((error) => {
         console.log(error.message);
       }, []);
-
     const handleAddTests = () => {
         testSelection.forEach(async (test) => {
             const newOrgAssignment = test.OrgAssignment.includes(org.OrgName)

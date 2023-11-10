@@ -73,7 +73,6 @@ const Organizations = ({history}) => {
     setOpenDialog(false);
     setError('');
   };
-  
   return (
     <div className="min-h-full">
       <header className="bg-white shadow">

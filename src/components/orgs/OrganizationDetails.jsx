@@ -29,7 +29,6 @@ export const OrganizationDetails = ({ match }) => {
         setOrg(newOrg)
         setLoading(false)
         //console.log(newOrg.OrgName)
-        
         console.log(currentOrg.items[0]);
       } catch (error) {
         console.error('Error loading organization data:', error);

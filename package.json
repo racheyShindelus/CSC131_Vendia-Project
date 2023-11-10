@@ -1,4 +1,5 @@
 {
+
   "name": "csc131",
   "version": "0.1.0",
   "private": true,
@@ -14,6 +15,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@vendia/client": "^0.12.0",
+    "autoprefixer": "^10.4.16",
     "autoprefixer": "^10.4.16",
     "firebase": "^10.4.0",
     "postcss": "^8.4.31",
@@ -50,4 +52,5 @@
   "devDependencies": {
     "tailwindcss": "^3.3.3"
   }
+
 }

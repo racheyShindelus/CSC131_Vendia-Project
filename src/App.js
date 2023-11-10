@@ -15,7 +15,6 @@ import {Register} from './signup'
 import { ProtectedRoute } from './ProtectedRoute';
 import { AuthProvider } from './AuthContext';
 import { ForgotPassword } from './components/auth/ForgotPassword';
-
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
@@ -58,7 +57,6 @@ function App() {
     </Router>
     </DataProvider>
   </AuthProvider>
-  
   //  <AuthProvider>
   //   <DataProvider>
   //   <Router>
