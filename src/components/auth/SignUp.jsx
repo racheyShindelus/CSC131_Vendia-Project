@@ -4,15 +4,15 @@ import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
 import { Redirect } from 'react-router-dom';
+import { useAuth } from '../../AuthContext';
 
 export const SignUp = () => {
     const [userEmail, setUserEmail] = useState(null);
     const [userPassword, setUserPassword] = useState(null);
     const [error, setError] = useState(null);
     const [userUsername, setUserUsername] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-  
+    const {authUser} = useAuth();
     const register = async (e) => {
       e.preventDefault();
       try {
@@ -32,10 +32,9 @@ export const SignUp = () => {
           await setDoc(userDocRef, {
             email: userEmail,
             displayName: userUsername,
-            role: 'user',
-            orgs: [0],
+            isAdmin: false,
+            orgs: [null],
           });
-          setIsAuthenticated(true);
         } else {
           setError('Username is already taken.');
         }
@@ -47,7 +46,7 @@ export const SignUp = () => {
       }
     };
   
-    if (isAuthenticated) {
+    if (authUser) {
       return <Redirect to="/Home" />;
     }
   

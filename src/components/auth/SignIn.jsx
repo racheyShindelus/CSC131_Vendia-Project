@@ -4,13 +4,13 @@ import {Link} from 'react-router-dom'
 import {Redirect} from 'react-router-dom'
 import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore'
 import { auth, db } from "../../firebase";
-
+import { useAuth } from '../../AuthContext';
 export const SignIn = () => {
   const [input, setInput] = useState(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const {authUser} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = async (e) => {
     e.preventDefault();
@@ -35,7 +35,6 @@ export const SignIn = () => {
           return;
         }
       }
-      setIsAuthenticated(true);
     } catch (error) {
       console.log(error);
       setError(error.message);
@@ -44,7 +43,7 @@ export const SignIn = () => {
     }
   };
 
-  if (isAuthenticated) {
+  if (authUser) {
     return <Redirect to="/Home" />;
   }
 

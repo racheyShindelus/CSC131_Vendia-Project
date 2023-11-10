@@ -15,8 +15,8 @@ const { client } = vendiaClient();
 
 const Organizations = ({history}) => {
   const { userData } = useData();
-  const organization = ([{OrgName: "Org1", OrgID: 1, Users: ["1","2","3"]},{OrgName: "Org3", OrgID: 2, Users: ["1","2","3"]},{OrgName: "Org2", OrgID: 3, Users: ["1","2","3"]},])
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [orgList, setOrgList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [change, setChange] = useState(false);
@@ -26,25 +26,19 @@ const Organizations = ({history}) => {
     Users: [],
   });
 
-  // useEffect(()=> {
-  //   const listOrgs = async () => {
-  //     const listOrg = await client.entities.organizations.list();
-  //     setOrgList(listOrg.items)
-  //     setLoading(false)
-  //   }
-  //   listOrgs();
-  //   console.log(orgList);
-  // }, [change])
+   useEffect(()=> {
+     const listOrgs = async () => {
+       const listOrg = await client.entities.organizations.list();
+       setOrgList(listOrg.items)
+       setLoading(false)
+     }
+     listOrgs();
+     console.log(orgList);
+   }, [change])
 
   const columns = [
     { field: 'OrgName', headerName: 'Org Name', flex:1 },
-    { field: 'OrgID', headerName: 'Org ID', flex: 2 },
-    { field: 'Users', headerName: '# of Users', flex:2,
-    renderCell: (params) => (
-      <div>
-        {params.value ? params.value.length : 0}
-      </div>
-    ), },
+    { field: 'OrgID', headerName: 'Org ID', flex: 1 },
     {
       field: 'View Details',
       headerName: 'View Details',
@@ -55,18 +49,31 @@ const Organizations = ({history}) => {
     },
   ];
   const handleEdit = (org) => {
-    history.push(`/org/${org.OrgID}`)
+    history.push(`/Organizations/${org.OrgName}`)
   };
 
   const handleCreateOrg = async () => {
+    const orgIDExists = orgList.some((org) => org.OrgID === parseInt(newOrg.OrgID, 10));
+    const orgNameExists = orgList.some((org) => org.OrgName === newOrg.OrgName);
+    if (orgNameExists) {
+      setError('Organization name already exists. Please choose a different name.');
+      return;
+    }
+    if (orgIDExists) {
+      setError('Organization ID is not unique.');
+      return;
+    }
     const addOrgResponse = await client.entities.organizations.add({
       OrgName: newOrg.OrgName,
       OrgID: parseInt(newOrg.OrgID, 10),
       Users: [],
-    })
+    });
+
     setChange(!change);
     setOpenDialog(false);
-  }
+    setError('');
+  };
+  
   return (
     <div className="min-h-full">
       <header className="bg-white shadow">
@@ -79,11 +86,11 @@ const Organizations = ({history}) => {
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
             <div className ="flex justify-between">
             <Link to="/Home" className="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md hover:bg-indigo-900">Back to Home</Link>
-            <button
+            {userData.isAdmin && <button
               className="w-48 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md hover:bg-indigo-900"
               onClick={() => setOpenDialog(true)}
             > + Add Organization
-            </button>
+            </button>}
             </div>
     
             <DataGrid
@@ -95,7 +102,7 @@ const Organizations = ({history}) => {
             />
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Create New Organization</DialogTitle>
-        <div className="p4">
+        <div className="p4 w-128">
         <DialogContent>
           <div className = "flex flex-col space-y-1 ">
           <TextField
@@ -110,6 +117,7 @@ const Organizations = ({history}) => {
             value={newOrg.OrgID}
             onChange={(e) => setNewOrg({ ...newOrg, OrgID: e.target.value })}
           />
+          {error && <div className="text-red-500">'Error: {error}'</div>}
           </div>
         </DialogContent>
         </div>
