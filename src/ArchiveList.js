@@ -19,8 +19,8 @@ const ArchiveList = (deviceProps) => {
 		const listDevices = async () => {
 			const listDevicesResponse = await client.entities.devices.list({
 				filter: {
-					Archived: {
-						eq: true
+					Completion: {
+						eq: 100
 					}
 				},
 			});

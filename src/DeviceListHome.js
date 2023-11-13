@@ -20,7 +20,13 @@ const DeviceListHome = (deviceProps) => {
 
     useEffect(() => {
         const listDevices = async () => {
-            const listDevicesResponse = await client.entities.devices.list();
+            const listDevicesResponse = await client.entities.devices.list({
+				filter: {
+					Completion: {
+						lt: 100
+					}
+				},
+			});
             if (addDummyData) {
                 const dummyData = Array.from({length: numDummyData}, (_, i) => ({
                     DeviceTitle: `Dummy Device ${i+1}`,
@@ -34,7 +40,7 @@ const DeviceListHome = (deviceProps) => {
         }
         listDevices();
     }, [])
-
+   
     return (
         <div className="home-test-devices-container">
             {currentItems?.map((item, index) => (
