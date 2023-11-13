@@ -40,7 +40,8 @@ function App() {
           <ProtectedRoute exact path="/Archive" component={Archive} />
           <ProtectedRoute exact path="/Demo" component={Demo} />
           <ProtectedRoute exact path="/Organizations" component={Organizations} />
-          <ProtectedRoute exact path="/org/:id" component={OrganizationDetails} />
+          {/* <ProtectedRoute exact path="/org/:id" component={OrganizationDetails} /> */}
+          <ProtectedRoute exact path="/Organizations/:name" component={OrganizationDetails} />
           <ProtectedRoute exact path="/Search" component={Search} />
           <ProtectedRoute exact path="/ArchiveTests/:DeviceName/:DeviceTitle" component={ArchiveTests}/>
           <ProtectedRoute exact path="/DevicePage/:DeviceName/:DeviceTitle" component={DevicePage} />
