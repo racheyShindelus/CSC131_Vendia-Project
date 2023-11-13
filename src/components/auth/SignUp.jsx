@@ -53,7 +53,10 @@ export const SignUp = () => {
   
     return (
       <div className="flex items-center justify-center">
-        <form onSubmit={register} className="max-w-md px-4 py-8 bg-white rounded-lg shadow-lg">
+        <form onSubmit={register} className="max-w-md px-4 pt-4 py-8 bg-white rounded-lg shadow-lg" style={{ display: 'block' }}>
+        <div>
+        Username
+        </div>
           <input
             type="text"
             placeholder="Username..."
@@ -62,6 +65,9 @@ export const SignUp = () => {
             required
             className="w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           />
+        <div>
+        Email
+        </div>
           <input
             type="email"
             placeholder="Email..."
@@ -70,6 +76,9 @@ export const SignUp = () => {
             required
             className="w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           />
+        <div>
+        Password
+        </div>
           <input
             type="password"
             placeholder="Password..."

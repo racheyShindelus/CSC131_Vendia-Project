@@ -5,10 +5,10 @@ import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import { useData } from "./DataContext";
 //import { filterStateInitializer } from "@mui/x-data-grid/internals";
 import "./Archive.css";
 import "./App.css";
+import { useData } from "./DataContext";
 import { useParams } from 'react-router-dom';
 
 const { client } = vendiaClient();
@@ -16,7 +16,6 @@ const { client } = vendiaClient();
 
 export const DevicePage = () => {
     const {userData} = useData();
-
     let { DeviceName, DeviceTitle } = useParams();
     const [rows, setRows] = useState([]);
     const [rowSelection, setRowSelection] = useState([]);
@@ -46,23 +45,22 @@ export const DevicePage = () => {
             }));
             setRows(tempRows);
             //console.log(tempRows);
-        }
-        //console.log(userData);
-        loadData();
-    }, []); 
 
-    
+        }
+
+        loadData();
+    }, []);
 
     const columns = [
-        {field: 'ID', headerName: 'ID', width: 300, editable: false},
-        //{field: 'Device', headerName: 'Device', width: 90, editable: false},
-        {field: 'TestID', headerName: 'TestID', width: 90, editable: false},
-        {field: 'OrgAssignment', headerName: 'OrgAssignment', width: 150, editable: true,},
-        {field: 'TestName', headerName: 'TestName', width: 90, editable: true,},
-        {field: 'TestMethod', headerName: 'TestMethod', width: 90, editable: true,},
-        {field: 'Notes', headerName: 'Notes', width: 90, editable: true,},
-        {field: 'Completed', headerName: 'Completed', width: 90, editable: true,},
-        {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 150, editable: true,},
+        {field: 'ID', headerName: 'ID', width: 90, editable: false},
+        //{field: 'Device', headerName: 'Device', width: 150, editable: false},
+        {field: 'TestID', headerName: 'TestID', width: 70, editable: false},
+        {field: 'OrgAssignment', headerName: 'OrgAssignment', width: 200, editable: true,},
+        {field: 'TestName', headerName: 'TestName', width: 150, editable: true,},
+        {field: 'TestMethod', headerName: 'TestMethod', width: 150, editable: true,},
+        {field: 'Notes', headerName: 'Notes', width: 200, editable: true,},
+        {field: 'Completed', headerName: 'Completed', width: 120, editable: true,},
+        {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 200, editable: true,},
     ];
 
     const removeNull = (value) =>
@@ -75,7 +73,7 @@ export const DevicePage = () => {
 
     const editRow = async (row) => {
         var oldRow = await row;
-        const newRow = await client.entities.test.update({
+        await client.entities.test.update({
             _id: oldRow.ID,
             //Device: oldRow.Device,
             TestID: oldRow.TestID,
@@ -85,12 +83,25 @@ export const DevicePage = () => {
             Notes: oldRow.Notes,
             Completed: oldRow.Completed,
             UpdatedBy: userData.displayName
-                
-            });    
+        });    
+        oldRow.UpdatedBy = userData.displayName;
+        return row;
 
-            oldRow.UpdatedBy = userData.displayName;
+        // const oldRow = await row;
+        // const newRow = await client.entities.test.update({
+        //     ID: oldRow.ID,
+        //     //Device: oldRow.Device,
+        //     TestID: oldRow.TestID,
+        //     OrgAssignment: oldRow.OrgAssignment,
+        //     TestName: oldRow.TestName,
+        //     TestMethod: oldRow.TestMethod,
+        //     Notes: oldRow.Notes,
+        //     Completed: oldRow.Completed,
+        //     UpdatedBy: oldRow.UpdatedBy
+                
+        //     });    
  
-            return row;
+        //     return row;
     };
 
     const deleteRow = async () =>
@@ -139,20 +150,23 @@ export const DevicePage = () => {
 
     const handleProcessRowUpdateError = React.useCallback((error) => {
         console.log(error.message);
-      }, []);
-
+    }, []);
 
     return (
-        <div className="home-container">
-            <div className="archive">
-            <caption> 
-                <div>
-                    <Link to="/Home" className="home-return-to-home-button">Back to Home</Link>
+        <div className="min-h-full">
+            <header className="bg-white shadow">
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900">{DeviceTitle} Tests</h1>
                 </div>
-                {DeviceTitle}
-                <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
-                    Remove Entry
-                </Button>
+            </header>
+            <main>
+                <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
+                    <div>
+                        <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
+                    </div>
+                    <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
+                        Remove Entry
+                    </Button>
                 <DataGrid
                     rows = {rows}
                     columns = {columns}
@@ -179,9 +193,101 @@ export const DevicePage = () => {
                     processRowUpdate={editRow}
                     onProcessRowUpdateError={handleProcessRowUpdateError}
                 />
-            </caption>
-            </div>
-         </div>
+                </div>
+            </main>
+        </div>
+
+
+
+
+        // <div className="min-h-full">
+        //     <header className="bg-white shadow">
+        //         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        //         <h1 className="text-3xl font-bold tracking-tight text-gray-900">{DeviceTitle} Tests</h1>
+        //         </div>
+        //     </header>
+        //     <main>
+        //         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
+        //             <div>
+        //                 <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
+        //             </div>
+        //             {/* {DeviceTitle} */}
+        //             <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
+        //                 Remove Entry
+        //             </Button>
+        //             <DataGrid
+        //                 rows = {rows}
+        //                 columns = {columns}
+        //                 getRowId={(rows) =>  rows?.ID}
+        //                 initialState={{
+        //                     columns: {
+        //                     columnVisibilityModel: {
+        //                         // Hide columns status and traderName, the other columns will remain visible
+        //                         ID: false,
+        //                     },
+        //                     },
+        //                 }}
+
+        //                 disableColumnFilter
+        //                 disableColumnSelector
+        //                 disableDensitySelector
+        //                 disableRowSelectionOnClick
+
+        //                 checkboxSelection
+        //                 onRowSelectionModelChange={(newRowSelection) => {
+        //                     setRowSelection(newRowSelection);
+        //                 }}
+        //                 slots={{ toolbar: GridToolbarQuickFilter }}
+        //                 processRowUpdate={editRow}
+        //                 onProcessRowUpdateError={handleProcessRowUpdateError}
+        //             />
+            //     </div>
+            // </main>
+            // </div>
+
+
+
+
+
+        // <div className="home-container">
+        //     <div className="archive">
+        //     <caption> 
+                // <div>
+                //     <Link to="/Home" className="home-return-to-home-button">Back to Home</Link>
+                // </div>
+                // {DeviceTitle}
+                // <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
+                //     Remove Entry
+                // </Button>
+                // <DataGrid
+                //     rows = {rows}
+                //     columns = {columns}
+                //     getRowId={(rows) =>  rows?.ID}
+                //     initialState={{
+                //         columns: {
+                //         columnVisibilityModel: {
+                //             // Hide columns status and traderName, the other columns will remain visible
+                //             ID: false,
+                //         },
+                //         },
+                //     }}
+
+                //     disableColumnFilter
+                //     disableColumnSelector
+                //     disableDensitySelector
+                //     disableRowSelectionOnClick
+
+                //     checkboxSelection
+                //     onRowSelectionModelChange={(newRowSelection) => {
+                //         setRowSelection(newRowSelection);
+                //     }}
+                //     slots={{ toolbar: GridToolbarQuickFilter }}
+                //     processRowUpdate={editRow}
+                //     onProcessRowUpdateError={handleProcessRowUpdateError}
+                // />
+        //     </caption>
+        //     </div>
+        //  </div>
     )
 }
 

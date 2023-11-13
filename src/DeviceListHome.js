@@ -8,15 +8,14 @@ import Pagination from '@mui/material/Pagination';
 
 const { client } = vendiaClient();
 
-const DeviceListHome = (deviceProps) => {
+const DeviceListHome = () => {
     const [deviceName, setDeviceList] = useState();
     const [page, setPage] = useState(1);
     const itemsPerPage = 12;
-    const devices = deviceProps.devices;
     const currentItems = deviceName?.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
     const addDummyData = false;
-    const numDummyData = 10;
+    const numDummyData = 50;
 
     useEffect(() => {
         const listDevices = async () => {
@@ -32,27 +31,39 @@ const DeviceListHome = (deviceProps) => {
                 setDeviceList(listDevicesResponse?.items);
             }
         }
+        
+        client.entities.devices.onAdd((data) => {
+            alert(`A new product named ${data.result.name} been added!`);
+            console.log("Device Added!");
+            listDevices();
+            
+          });
+
         listDevices();
+
+
     }, [])
 
     return (
-        <div className="home-test-devices-container">
-            {currentItems?.map((item, index) => (
-            <div className="home-device1" key={index}>
-                <h2>#{index+1}: {item?.DeviceTitle}</h2>
-                <p>Status: {item?.Completion}%</p>
-                <Link to={`/DevicePage/${item?.DeviceName}/${item?.DeviceTitle}`} className="home-device1button" type="button">View tests</Link>
+        <div className="home-test-devices">
+            <div className="home-test-devices-container">
+                {currentItems?.map((item, index) => (
+                <div className="home-device1" key={index}>
+                    <h2>#{index+1}: {item?.DeviceTitle}</h2>
+                    <p>Status: {item?.Completion}%</p>
+                    <Link to={`/DevicePage/${item?.DeviceName}/${item?.DeviceTitle}`} className="home-device1button" type="button">View tests</Link>
+                </div>
+                ))}
             </div>
-            ))}
             <div>
-            <Pagination className="pagination" count={Math.ceil(deviceName?.length / itemsPerPage)} page={page} onChange={(event, value) => setPage(value)} />
+                <Pagination className="pagination" count={Math.ceil(deviceName?.length / itemsPerPage)} page={page} onChange={(event, value) => setPage(value)} />
             </div>
         </div>
-        
     );
 }
 
 export default DeviceListHome;
+
 
 // const DeviceListHome = (deviceProps) => {
 //     const handleViewTests = () => {
