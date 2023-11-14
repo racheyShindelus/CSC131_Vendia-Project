@@ -4,13 +4,14 @@ import {Link} from 'react-router-dom'
 import {Redirect} from 'react-router-dom'
 import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore'
 import { auth, db } from "../../firebase";
+import { useAuth } from '../../AuthContext';
 
 export const SignIn = () => {
   const [input, setInput] = useState(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const {authUser} = useAuth();
 
   const login = async (e) => {
     e.preventDefault();
@@ -35,7 +36,6 @@ export const SignIn = () => {
           return;
         }
       }
-      setIsAuthenticated(true);
     } catch (error) {
       console.log(error);
       setError(error.message);
@@ -44,7 +44,7 @@ export const SignIn = () => {
     }
   };
 
-  if (isAuthenticated) {
+  if (authUser) {
     return <Redirect to="/Home" />;
   }
 
@@ -80,8 +80,17 @@ export const SignIn = () => {
         >
           {isLoading ? 'Signing In...' : 'Sign In'}
         </button>
-        <Link to="/forgotpassword" className="block flex items-left w-36 px-0 mt-4 text-base text-gray-700 text-black">Forgot Password?</Link>
-        {error && <div className="text-red-500">{error}</div>}
+          {error && <div className="text-red-500">{error}</div>}
+          <div className="text-base mt-[8px]">
+            Forgot Password? 
+            <Link to ="/forgotpassword" className ="text-base text-blue-500"> Reset Password </Link>
+          </div>
+          <div className="text-base mt-[3px]">
+            Need an account? 
+            <Link to= "/signup" className ="text-base text-blue-500"> Sign Up</Link>
+          </div>
+        {/* <Link to="/forgotpassword" className="block flex items-left w-36 px-0 mt-4 text-base text-gray-700 text-black">Forgot Password?</Link>
+        {error && <div className="text-red-500">{error}</div>} */}
       </form>
     </div>
   );

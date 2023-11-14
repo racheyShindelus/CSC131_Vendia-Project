@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { auth } from './firebase'
+
 const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
     const [authUser, setAuthUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    
     useEffect(() => {
         const listen = auth.onAuthStateChanged((user)=>{
             if(user) {

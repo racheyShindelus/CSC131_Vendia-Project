@@ -239,16 +239,13 @@
   font-size: 16px;
   text-decoration: none;
 }
-.pagination {
-  /* position: relative; */
-  /* bottom: -10px;
-  left: 225px; */
+/* .pagination {
   bottom: -1%;
   left: 12%;
-}
-.pagination button {
+} */
+/* .pagination button {
   margin-right: 5px;
-}
+} */
 .home-device1button:hover {
   background-color: #dfdfdf;
 }
