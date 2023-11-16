@@ -86,7 +86,6 @@ export const ArchiveTests = () => {
 						},
 						},
 					}}
-
 					disableColumnFilter
 					disableColumnSelector
 					disableDensitySelector

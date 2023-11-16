@@ -216,11 +216,6 @@ export const DisplayOrgTests = ({org}) => {
                 processRowUpdate={editRow}
                 onProcessRowUpdateError={handleProcessRowUpdateError}
             />
-            {/*client.entities.test.onUpdate((data)=>{
-                return ((data.result.OrgName.includes(org.OrgName)) ? 
-                    (<Alert>{data.result.TestName} was successfully added!</Alert>) : 
-                    (<Alert>{data.result.TestName} was successfully removed!</Alert>))
-            })*/}
             <Dialog open={manageTestsDialog} onClose={handleCloseDialog}>
                 <DialogTitle>Assign Tests</DialogTitle>
                     <DialogContent >

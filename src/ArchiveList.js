@@ -39,7 +39,6 @@ const ArchiveList = (deviceProps) => {
                 {currentItems?.map((item, index) => (
                 <div className="shadow-custom w-[90%] flex p-[16px] border border-gray-300 max-w-[MaxWidth] transition-transform transition-shadow transition duration-300 items-start flex-col justify-start bg-white hover:scale-[1.02] hover:shadow-indigo-300" key={index}>
                     <h2 className="mb-[5px] text-[20px] mt-0 font-bold">
-						{/* #{index+1}: {item?.DeviceTitle} */}
 						#{(page - 1) * itemsPerPage + index + 1}: {item?.DeviceTitle}
 					</h2>
                     <p className="text-[16px] mb-[18px]">

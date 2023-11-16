@@ -1,11 +1,4 @@
-.archive {
-  /* display: flex;
-  background-color: #eaecf9;
-  width: 100%;
-  z-index: 100;
-  overflow: auto;
-  min-height: 100vh;
-  align-items: top; */
+/* .archive {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   width: 80%;
   border: 1px solid #000000;
@@ -70,4 +63,4 @@
   
   form * {
     font-size: 18px;
-  }
+  } */

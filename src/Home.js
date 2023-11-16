@@ -127,9 +127,6 @@ const Home = () => {
       </header>
       <main>
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
-            {/* <Link to={`/Demo`} class="flex items-center justify-center mb-3 w-24 h-9 text-base ml-auto mr-7 mt-3 border-black rounded-2xl font-bold bg-indigo-800 text-white shadow-md no-underline hover:bg-indigo-900">
-              <span class="text-current">+ Add new</span>
-            </Link> */}
             <div className="flex justify-end my-3 mr-[30px] space-x-3">
               <Button variant="outlined"onClick={addDeviceStateOpen}>
                 Add Device
@@ -243,18 +240,6 @@ const Home = () => {
           </div>
       </main>
     </div>
-
-    // <div className="home-container">
-    // <div className="home-home-test-devices">
-    // <div className="home-test-devices-header">
-    // <h1 className="home-test-devices-text">Home - Test Devices</h1>
-    //     <Link to={`/Demo`} className="home-add-device-button button" type="button">
-    //     <span>Add device</span>
-    //     </Link>
-    // </div>
-    //     <DeviceListHome devices={devices}/>
-    // </div>
-    // </div>
   );
 }
 
