@@ -24,7 +24,8 @@ export const ArchiveTests = () => {
 					Device: {
 						contains: DeviceName.toString(),
 					}
-				}
+				},
+				readMode: 'NODE_LEDGERED',
 			});
 
 			const tempRows = tempFilteredTestList?.items.map((test) => ({

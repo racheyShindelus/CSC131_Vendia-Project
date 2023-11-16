@@ -27,6 +27,7 @@ export const OrganizationDetails = ({ match }) => {
               contains: orgName,
             },
           },
+          readMode: 'NODE_LEDGERED',
         });
         const newOrg = currentOrg?.items[0]
         setOrg(newOrg)
