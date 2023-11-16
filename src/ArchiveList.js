@@ -26,6 +26,7 @@ const ArchiveList = (deviceProps) => {
 					// 	eq: true
 					// }
 				},
+				readMode: 'NODE_LEDGERED',
 			});
 			setDeviceList(listDevicesResponse?.items);
 		}

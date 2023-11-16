@@ -29,7 +29,7 @@ const Organizations = ({history}) => {
 
   useEffect(()=> {
     const listOrgs = async () => {
-      const listOrg = await client.entities.organizations.list();
+      const listOrg = await client.entities.organizations.list({readMode: 'NODE_LEDGERED',});
       setOrgList(listOrg.items)
       setLoading(false)
     }
