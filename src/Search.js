@@ -26,6 +26,7 @@ const Search = ({ onSearch }) => {
             //     contains: 'Device',
             //   }
             // },
+            readMode: 'NODE_LEDGERED',
         });
         const tempRows = tempFilteredTestList?.items.map((test) => ({
             ID: test._id,

@@ -29,6 +29,7 @@ export const DisplayOrgTests = ({org}) => {
                     contains: org.OrgName,
                   }
                 },
+                readMode: 'NODE_LEDGERED',
             });
             const tempRows = tempFilteredTestList?.items.map((test) => ({
                 _id: test._id,
@@ -46,7 +47,8 @@ export const DisplayOrgTests = ({org}) => {
                     OrgAssignment: {
                         notContains: org.OrgName
                     }
-                }
+                },
+                readMode: 'NODE_LEDGERED',
             })
             const newOtherTests = filterOtherTests?.items.map((test) => ({
                 _id: test._id,

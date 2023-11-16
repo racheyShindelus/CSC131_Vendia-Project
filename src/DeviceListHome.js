@@ -27,6 +27,7 @@ const DeviceListHome = (deviceProps) => {
 						lt: 100
 					}
 				},
+                readMode: 'NODE_LEDGERED',
 			});
 
             if (addDummyData) {
