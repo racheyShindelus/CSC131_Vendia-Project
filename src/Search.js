@@ -50,7 +50,7 @@ const Search = ({ onSearch }) => {
     {field: 'TestMethod', headerName: 'TestMethod', width: 150, editable: false,},
     {field: 'Notes', headerName: 'Notes', width: 200, editable: false,},
     {field: 'Completed', headerName: 'Completed', width: 120, editable: false,},
-    {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 100, editable: false,},
+    {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 150, editable: false,},
   ];
 
   const removeNull = (value) =>
