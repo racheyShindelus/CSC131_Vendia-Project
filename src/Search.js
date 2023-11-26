@@ -21,11 +21,6 @@ const Search = ({ onSearch }) => {
   useEffect(() => {
     const loadData = async () => {
         const tempFilteredTestList = await client.entities.test.list({
-            // filter: {
-            //   Device: {
-            //     contains: 'Device',
-            //   }
-            // },
             readMode: 'NODE_LEDGERED',
         });
         const tempRows = tempFilteredTestList?.items.map((test) => ({
@@ -76,21 +71,7 @@ const Search = ({ onSearch }) => {
       <main>
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-2 mt-3">
-              {/* <input
-                type="text"
-                placeholder="Search..."
-                className="w-64 p-2 border rounded focus:outline-none"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <button
-                onClick={handleSearch}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer"
-              >
-                Search
-              </button> */}
           </div>
-
           <div className="ml-0 pl-0 max-w-7xl pb-6">
             <DataGrid
               GridToolbarQuickFilter

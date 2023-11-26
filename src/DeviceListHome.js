@@ -20,7 +20,6 @@ const DeviceListHome = (deviceProps) => {
 
     useEffect(() => {
         const listDevices = async () => {
-            // const listDevicesResponse = await client.entities.devices.list();
             const listDevicesResponse = await client.entities.devices.list({
 				filter: {
 					Completion: {
@@ -51,7 +50,6 @@ const DeviceListHome = (deviceProps) => {
             {currentItems?.map((item, index) => (
             <div className="shadow-custom w-[90%] flex p-[16px] border border-gray-300 max-w-[MaxWidth] transition-transform transition-shadow transition duration-300 items-start flex-col justify-start bg-white hover:scale-[1.02] hover:shadow-indigo-400" key={index}>
                 <h2 className="mb-[5px] text-[20px] mt-0 font-bold">
-                    {/* #{index+1}: {item?.DeviceTitle} */}
                     #{(page - 1) * itemsPerPage + index + 1}: {item?.DeviceTitle}
                 </h2>
                 <p className="text-[16px] mb-[18px]">
@@ -73,33 +71,3 @@ const DeviceListHome = (deviceProps) => {
 }
 
 export default DeviceListHome;
-
-// const DeviceListHome = (deviceProps) => {
-//     const handleViewTests = () => {
-//         console.log('View tests button was pressed');
-//     }
-//     const[deviceName, setDeviceList] = useState();
-//     const devices = deviceProps.devices;
-
-//     useEffect(() => {
-//         const listDevices = async () => {
-//             const listDevicesResponse = await client.entities.devices.list();
-//             setDeviceList(listDevicesResponse?.items);
-//         }
-//         listDevices();
-//     }, [])
-
-//     return (
-//         <div className="home-test-devices-container">
-//             {deviceName?.map((item, index) => (
-//             <div className="home-device1" key={index}>
-//                 <h2>#{index+1}: {item?.DeviceTitle}</h2>
-//                 <p>Status: {item?.Completion}%</p>
-//                 {/* <Link to={`/DevicePage/${item?.DeviceName}`} className="home-device1button" type="button">View tests</Link> */}
-//                 <Link to={`/DevicePage/${item?.DeviceName}/${item?.DeviceTitle}`} className="home-device1button" type="button">View tests</Link>
-//             </div>
-//             ))}
-//         </div>
-//     );
-// }
-// export default DeviceListHome;
