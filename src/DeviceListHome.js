@@ -32,7 +32,8 @@ const DeviceListHome = (deviceProps) => {
             if (addDummyData) {
                 const dummyData = Array.from({length: numDummyData}, (_, i) => ({
                     DeviceTitle: `Dummy Device ${i+1}`,
-                    Completion: `${Math.floor(Math.random() * 100)}`,
+                    // Completion: `${Math.floor(Math.random() * 100)}`,
+                    Completion: 42,
                     DeviceName: `dummy-device-${i+1}`
                 }));
                 setDeviceList([...listDevicesResponse?.items, ...dummyData]);
