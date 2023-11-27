@@ -65,7 +65,7 @@ export const DisplayOrgTests = ({org}) => {
                 TestName: test.TestName,
                 TestMethod: test.TestMethod,
                 Notes: test.Notes,
-                Completed: test.Completed,
+                Completed: removeNull(test.Completed),
                 UpdatedBy: test.UpdatedBy
             }))
             console.log(newOtherTests)
@@ -122,6 +122,14 @@ export const DisplayOrgTests = ({org}) => {
           const newRow = await client.entities.test.update({
             _id: oldRow._id,
             Device: oldRow.Device,
+    const removeNull = (value) =>
+    {
+        if(typeof(value) === 'boolean')
+            return true;
+        else
+            return false;
+    }
+
             TestID: oldRow.TestID,
             OrgAssignment: oldRow.OrgAssignment,
             TestName: oldRow.TestName,
@@ -161,6 +169,7 @@ export const DisplayOrgTests = ({org}) => {
                         TestMethod: test.TestMethod,
                         Notes: test.Notes,
                         Completed: test.Completed,
+                        Completed: removeNull(test.Completed),
                         UpdatedBy: userData.displayName,
                     }
                 )
@@ -185,7 +194,6 @@ export const DisplayOrgTests = ({org}) => {
     const handleProcessRowUpdateError = React.useCallback((error) => {
         console.log(error.message);
       }, []);
-
     const handleAddTests = async () => {
         await Promise.all(testSelection.forEach(async (test) => {
             const newOrgAssignment = test.OrgAssignment.includes(org.OrgName)
@@ -200,11 +208,11 @@ export const DisplayOrgTests = ({org}) => {
                     TestName: test.TestName,
                     TestMethod: test.TestMethod,
                     Notes: test.Notes,
-                    Completed: test.Completed,
+                    Completed: removeNull(test.Completed),
                     UpdatedBy: userData.displayName
                 }
             )
-        }))
+        })
         setManageTestsDialog(false);
         setTestSelection([]);
     }

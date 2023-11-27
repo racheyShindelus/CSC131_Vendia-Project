@@ -85,7 +85,6 @@ const Organizations = ({history}) => {
     })
     setError('');
   };
-  
   return (
     <div className="min-h-full">
       <header className="bg-white shadow">

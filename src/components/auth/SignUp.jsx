@@ -13,7 +13,6 @@ export const SignUp = () => {
     const [userUsername, setUserUsername] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const {authUser} = useAuth();
-  
     const register = async (e) => {
       e.preventDefault();
       try {
@@ -99,7 +98,7 @@ export const SignUp = () => {
           <Link to= "/login" className ="text-base text-blue-500"> Sign In</Link>
         </div>
         </form>
-      </div>
+        
     );
   };
 

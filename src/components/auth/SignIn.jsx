@@ -5,14 +5,13 @@ import {Redirect} from 'react-router-dom'
 import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore'
 import { auth, db } from "../../firebase";
 import { useAuth } from '../../AuthContext';
-
 export const SignIn = () => {
   const [input, setInput] = useState(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const {authUser} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const {authUser} = useAuth();
-
   const login = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -92,7 +91,6 @@ export const SignIn = () => {
         {/* <Link to="/forgotpassword" className="block flex items-left w-36 px-0 mt-4 text-base text-gray-700 text-black">Forgot Password?</Link>
         {error && <div className="text-red-500">{error}</div>} */}
       </form>
-    </div>
   );
 };
 

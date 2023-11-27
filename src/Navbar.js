@@ -1,4 +1,3 @@
-import './App.css'
 import { Link } from 'react-router-dom';
 import { AuthDetails } from './components/auth/AuthDetails'
 import {useData} from './DataContext';

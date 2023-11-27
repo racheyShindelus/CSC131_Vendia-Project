@@ -16,7 +16,20 @@ export const AuthDetails = (props) => {
         console.log('Sign out successful');
         setRedirect(true);
       }).catch((error) => console.log(error));
+    const [redirect, setRedirect] = useState(false);
+    const { authUser, loading } = useAuth();
+    const { userData } = useData();
+  
+    const userSignOut = () => {
+      signOut(auth).then(() => {
+        console.log('Sign out successful');
+        setRedirect(true);
+      }).catch((error) => console.log(error));
     }
+    if (redirect) {
+      return <Redirect to='/login' />;
+    }
+  
   
     if (redirect) {
       return <Redirect to='/login' />;

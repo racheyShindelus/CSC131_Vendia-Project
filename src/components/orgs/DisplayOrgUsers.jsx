@@ -14,8 +14,6 @@ import { vendiaClient } from "../../vendiaClient";
 import Checkbox from '@mui/material/Checkbox';
 const {client} = vendiaClient();
 export const DisplayOrgUsers = ({org}) => {
-   const adminPfp = 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Eo_circle_green_white_letter-a.svg'
-    const userPfp = 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
     const [selectedUser, setSelectedUser] = useState([]);
     const {userData} = useData();
     const [otherUsers, setOtherUsers] = useState([]);
@@ -58,6 +56,7 @@ export const DisplayOrgUsers = ({org}) => {
         unsubscribe();
       };
     }, [org]);
+
 
     const deleteRow = async () => {
       for (let i = 0; i < rowSelection.length; i++) {
@@ -147,6 +146,7 @@ export const DisplayOrgUsers = ({org}) => {
             <Dialog open={manageUsersDialog} onClose={() => setManageUsersDialog(false)} >
                 <DialogTitle>Assign Users</DialogTitle>
                   <DialogContent className="items-center w-80 md:w-128">
+
                   <Autocomplete
                       className="mt-4"
                       id="user-select"

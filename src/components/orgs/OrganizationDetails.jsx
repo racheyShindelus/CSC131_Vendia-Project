@@ -5,7 +5,6 @@ import { vendiaClient } from '../../vendiaClient';
 import { DisplayOrgUsers } from './DisplayOrgUsers';
 import { DisplayOrgTests } from './DisplayOrgTests';
 import { useData } from './../../DataContext';
-
 const { client } = vendiaClient();
 
 export const OrganizationDetails = ({ match }) => {
@@ -16,7 +15,6 @@ export const OrganizationDetails = ({ match }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [redirect, setRedirect] = useState(false);
-
   useEffect(() => {
     const loadData = async () => {
       try {

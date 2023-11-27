@@ -53,6 +53,35 @@ function App() {
     </Router>
     </DataProvider>
   </AuthProvider>
+  //  <AuthProvider>
+  //   <DataProvider>
+  //   <Router>
+  //     <div className="App">
+  //       <Navbar/>
+  //       <Switch>
+  //         <Route exact path="/">
+  //           <Login/>
+  //         </Route>
+  //         <Route exact path="/login">
+  //           <Login/>
+  //         </Route>
+  //         <Route exact path="/signup">
+  //           <Register/>
+  //         </Route>
+  //         <ProtectedRoute exact path="/Home" component={Home} />
+  //         <ProtectedRoute exact path="/Archive" component={Archive} />
+  //         <ProtectedRoute exact path="/Demo" component={Demo} />
+  //         <ProtectedRoute exact path="/Organizations" component={Organizations} />
+  //         <ProtectedRoute exact path="/Search" component={Search} />
+  //         <ProtectedRoute exact path="/ArchiveTests/:DeviceName/:DeviceTitle" component={ArchiveTests}/>
+  //         <ProtectedRoute exact path="/DevicePage/:DeviceName/:DeviceTitle" component={DevicePage} />
+  //       </Switch>
+  //       <div className="App-content">
+  //       </div>
+  //     </div>
+  //   </Router>
+  //   </DataProvider>
+  // </AuthProvider>
   );
 }
 
