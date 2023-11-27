@@ -15,31 +15,34 @@ const { client } = vendiaClient();
 
 const Organizations = ({history}) => {
   const { userData } = useData();
-  const organization = ([{OrgName: "Org1", OrgID: 1, Users: ["1","2","3"]},{OrgName: "Org3", OrgID: 2, Users: ["1","2","3"]},{OrgName: "Org2", OrgID: 3, Users: ["1","2","3"]},])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [orgList, setOrgList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [change, setChange] = useState(false);
   const [newOrg, setNewOrg] = useState({
     OrgName: '',
     OrgID: null,
     Users: [],
   });
-
-  useEffect(()=> {
+   useEffect(()=> {
     const listOrgs = async () => {
-      const listOrg = await client.entities.organizations.list({readMode: 'NODE_LEDGERED',});
+      const listOrg = await client.entities.organizations.list({
+      readMode: 'NODE_LEDGERED',
+    });
       setOrgList(listOrg.items)
       setLoading(false)
     }
+    const unsubscribe = client.entities.organizations.onAdd((data)=>{
+      console.log('Subscription update:', data);
+      listOrgs();
+    })
     listOrgs();
     console.log(orgList);
-  }, [change])
-
+    return () => {unsubscribe();};
+   }, [])
   const columns = [
     { field: 'OrgName', headerName: 'Org Name', flex:1 },
-    { field: 'OrgID', headerName: 'Org ID', flex: 1 },
+    { field: 'OrgID', headerName: 'Org ID', flex:1 },
     {
       field: 'View Details',
       headerName: 'View Details',
@@ -49,9 +52,8 @@ const Organizations = ({history}) => {
       ),
     },
   ];
-
   const handleEdit = (org) => {
-      history.push(`/Organizations/${org.OrgName}`)
+    history.push(`/Organizations/${org.OrgName}`)
   };
 
   const handleCreateOrg = async () => {
@@ -65,39 +67,33 @@ const Organizations = ({history}) => {
       setError('Organization ID is not unique.');
       return;
     }
+    if (newOrg.OrgName.includes('/'))
+    {
+      setError("Organization name can't include slashes")
+      return;
+    }
     const addOrgResponse = await client.entities.organizations.add({
       OrgName: newOrg.OrgName,
       OrgID: parseInt(newOrg.OrgID, 10),
       Users: [],
     });
-
-    setChange(!change);
     setOpenDialog(false);
+    setNewOrg({
+      OrgName: '',
+      OrgID: null,
+      Users: [],
+    })
     setError('');
   };
-
+  
   return (
-    // <div className="min-h-full">
-    //   <header className="bg-white shadow">
-    //     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-    //       <h1 className="text-3xl font-bold tracking-tight text-gray-900">Organizations</h1>
-    //     </div>
-    //   </header>
-    //   {loading ? <div className="mx-auto text-[20px] max-w-7xl px-4 py-2 sm:px-6 lg:px-8">Loading...</div> : 
-    //   <main>
-    //     <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
-    //         <div className ="flex justify-between">
-    //         <Link to="/Home" className="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md hover:bg-indigo-900">Back to Home</Link>
-    //         <button
-    //           className="w-48 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md hover:bg-indigo-900"
-    //           onClick={() => setOpenDialog(true)}
     <div className="min-h-full">
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Organizations</h1>
         </div>
       </header>
-      {loading ? <div className="mx-auto text-[20px] max-w-7xl px-4 py-2 sm:px-6 lg:px-8">Loading...</div> : 
+      {loading ? <div className="mx-auto text-[20px] max-w-7xl px-4 py-2 sm:px-6 lg:px-8">Loading</div> : 
       <main>
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
             <div className ="flex justify-between">
@@ -118,7 +114,7 @@ const Organizations = ({history}) => {
             />
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Create New Organization</DialogTitle>
-        <div className="p4 w-128">
+        <div className="p4 items-center w-80 md:w-128">
         <DialogContent>
           <div className = "flex flex-col space-y-1 ">
           <TextField
@@ -130,6 +126,7 @@ const Organizations = ({history}) => {
           <TextField
             label="Organization ID"
             fullWidth
+            type="number"
             value={newOrg.OrgID}
             onChange={(e) => setNewOrg({ ...newOrg, OrgID: e.target.value })}
           />

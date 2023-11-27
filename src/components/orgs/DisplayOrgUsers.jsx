@@ -12,17 +12,16 @@ import { TextField } from "@mui/material";
 import { useData } from "../../DataContext";
 import { vendiaClient } from "../../vendiaClient";
 import Checkbox from '@mui/material/Checkbox';
-
 const {client} = vendiaClient();
-
 export const DisplayOrgUsers = ({org}) => {
+   const adminPfp = 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Eo_circle_green_white_letter-a.svg'
+    const userPfp = 'https://upload.wikimedia.org/wikipedia/commons/0/07/Eo_circle_pink_white_letter-u.svg'
     const [selectedUser, setSelectedUser] = useState([]);
     const {userData} = useData();
     const [otherUsers, setOtherUsers] = useState([]);
     const [rows, setRows] = useState([]);
     const [rowSelection, setRowSelection] = useState([]);
     const [manageUsersDialog, setManageUsersDialog] = useState(false);
-
     useEffect(() => {
       const listOrgUsers = async () => {
         const usersCollection = collection(db, "users");
@@ -51,16 +50,14 @@ export const DisplayOrgUsers = ({org}) => {
           console.error('Error getting users:', error);
         }
       };
-
       const usersCollection = collection(db, "users");
-
       const unsubscribe = onSnapshot(usersCollection, () => {
         listOrgUsers();
       });
       return () => {
         unsubscribe();
       };
-    }, [org.OrgName]);
+    }, [org]);
 
     const deleteRow = async () => {
       for (let i = 0; i < rowSelection.length; i++) {
@@ -86,7 +83,6 @@ export const DisplayOrgUsers = ({org}) => {
           });
       }
     }
-
     const handleAddUsers = async () => {
         selectedUser.forEach(async(user) => {
           const userDocRef = await doc(db, 'users', user.id)
@@ -111,83 +107,79 @@ export const DisplayOrgUsers = ({org}) => {
         setSelectedUser([]);
         setManageUsersDialog(false)
     }
-
     const columns = [
         { field: 'displayName', headerName: "Username", flex:2 },
         { field: 'isAdmin', headerName: 'Admin', flex:2 },
         { field: 'email', headerName: 'Email', flex:2 },
-    ]
-    return(
-    <div>
-        <div className="flex space-x-4">
-            {userData.isAdmin && (
-                <button
-                onClick={() => setManageUsersDialog(true)}
-                className="my-2 w-28 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-green-600 text-white shadow-md hover:bg-green-700"
-                >
-                Assign Users
-                </button>
-            )}
-            {userData.isAdmin && (
-                <button
-                onClick={deleteRow}
-                className="my-2 w-36 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-red-600 text-white shadow-md hover:bg-red-700"
-                >
-                Unassign Users
-                </button>
-            )}
-        </div> 
-            <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            getRowId={(row) => row?.ID}
-            checkboxSelection
-            rowSelectionModel={rowSelection}
-            onRowSelectionModelChange={(newRowSelection) => {
-            setRowSelection(newRowSelection);
-            }}
-            slots={{ toolbar: GridToolbarQuickFilter }}
-            />
+      ]
+      return(
+        <div>
+            <div className="flex space-x-4">
+                {userData.isAdmin && (
+                  <button
+                    onClick={() => setManageUsersDialog(true)}
+                    className="my-2 w-28 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-green-600 text-white shadow-md hover:bg-green-700"
+                  >
+                    Assign Users
+                  </button>
+                )}
+                {userData.isAdmin && (
+                  <button
+                    onClick={deleteRow}
+                    className="my-2 w-36 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-red-600 text-white shadow-md hover:bg-red-700"
+                  >
+                    Unassign Users
+                  </button>
+                )}
+              </div> 
+              <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={5}
+              getRowId={(row) => row?.ID}
+              checkboxSelection
+              rowSelectionModel={rowSelection}
+              onRowSelectionModelChange={(newRowSelection) => {
+                setRowSelection(newRowSelection);
+              }}
+              slots={{ toolbar: GridToolbarQuickFilter }}
+              />
             <Dialog open={manageUsersDialog} onClose={() => setManageUsersDialog(false)} >
                 <DialogTitle>Assign Users</DialogTitle>
-                <DialogContent className="w-128">
-                <Autocomplete
-                    className="mt-4"
-                    id="user-select"
-                    options={otherUsers}
-                    getOptionLabel={(option) => option.displayName}
-                    value={selectedUser}
-                    onChange={(event, newValue) => setSelectedUser(newValue)}
-                    multiple
-                    disableCloseOnSelect
-                    renderInput={(params) =><TextField {...params} label="Users" />}
-                    renderOption={(props, option) => (
-                    <li {...props} className="flex justify-between items-center p-2 border-b">
-                        <div>
-                        <div className="font-bold">{option.displayName}<span className="font-normal text-gray-400"> {option.orgs.join(', ')}</span></div>
-                        <div className="text-sm">{option.email}</div>
-                        </div>
-                        <Checkbox
-                        color="primary"
-                        checked={selectedUser.some((user) => user.id === option.id)}
-                        />
-                    </li>
-                    )}
-                    PopperProps={{
-                    className: 'max-h-60 overflow-y-auto',
-                    }}
-                />
-                </DialogContent>
+                  <DialogContent className="items-center w-80 md:w-128">
+                  <Autocomplete
+                      className="mt-4"
+                      id="user-select"
+                      options={otherUsers}
+                      getOptionLabel={(option) => option.displayName}
+                      value={selectedUser}
+                      onChange={(event, newValue) => setSelectedUser(newValue)}
+                      multiple
+                      disableCloseOnSelect
+                      renderInput={(params) =><TextField {...params} label="Users" />}
+                      renderOption={(props, option) => (
+                        <li {...props} className="flex justify-between items-center p-2 border-b">
+                          <div>
+                            <div className="font-bold">{option.displayName}<span className="font-normal text-gray-400"> {option.orgs.join(', ')}</span></div>
+                            <div className="text-sm">{option.email}</div>
+                          </div>
+                          <Checkbox
+                            color="primary"
+                            checked={selectedUser.some((user) => user.id === option.id)}
+                          />
+                        </li>
+                      )}
+                    />
+                  </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleAddUsers} color="primary">
-                        Assign
+                  <Button onClick={handleAddUsers} color="primary">
+                      Assign
                     </Button>
-                    <Button onClick={()=>setManageUsersDialog(false)} color="primary">
+                  <Button onClick={()=>setManageUsersDialog(false)} color="primary">
                     Cancel
-                    </Button>
+                  </Button>
                 </DialogActions>
-            </Dialog>
-    </div>
-    )
+             </Dialog>
+        </div>
+      )
 }
