@@ -19,26 +19,30 @@ const Organizations = ({history}) => {
   const [error, setError] = useState('');
   const [orgList, setOrgList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [change, setChange] = useState(false);
   const [newOrg, setNewOrg] = useState({
     OrgName: '',
     OrgID: null,
     Users: [],
   });
-
    useEffect(()=> {
-     const listOrgs = async () => {
-       const listOrg = await client.entities.organizations.list();
-       setOrgList(listOrg.items)
-       setLoading(false)
-     }
-     listOrgs();
-     console.log(orgList);
-   }, [change])
-
+    const listOrgs = async () => {
+      const listOrg = await client.entities.organizations.list({
+      readMode: 'NODE_LEDGERED',
+    });
+      setOrgList(listOrg.items)
+      setLoading(false)
+    }
+    const unsubscribe = client.entities.organizations.onAdd((data)=>{
+      console.log('Subscription update:', data);
+      listOrgs();
+    })
+    listOrgs();
+    console.log(orgList);
+    return () => {unsubscribe();};
+   }, [])
   const columns = [
     { field: 'OrgName', headerName: 'Org Name', flex:1 },
-    { field: 'OrgID', headerName: 'Org ID', flex: 1 },
+    { field: 'OrgID', headerName: 'Org ID', flex:1 },
     {
       field: 'View Details',
       headerName: 'View Details',
@@ -63,14 +67,22 @@ const Organizations = ({history}) => {
       setError('Organization ID is not unique.');
       return;
     }
+    if (newOrg.OrgName.includes('/'))
+    {
+      setError("Organization name can't include slashes")
+      return;
+    }
     const addOrgResponse = await client.entities.organizations.add({
       OrgName: newOrg.OrgName,
       OrgID: parseInt(newOrg.OrgID, 10),
       Users: [],
     });
-
-    setChange(!change);
     setOpenDialog(false);
+    setNewOrg({
+      OrgName: '',
+      OrgID: null,
+      Users: [],
+    })
     setError('');
   };
   return (
@@ -80,7 +92,7 @@ const Organizations = ({history}) => {
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Organizations</h1>
         </div>
       </header>
-      {loading ? <div>loading</div> : 
+      {loading ? <div className="mx-auto text-[20px] max-w-7xl px-4 py-2 sm:px-6 lg:px-8">Loading</div> : 
       <main>
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
             <div className ="flex justify-between">
@@ -101,7 +113,7 @@ const Organizations = ({history}) => {
             />
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Create New Organization</DialogTitle>
-        <div className="p4 w-128">
+        <div className="p4 items-center w-80 md:w-128">
         <DialogContent>
           <div className = "flex flex-col space-y-1 ">
           <TextField
@@ -113,6 +125,7 @@ const Organizations = ({history}) => {
           <TextField
             label="Organization ID"
             fullWidth
+            type="number"
             value={newOrg.OrgID}
             onChange={(e) => setNewOrg({ ...newOrg, OrgID: e.target.value })}
           />

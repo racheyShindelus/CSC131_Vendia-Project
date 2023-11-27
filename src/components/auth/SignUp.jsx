@@ -93,7 +93,7 @@ export const SignUp = () => {
             {isLoading ? "Signing Up..." : "Sign Up"} 
           </button>
           {error && <div className="text-red-500">{error}</div>}
-            <div className="text-base">
+            <div className="text-base mt-[10px]">
           Already have an account?  
           <Link to= "/login" className ="text-base text-blue-500"> Sign In</Link>
         </div>

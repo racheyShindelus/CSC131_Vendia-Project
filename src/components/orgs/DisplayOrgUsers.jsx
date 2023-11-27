@@ -55,7 +55,8 @@ export const DisplayOrgUsers = ({org}) => {
       return () => {
         unsubscribe();
       };
-    }, [org.OrgName]);
+    }, [org]);
+
 
     const deleteRow = async () => {
       for (let i = 0; i < rowSelection.length; i++) {
@@ -144,7 +145,8 @@ export const DisplayOrgUsers = ({org}) => {
               />
             <Dialog open={manageUsersDialog} onClose={() => setManageUsersDialog(false)} >
                 <DialogTitle>Assign Users</DialogTitle>
-                  <DialogContent className="w-128">
+                  <DialogContent className="items-center w-80 md:w-128">
+
                   <Autocomplete
                       className="mt-4"
                       id="user-select"
@@ -167,9 +169,6 @@ export const DisplayOrgUsers = ({org}) => {
                           />
                         </li>
                       )}
-                      PopperProps={{
-                        className: 'max-h-60 overflow-y-auto',
-                      }}
                     />
                   </DialogContent>
                 <DialogActions>

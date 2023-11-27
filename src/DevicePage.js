@@ -22,14 +22,15 @@ export const DevicePage = () => {
 
     useEffect(() => {
         const loadData = async () => {
+
             const tempFilteredTestList = await client.entities.test.list({
                 filter: {
                   Device: {
                     contains: DeviceName.toString(),
                   }
                 },
+                readMode: 'NODE_LEDGERED',
             });
-
 
             const tempRows = tempFilteredTestList?.items.map((test) => ({
                 ID: test._id,
