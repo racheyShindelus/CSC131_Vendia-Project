@@ -31,7 +31,6 @@ function DeviceForm({ onAddDevice }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <h2>Add a Device</h2> */}
       <div>
         <label>
           Device Name:
@@ -49,11 +48,6 @@ function DeviceForm({ onAddDevice }) {
         <label>
           Completion:
           <input
-            // type="checkbox"
-            // name="completion"
-            // class="ml-2 h-5 w-5 text-indigo-600 rounded"
-            // checked={device.completion}
-            // onChange={handleChange}
             type="number"
             name="completion"
             class="ml-2 pl-2 pr-2 w-16 border border-black rounded focus:outline-none"
@@ -120,21 +114,6 @@ function AddDevice() {
         ))}
       </ul>
     </div>
-    // <div>
-    //   <h1>Device Management</h1>
-    //   <DeviceForm onAddDevice={handleAddDevice} />
-    //   <h2>Added Devices:</h2>
-    //   <ul>
-    //     {devices.map((device, index) => (
-    //       <li key={index}>
-    //         <strong>Device Name:</strong> {device.deviceName},{' '}
-    //         <strong>Completion:</strong> {device.completion ? 'Yes' : 'No'},{' '}
-    //         <strong>Archived:</strong> {device.archived ? 'Yes' : 'No'},{' '}
-    //         <strong>Device Title:</strong> {device.deviceTitle}
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
   );
 }
 

@@ -3,13 +3,10 @@ import {auth} from '../../firebase'
 import { signOut } from "firebase/auth"
 import { Link, Redirect } from 'react-router-dom'
 import { useAuth } from '../../AuthContext'
-// import { useData } from '../../DataContext'
 
-// export const AuthDetails = () => {
 export const AuthDetails = (props) => {
     const [redirect, setRedirect] = useState(false);
     const { authUser, loading } = useAuth();
-    // const { userData } = useData();
   
     const userSignOut = () => {
       signOut(auth).then(() => {
@@ -38,8 +35,6 @@ export const AuthDetails = (props) => {
             ) : (
               <><Link to="/login" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Login</Link><Link to="/signup" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Register</Link></>
             )}
-            {/* <Link to="/login" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Login</Link>
-            <Link to="/signup" className="block flex items-left w-48 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-black">Register</Link> */}
           </div>
         }
       </form>

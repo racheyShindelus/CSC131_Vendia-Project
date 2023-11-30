@@ -1,4 +1,4 @@
-.home-container {
+/* .home-container {
   width: 100%;
   display: flex;
   z-index: 100;
@@ -10,7 +10,6 @@
   background-color: #dfdfdf;
 }
 .home-top-header {
-  /* width: 95%; */
   display: flex;
   align-items: center;
   padding-top: 16px;
@@ -25,7 +24,6 @@
   padding-bottom: 25px;
 }
 .home-top-header-title {
-  /* margin-left: 8px; */
   margin-left: 1px;
   padding-right: 10px;
   font-size: 32px;
@@ -33,14 +31,12 @@
 }
 .home-top-header-nav {
   display: contents;
-  /* display: flex; */
   position: relative;
 }
 .home-navbar-text {
   font-size: 20px;
   text-decoration: none;
   color: inherit;
-  /* margin-left: 32px; */
 }
 .home-navbar-text:hover {
   border-bottom: 2px solid #001affcb;
@@ -65,7 +61,7 @@
 .home-return-to-home-button:hover {
   background-color: #20359ec2;
 }
-/* .home-navbar-buttons {
+.home-navbar-buttons {
   background-color: transparent;
   border: none;
   font-size: 18px;
@@ -74,7 +70,7 @@
   margin-left: 32px;
   cursor: pointer;
   outline: none;
-} */
+}
 .home-search-bar {
   width: 400px;
   height: 35px;
@@ -160,8 +156,6 @@
   width: 142px;
   height: 43px;
   font-size: 16px;
-  /* margin-left: 45%;
-  margin-top: 2%; */
   border-radius: 20px;
   background-color: #ffffff;
   box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.1);
@@ -177,17 +171,13 @@
 }
 
 .home-test-devices-container {
-  /* width: 1400px; */
   width: auto;
-  /* height: 573px; */
   height: 520px;
   display: grid;
-  /* grid-gap: 32px; */
   align-items: flex-start;
   grid-row-gap: 30px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  /* padding-bottom: 25px; */
 }
 .home-device1 {
   width: 90%;
@@ -216,7 +206,7 @@
   font-size: 16px;
   margin-bottom: 18px;
 }
-/* .home-device1 button{
+.home-device1 button{
   border-radius: 10px;
   background-color: #f3f3f3;
   width: 40%;
@@ -225,7 +215,7 @@
 }
 .home-device1 button:hover{
   background-color: #dfdfdf;
-} */
+}
 .home-device1button {
   display: flex;
   color: inherit;
@@ -239,13 +229,13 @@
   font-size: 16px;
   text-decoration: none;
 }
-/* .pagination {
+.pagination {
   bottom: -1%;
   left: 12%;
-} */
-/* .pagination button {
+}
+.pagination button {
   margin-right: 5px;
-} */
+}
 .home-device1button:hover {
   background-color: #dfdfdf;
 }
@@ -304,4 +294,4 @@
   .home-test-devices-container {
     grid-gap: 8px;
   }
-}
+} */

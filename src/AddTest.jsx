@@ -160,20 +160,6 @@ function AddTest() {
         ))}
       </ul>
     </div>
-
-    // <div>
-    //   <h1>Test Management</h1>
-    //   <TestForm onAddTest={handleAddTest} />
-    //   <h2>Added Tests:</h2>
-    //   <ul>
-    //     {tests.map((test, index) => (
-    //       <li key={index}>
-    //         <strong>Test Name:</strong> {test.testName}, <strong>Test ID:</strong> {test.testID},{' '}
-    //         <strong>Completed:</strong> {test.completed ? 'Yes' : 'No'}
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
   );
 }
 
