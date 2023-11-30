@@ -51,16 +51,14 @@ export const DisplayOrgUsers = ({org}) => {
           console.error('Error getting users:', error);
         }
       };
-
       const usersCollection = collection(db, "users");
-
       const unsubscribe = onSnapshot(usersCollection, () => {
         listOrgUsers();
       });
       return () => {
         unsubscribe();
       };
-    }, [org.OrgName]);
+    }, [org]);
 
     const deleteRow = async () => {
       for (let i = 0; i < rowSelection.length; i++) {
@@ -88,55 +86,56 @@ export const DisplayOrgUsers = ({org}) => {
     }
 
     const handleAddUsers = async () => {
-        selectedUser.forEach(async(user) => {
-          const userDocRef = await doc(db, 'users', user.id)
-            getDoc(userDocRef)
-              .then((doc) => {
-                if(doc.exists()) {
-                  const data = doc.data();
-                  const newOrgs = data.orgs || [];
-                if(!newOrgs.includes(org?.OrgName)){
-                    newOrgs.push(org.OrgName)
-                    return updateDoc(userDocRef, {orgs: newOrgs})
-                  }
+      selectedUser.forEach(async(user) => {
+        const userDocRef = await doc(db, 'users', user.id)
+          getDoc(userDocRef)
+            .then((doc) => {
+              if(doc.exists()) {
+                const data = doc.data();
+                const newOrgs = data.orgs || [];
+              if(!newOrgs.includes(org?.OrgName)){
+                  newOrgs.push(org.OrgName)
+                  return updateDoc(userDocRef, {orgs: newOrgs})
                 }
-              })
-              .then(() => {
-                console.log(`Value '${org?.OrgName}' added from the 'orgs' array.`);
-              })
-              .catch((error)=> {
-                console.error('Error adding value:', error)
-              })
-        })
-        setSelectedUser([]);
-        setManageUsersDialog(false)
+              }
+            })
+            .then(() => {
+              console.log(`Value '${org?.OrgName}' added from the 'orgs' array.`);
+            })
+            .catch((error)=> {
+              console.error('Error adding value:', error)
+            })
+      })
+      setSelectedUser([]);
+      setManageUsersDialog(false)
     }
 
     const columns = [
-        { field: 'displayName', headerName: "Username", flex:2 },
-        { field: 'isAdmin', headerName: 'Admin', flex:2 },
-        { field: 'email', headerName: 'Email', flex:2 },
+      { field: 'displayName', headerName: "Username", flex:2 },
+      { field: 'isAdmin', headerName: 'Admin', flex:2 },
+      { field: 'email', headerName: 'Email', flex:2 },
     ]
+    
     return(
-    <div>
-        <div className="flex space-x-4">
-            {userData.isAdmin && (
+      <div>
+          <div className="flex space-x-4">
+              {userData.isAdmin && (
                 <button
-                onClick={() => setManageUsersDialog(true)}
-                className="my-2 w-28 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-green-600 text-white shadow-md hover:bg-green-700"
+                  onClick={() => setManageUsersDialog(true)}
+                  className="my-2 w-28 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-green-600 text-white shadow-md hover:bg-green-700"
                 >
-                Assign Users
+                  Assign Users
                 </button>
-            )}
-            {userData.isAdmin && (
+              )}
+              {userData.isAdmin && (
                 <button
-                onClick={deleteRow}
-                className="my-2 w-36 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-red-600 text-white shadow-md hover:bg-red-700"
+                  onClick={deleteRow}
+                  className="my-2 w-36 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-red-600 text-white shadow-md hover:bg-red-700"
                 >
-                Unassign Users
+                  Unassign Users
                 </button>
-            )}
-        </div> 
+              )}
+            </div> 
             <DataGrid
             rows={rows}
             columns={columns}
@@ -145,13 +144,14 @@ export const DisplayOrgUsers = ({org}) => {
             checkboxSelection
             rowSelectionModel={rowSelection}
             onRowSelectionModelChange={(newRowSelection) => {
-            setRowSelection(newRowSelection);
+              setRowSelection(newRowSelection);
             }}
             slots={{ toolbar: GridToolbarQuickFilter }}
             />
-            <Dialog open={manageUsersDialog} onClose={() => setManageUsersDialog(false)} >
-                <DialogTitle>Assign Users</DialogTitle>
-                <DialogContent className="w-128">
+          <Dialog open={manageUsersDialog} onClose={() => setManageUsersDialog(false)} >
+              <DialogTitle>Assign Users</DialogTitle>
+                <DialogContent className="items-center w-80 md:w-128">
+
                 <Autocomplete
                     className="mt-4"
                     id="user-select"
@@ -163,31 +163,28 @@ export const DisplayOrgUsers = ({org}) => {
                     disableCloseOnSelect
                     renderInput={(params) =><TextField {...params} label="Users" />}
                     renderOption={(props, option) => (
-                    <li {...props} className="flex justify-between items-center p-2 border-b">
+                      <li {...props} className="flex justify-between items-center p-2 border-b">
                         <div>
-                        <div className="font-bold">{option.displayName}<span className="font-normal text-gray-400"> {option.orgs.join(', ')}</span></div>
-                        <div className="text-sm">{option.email}</div>
+                          <div className="font-bold">{option.displayName}<span className="font-normal text-gray-400"> {option.orgs.join(', ')}</span></div>
+                          <div className="text-sm">{option.email}</div>
                         </div>
                         <Checkbox
-                        color="primary"
-                        checked={selectedUser.some((user) => user.id === option.id)}
+                          color="primary"
+                          checked={selectedUser.some((user) => user.id === option.id)}
                         />
-                    </li>
+                      </li>
                     )}
-                    PopperProps={{
-                    className: 'max-h-60 overflow-y-auto',
-                    }}
-                />
+                  />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleAddUsers} color="primary">
-                        Assign
-                    </Button>
-                    <Button onClick={()=>setManageUsersDialog(false)} color="primary">
-                    Cancel
-                    </Button>
-                </DialogActions>
-            </Dialog>
-    </div>
+              <DialogActions>
+                <Button onClick={handleAddUsers} color="primary">
+                    Assign
+                  </Button>
+                <Button onClick={()=>setManageUsersDialog(false)} color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+           </Dialog>
+      </div>
     )
 }
