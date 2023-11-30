@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { vendiaClient } from '../../vendiaClient';
 import { DataGrid, GridToolbarQuickFilter } from '@mui/x-data-grid';
-import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Card, CardContent, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -19,6 +21,8 @@ export const DisplayOrgTests = ({org}) => {
     const [manageTestsDialog, setManageTestsDialog] = useState(false);
     const [testSelection, setTestSelection] = useState([]);
     const [addTest, setAddTest] = useState([])
+    const [openNotes, setOpenNotes] = useState(false);
+    const [selectedNote, setSelectedNote] = useState();
     const {userData} = useData();
 
     useEffect(() => {
@@ -39,7 +43,7 @@ export const DisplayOrgTests = ({org}) => {
                 TestName: test.TestName,
                 TestMethod: test.TestMethod,
                 Notes: test.Notes,
-                Completed: removeNull(test.Completed),
+                Completed: test.Completed,
                 UpdatedBy: test.UpdatedBy
             }));
             const filterOtherTests = await client.entities.test.list({
@@ -75,21 +79,40 @@ export const DisplayOrgTests = ({org}) => {
         }
     }, []);
     const columns = [
-        {field: 'Device', headerName: 'Device', width: 90, editable: false},
-        {field: 'TestID', headerName: 'TestID', flex:1, editable: false},
+        {field: 'Device', headerName: 'Device', width:90, editable: false, hide: 'smDown'},
+        {field: 'TestID', headerName: 'TestID', width:30, editable: false},
         {field: 'OrgAssignment', headerName: 'OrgAssignment', flex:2, editable: userData.isAdmin,},
-        {field: 'TestName', headerName: 'TestName', flex:2, editable: true,},
-        {field: 'TestMethod', headerName: 'TestMethod', flex:1, editable: true,},
-        {field: 'Notes', headerName: 'Notes', flex:1, editable: true,},
-        {field: 'Completed', headerName: 'Completed', flex:1, editable: true,},
-        {field: 'UpdatedBy', headerName: 'UpdatedBy', flex:1, editable: true,},
+        {field: 'TestName', headerName: 'TestName', width:150, editable: true,},
+        {field: 'TestMethod', headerName: 'TestMethod', width:150, editable: true,},
+        {field: 'Notes', headerName: 'Notes', width:80, editable: true, renderCell: (params) => (
+            <div className="mx-auto">
+              <button className="text-blue-400 hover:text-blue-500"onClick={() => handleViewNotes(params.row)}>
+                View
+              </button>
+            </div>
+          ),},
+        {field: 'Completed', headerName: 'Completed', width:160, editable: true, renderCell: (params) => (
+            <div className="flex mx-auto">
+                {params.value ? (
+                    <CheckCircleOutlineIcon className="text-green-500" />
+                    ) : (
+                    <HighlightOffIcon className="text-red-500" />
+                )}
+            </div>
+            ),
+        },
+        {field: 'UpdatedBy', headerName: 'UpdatedBy', width:200, editable: true, renderCell: (params) => (
+            <div className="mx-auto font-bold">
+                {params.value}
+            </div>
+          ),},
     ];
-    const addColumns =[
-        {field: 'Device', headerName: 'Device', flex: 1, editable: false},
-        {field: 'TestName', headerName: 'TestName', flex:1, editable: false,},
-        {field: 'OrgAssignment', headerName: 'OrgAssignment', flex:1, editable: false,},
-        
-    ]
+
+    const handleViewNotes = (test) => {
+        setSelectedNote(test);
+        setOpenNotes(true);
+    };
+
     const removeNull = (value) =>
     {
         if(typeof(value) === 'boolean')
@@ -99,20 +122,26 @@ export const DisplayOrgTests = ({org}) => {
     }
 
     const editRow = async (row) => {
-        const oldRow = await row;
-        const newRow = await client.entities.test.update({
+        try {
+          const oldRow = await row;
+          //console.log('Editing row:', row);
+          const newRow = await client.entities.test.update({
             _id: oldRow._id,
-            //Device: oldRow.Device,
+            Device: oldRow.Device,
             TestID: oldRow.TestID,
             OrgAssignment: oldRow.OrgAssignment,
             TestName: oldRow.TestName,
             TestMethod: oldRow.TestMethod,
             Notes: oldRow.Notes,
             Completed: oldRow.Completed,
-            UpdatedBy: userData.displayName 
-            });    
-            return row;
-    };
+            UpdatedBy: userData.displayName,
+          });
+          return newRow;
+        } catch (error) {
+          console.error('Error editing row:', error);
+          throw error;
+        }
+      };
 
     const removeTests = async () => {
         try {
@@ -143,6 +172,7 @@ export const DisplayOrgTests = ({org}) => {
                     }
                 )
             })
+            await Promise.all(selectedTests);
         } catch (error) {
             console.error(error);
         }
@@ -163,8 +193,8 @@ export const DisplayOrgTests = ({org}) => {
         console.log(error.message);
     }, []);
 
-    const handleAddTests = () => {
-        testSelection.forEach(async (test) => {
+    const handleAddTests = async () => {
+        await Promise.all(testSelection.forEach(async (test) => {
             const newOrgAssignment = test.OrgAssignment.includes(org.OrgName)
                                         ? test.OrgAssignment
                                         : test.OrgAssignment + ", " + org.OrgName;
@@ -181,7 +211,7 @@ export const DisplayOrgTests = ({org}) => {
                     UpdatedBy: userData.displayName
                 }
             )
-        })
+        }))
         setManageTestsDialog(false);
         setTestSelection([]);
     }
@@ -193,74 +223,84 @@ export const DisplayOrgTests = ({org}) => {
 
     return (
         <div>
-        <div className="flex space-x-4">
-            {userData.isAdmin && <button onClick={()=>setManageTestsDialog(true)} className="my-2 w-28 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-green-600 text-white shadow-md hover:bg-green-700">Assign Tests</button>}
-            {userData.isAdmin && <button onClick={removeTests} className="my-2 w-36 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-red-600 text-white shadow-md hover:bg-red-700">Unassign Tests</button>}
-        </div>
-        <DataGrid
-                rows = {rows}
-                columns = {columns}
-                getRowId={(rows) =>  rows?._id}
-                isCellEditable={(params) => isOrgAssigned(params.row.OrgAssignment) === true}
-
-                disableColumnFilter
-                disableColumnSelector
-                disableDensitySelector
-                disableRowSelectionOnClick
-
-                checkboxSelection
-                onRowSelectionModelChange={(newRowSelection) => {
-                    setRowSelection(newRowSelection)
-                }}
-                slots={{ toolbar: GridToolbarQuickFilter }}
-                processRowUpdate={editRow}
-                onProcessRowUpdateError={handleProcessRowUpdateError}
-            />
-            <Dialog open={manageTestsDialog} onClose={handleCloseDialog}>
-                <DialogTitle>Assign Tests</DialogTitle>
-                    <DialogContent >
-                        <div className="max-h-[40vh] w-128">
-                        <Autocomplete
-                            className="mt-4"
-                            id="test-select"
-                            options={addTest}
-                            groupBy={(option)=> option.Device}
-                            getOptionLabel={(option) => option.TestName}
-                            value={testSelection}
-                            onChange={(event, newValue) => setTestSelection(newValue)}
-                            multiple
-                            disableCloseOnSelect
-                            renderInput={(params) =><TextField {...params} label="Tests" />}
-                            renderOption={(props, option, { selected }) => (
-                                <li {...props} className="flex justify-between items-center p-2 border-b">
-                                    <div>
-                                        <div className="">
-                                            {option.TestName} <span className="text-gray-400">id:{option.TestID}</span>
+            <div className="flex space-x-4">
+                {userData.isAdmin && <button onClick={()=>setManageTestsDialog(true)} className="my-2 w-28 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-green-600 text-white shadow-md hover:bg-green-700">Assign Tests</button>}
+                {userData.isAdmin && <button onClick={removeTests} className="my-2 w-36 h-8 text-base flex items-center justify-center font-bold no-underline rounded-2xl bg-red-600 text-white shadow-md hover:bg-red-700">Unassign Tests</button>}
+            </div>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    isCellEditable={(params) => isOrgAssigned(params.row.OrgAssignment) === true}
+                    disableColumnFilter
+                    disableColumnSelector
+                    disableDensitySelector
+                    disableRowSelectionOnClick
+                    checkboxSelection
+                    onRowSelectionModelChange={(newRowSelection) => {
+                        setRowSelection(newRowSelection);
+                    }}
+                    slots={{ toolbar: GridToolbarQuickFilter }}
+                    processRowUpdate={editRow}
+                    onProcessRowUpdateError={handleProcessRowUpdateError}
+                    />
+                {/*client.entities.test.onUpdate((data)=>{
+                    return ((data.result.OrgName.includes(org.OrgName)) ? 
+                        (<Alert>{data.result.TestName} was successfully added!</Alert>) : 
+                        (<Alert>{data.result.TestName} was successfully removed!</Alert>))
+                })*/}
+                <Dialog open={manageTestsDialog} onClose={handleCloseDialog}>
+                    <DialogTitle>Assign Tests</DialogTitle>
+                        <DialogContent >
+                            <div className="items-center w-80 md:w-128">
+                            <Autocomplete
+                                className="mt-4"
+                                id="test-select"
+                                options={addTest}
+                                groupBy={(option)=> option.Device}
+                                getOptionLabel={(option) => option.TestName}
+                                value={testSelection}
+                                onChange={(event, newValue) => setTestSelection(newValue)}
+                                multiple
+                                disableCloseOnSelect
+                                renderInput={(params) =><TextField {...params} label="Tests" />}
+                                renderOption={(props, option, { selected }) => (
+                                    <li {...props} className="flex justify-between items-center p-2 border-b">
+                                        <div>
+                                            <div className="">
+                                                {option.TestName}
+                                            </div>
+                                            <div className="text-xs text-gray-400">{`${option.OrgAssignment}`}</div>
                                         </div>
-                                        <div className="text-sm text-gray-400">{`${option.OrgAssignment}`}</div>
-                                    </div>
-                                    <Checkbox
-                                        color="primary"
-                                        checked={testSelection.some((selectedOption) => selectedOption._id === option._id)}
-                                    />
-                                </li>
-                            )}
-                        
-                            PopperProps={{
-                                className: 'max-h-60 overflow-y-auto',
-                            }}
-                            />
-                        </div>
-                    </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleAddTests}>
-                        Assign
-                    </Button>
-                    <Button onClick={handleCloseDialog}>
-                        Cancel
-                    </Button >
-                </DialogActions>
-            </Dialog>
-        </div>
-    )
+                                        <Checkbox
+                                            color="primary"
+                                            checked={testSelection.some((selectedOption) => selectedOption._id === option._id)}
+                                        />
+                                    </li>
+                                )}
+                                />
+                            </div>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleAddTests}>
+                                Assign
+                            </Button>
+                            <Button onClick={handleCloseDialog}>
+                                Cancel
+                            </Button >
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog open={openNotes} onClose={()=>{setOpenNotes(false)}}>
+                        <DialogTitle>{selectedNote?.TestName} Notes</DialogTitle>
+                        <DialogContent>
+                        <p>{selectedNote?.Notes}</p>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={()=>{setOpenNotes(false)}} color="primary">
+                            Close
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
+            </div>
+)
 }

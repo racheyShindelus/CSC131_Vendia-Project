@@ -14,6 +14,7 @@ import {Register} from './signup'
 import { ProtectedRoute } from './ProtectedRoute';
 import { AuthProvider } from './AuthContext';
 import { ForgotPassword } from './components/auth/ForgotPassword';
+import { UserProfile } from './UserProfile';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <ProtectedRoute exact path="/Home" component={Home} />
           <ProtectedRoute exact path="/Archive" component={Archive} />
           <ProtectedRoute exact path="/Demo" component={Demo} />
+          <ProtectedRoute exact path="/UserProfile" component={UserProfile}/>
           <ProtectedRoute exact path="/Organizations" component={Organizations} />
           <ProtectedRoute exact path="/Organizations/:name" component={OrganizationDetails} />
           <ProtectedRoute exact path="/Search" component={Search} />

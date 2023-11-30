@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { vendiaClient } from "./vendiaClient";
 import "./Archive.css";
 import './App.css'
+import './Home.js'
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 
@@ -14,6 +15,7 @@ const DeviceListHome = (deviceProps) => {
     const itemsPerPage = 12;
     const devices = deviceProps.devices;
     const currentItems = deviceName?.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+    const [reload, setReload] = useState(false);
 
     const addDummyData = false;
     const numDummyData = 50;
@@ -43,7 +45,8 @@ const DeviceListHome = (deviceProps) => {
 
         }
         listDevices();
-    }, [deviceName])
+        console.log(deviceName);
+    }, [])
 
     return (
         <div>

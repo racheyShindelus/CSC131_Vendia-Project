@@ -5,7 +5,6 @@ import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-//import { filterStateInitializer } from "@mui/x-data-grid/internals";
 import "./Archive.css";
 import "./App.css";
 import { useData } from "./DataContext";
@@ -13,20 +12,20 @@ import { useParams } from 'react-router-dom';
 
 const { client } = vendiaClient();
 
-export const DevicePage = () => {
+const DevicePage = () => {
 
     let { DeviceName, DeviceTitle } = useParams();
     const {userData} = useData();
     const [rows, setRows] = useState([]);
     const [rowSelection, setRowSelection] = useState([]);
-
+    
     useEffect(() => {
         const loadData = async () => {
 
             const tempFilteredTestList = await client.entities.test.list({
                 filter: {
                   Device: {
-                    contains: DeviceName.toString(),
+                    contains: DeviceName,
                   }
                 },
                 readMode: 'NODE_LEDGERED',
@@ -34,28 +33,25 @@ export const DevicePage = () => {
 
             const tempRows = tempFilteredTestList?.items.map((test) => ({
                 ID: test._id,
-                //Device: test.Device,
+                Device: test.Device,
                 TestID: test.TestID,
                 OrgAssignment: test.OrgAssignment,
                 TestName: test.TestName,
                 TestMethod: test.TestMethod,
                 Notes: test.Notes,
-                Completed: removeNull(test.Completed),
+                Completed: test.Completed,
                 UpdatedBy: test.UpdatedBy
-                
             }));
-            setRows(tempRows);
-            //console.log(tempRows);
-
+            setRows(tempRows); 
+                //console.log(trueDeviceTests);
+                //console.log(allDeviceTests);
         }
-
         loadData();
-        console.log('loadData')
-    }, []);
+    }, [DeviceName]);
 
     const columns = [
         {field: 'ID', headerName: 'ID', width: 90, editable: false},
-        //{field: 'Device', headerName: 'Device', width: 150, editable: false},
+        {field: 'Device', headerName: 'Device', width: 150, editable: false},
         {field: 'TestID', headerName: 'TestID', width: 70, editable: false},
         {field: 'OrgAssignment', headerName: 'OrgAssignment', width: 200, editable: true,},
         {field: 'TestName', headerName: 'TestName', width: 150, editable: true,},
@@ -65,62 +61,157 @@ export const DevicePage = () => {
         {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 200, editable: true,},
     ];
 
-    const removeNull = (value) =>
+    const stringToBoolCheck = (value) =>
     {
-        if(typeof(value) === 'boolean')
-            return true;
+        var output;
+        if (value === true)
+            output = true;
+        else if (value === false)
+            output = false;
+        else if(value === 'true')
+        {
+            output = true;
+        }
         else
-            return false;
+            output = false;
+        return output;
     }
 
     const editRow = async (row) => {
         var oldRow = await row;
-        const newRow = await client.entities.test.update({
+
+        var oldIsCompleted = (await client.entities.test.get(oldRow.ID)).Completed;
+        console.log("old: " + oldIsCompleted);
+        var newIsCompleted;
+        
+        await client.entities.test.update({
             _id: oldRow.ID,
-            //Device: oldRow.Device,
+            Device: oldRow.Device,
             TestID: oldRow.TestID,
             OrgAssignment: oldRow.OrgAssignment,
             TestName: oldRow.TestName,
             TestMethod: oldRow.TestMethod,
             Notes: oldRow.Notes,
-            Completed: oldRow.Completed,
+            Completed: stringToBoolCheck(oldRow.Completed),
             UpdatedBy: userData.displayName
         });    
         oldRow.UpdatedBy = userData.displayName;
+
+        newIsCompleted = (await client.entities.test.get(oldRow.ID)).Completed;
+        console.log("new: " + newIsCompleted);
+
+        if (oldIsCompleted !== newIsCompleted)
+        {
+            console.log('Completed has changed!')
+            const trueDeviceTests = (await client.entities.test.list({
+            filter: {
+                Device: {
+                    eq: DeviceName,
+                },
+                _and:{
+                    Completed:{
+                    eq: true,
+                },
+                }
+            },
+                readMode: 'NODE_LEDGERED',
+            })).items.length;
+
+            const allDeviceTests = (await client.entities.test.list({
+            filter: {
+                Device: {
+                    contains: DeviceName,
+                },
+            },
+                readMode: 'NODE_LEDGERED',
+            })).items.length;  
+
+            const findDeviceID = (await client.entities.devices.list({
+            filter: {
+                DeviceName: {
+                    eq: DeviceName,
+                },
+            },
+                readMode: 'NODE_LEDGERED',
+            })).items[0]._id;  
+          
+        
+            await client.entities.devices.update({
+                _id: findDeviceID,
+                Completion: Math.round(trueDeviceTests / allDeviceTests * 100),
+            });    
+
+            console.log("EDIT trueDeviceTests: " + trueDeviceTests);
+            console.log("EDIT allDeviceTests: " + allDeviceTests);
+            console.log("EDIT Progress: "+ Math.round(trueDeviceTests / allDeviceTests * 100) + "%");
+        }
+
         return row;
     };
 
     const deleteRow = async () =>
     {
-        var table = client.entities.test;
-        
+        var tempRows;
+        var tempFilteredRows;
+        var trueDeviceTests = (await client.entities.test.list({
+            filter: {
+                Device: {
+                    eq: DeviceName,
+                },
+                _and:{
+                    Completed:{
+                    eq: true,
+                },
+                }
+            },
+                readMode: 'NODE_LEDGERED',
+            })).items.length;
+        var  allDeviceTests;
+
         for (let i = 0; i < rowSelection.length; i++) 
         {
-            await table.remove(rowSelection[i]);
+            //console.log(await client.entities.test.get(rowSelection[i]));
+            if(i === 0)
+                tempRows = rows;
+            else
+                tempRows = tempFilteredRows;
+        
+            if((await client.entities.test.get(rowSelection[i])).Completed === true)
+                trueDeviceTests = trueDeviceTests - 1;
+            
+            tempFilteredRows = tempRows.filter((entry) => entry.ID !== rowSelection[i]);
+            await client.entities.test.remove(rowSelection[i]);
+            
         }
 
-        const tempFilteredTestList = await client.entities.test.list({
+        allDeviceTests = (await client.entities.test.list({
             filter: {
-              Device: {
-                contains: DeviceName.toString(),
-              }
+                Device: {
+                    contains: DeviceName,
+                },
             },
-        });
+                readMode: 'NODE_LEDGERED',
+            })).items.length;  
 
-        const tempRows = tempFilteredTestList?.items.map((test) => ({
-            ID: test._id,
-            //Device: test.Device,
-            TestID: test.TestID,
-            OrgAssignment: test.OrgAssignment,
-            TestName: test.TestName,
-            TestMethod: test.TestMethod,
-            Notes: test.Notes,
-            Completed: removeNull(test.Completed),
-            UpdatedBy: test.UpdatedBy
-            
-        }));
-        setRows(tempRows);
-        
+            const findDeviceID = (await client.entities.devices.list({
+            filter: {
+                DeviceName: {
+                    eq: DeviceName,
+                },
+            },
+                readMode: 'NODE_LEDGERED',
+            })).items[0]._id;  
+          
+            await client.entities.devices.update({
+                _id: findDeviceID,
+                Completion: Math.round((trueDeviceTests / (allDeviceTests-1)) * 100),
+            });    
+            console.log("DELETE trueDeviceTests: " + trueDeviceTests);
+            console.log("DELETE allDeviceTests: " + (allDeviceTests - 1));
+            console.log("DELETE Progress: " + Math.round((trueDeviceTests / (allDeviceTests-1)) * 100) + "%");
+
+        setRows(tempFilteredRows);
+        setRowSelection([]);
     };
 
     const isOrgAssigned = (orgAssignment) =>
@@ -161,6 +252,7 @@ export const DevicePage = () => {
                         columns: {
                         columnVisibilityModel: {
                             ID: false,
+                            Device: false,
                         },
                         },
                     }}

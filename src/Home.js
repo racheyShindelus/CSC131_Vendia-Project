@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DeviceListHome from './DeviceListHome';
 import { vendiaClient } from "./vendiaClient";
@@ -13,6 +13,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { FormControl, MenuItem, Select } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
 
 const { client } = vendiaClient();
 
@@ -35,8 +37,27 @@ const Home = () => {
   const [testName, setTestName] = useState("");
   const [testMethod, setTestMethod] = useState("");
   const [notes, setNotes] = useState("");
+  const [deviceList, setDeviceList] = useState([]);
+  const [userOrgs, setUserOrgs] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      if (userData) {
+        var tempDeviceList = await client.entities.devices.list({ readMode: 'NODE_LEDGERED' });
+        var tempArr = [];
+        for (let i = 0; i < 4; i++) {
+          tempArr[i] = tempDeviceList.items[i].DeviceName;
+        }
+        setDeviceList(tempArr);
+        setUserOrgs(userData.orgs);
+      }
+    }
+    loadData();
+  }, []);
 
   const addDeviceStateOpen = () => {
+    //console.log(deviceList);
+    //console.log(userOrgs)
     setAddDeviceState(true);
   };
 
@@ -49,10 +70,12 @@ const Home = () => {
   };
 
   const addTestStateClose = () => {
+    setDevice("");
+    setOrgAssignment("");
     setAddTestState(false);
   };
 
-  const addDevice = async() => {
+  const addDevice = async () => {
     await client.entities.devices.add({
       DeviceName: deviceName,
       Completion: 0,
@@ -62,17 +85,15 @@ const Home = () => {
     setAddDeviceState(false);
   };
 
-  const handleDeviceTitleChange = event =>
-  {
+  const handleDeviceTitleChange = event => {
     setDeviceTitle(event.target.value);
   }
 
-  const handleDeviceNameChange = event =>
-  {
+  const handleDeviceNameChange = event => {
     setDeviceName(event.target.value);
   }
 
-  const addTest = async() => {
+  const addTest = async () => {
     await client.entities.test.add({
       Device: device,
       TestID: parseInt(testID),
@@ -80,40 +101,76 @@ const Home = () => {
       TestName: testName,
       TestMethod: testMethod,
       Notes: notes,
+      Completed: Boolean(false),
       UpdatedBy: userData.displayName,
 
     });
 
+    const trueDeviceTests = (await client.entities.test.list({
+      filter: {
+        Device: {
+          eq: device,
+        },
+        _and: {
+          Completed: {
+            eq: true,
+          },
+        }
+      },
+      readMode: 'NODE_LEDGERED',
+    })).items.length;
+
+    const allDeviceTests = (await client.entities.test.list({
+      filter: {
+        Device: {
+          contains: device,
+        },
+      },
+      readMode: 'NODE_LEDGERED',
+    })).items.length;
+
+    const findDeviceID = (await client.entities.devices.list({
+      filter: {
+        DeviceName: {
+          eq: device,
+        },
+      },
+      readMode: 'NODE_LEDGERED',
+    })).items[0]._id;
+    //console.log(findDeviceID);
+
+    await client.entities.devices.update({
+      _id: findDeviceID,
+      Completion: Math.round(trueDeviceTests / allDeviceTests * 100),
+    });
+    console.log("ADD TEST " + trueDeviceTests);
+    console.log("ADD TEST " + allDeviceTests);
+    //console.log(Math.round(trueDeviceTests / allDeviceTests * 100))
     setAddTestState(false);
+
   };
 
-  const handleDeviceChange = event =>
-  {
+  const handleDeviceChange = event => {
     setDevice(event.target.value);
   }
 
-  const handleTestIDChange = event =>
-  {
+  const handleTestIDChange = event => {
     setTestID(event.target.value);
   }
 
-  const handleOrgAssignmentChange = event =>
-  {
+  const handleOrgAssignmentChange = event => {
     setOrgAssignment(event.target.value);
   }
 
-  const handleTestNameChange = event =>
-  {
+  const handleTestNameChange = event => {
     setTestName(event.target.value);
   }
 
-  const handleTestMethodChange = event =>
-  {
+  const handleTestMethodChange = event => {
     setTestMethod(event.target.value);
   }
 
-  const handleNotesChange = event =>
-  {
+  const handleNotesChange = event => {
     setNotes(event.target.value);
   }
 
@@ -178,15 +235,20 @@ const Home = () => {
                   Assign a new test to a device, fill in required the fields below. Required fields are indicated with an asterisk (*).
                 </DialogContentText>
 
-                <TextField
-                  autoFocus
-                  required
-                  fullWidth
-                  id="Device"
-                  label="Device"
-                  variant="standard"
-                  onChange={handleDeviceChange}
-                />
+                <FormControl sx={{ width: 200 }}>
+                  <InputLabel id="Device">Device*</InputLabel>
+                  <Select
+                    labelID="Device"
+                    id="Device"
+                    value={device}
+                    onChange={handleDeviceChange}
+                    label="Device*"
+                  >
+                    {deviceList.map((val) => {
+                      return <MenuItem value={val}>{val}</MenuItem>
+                    })}
+                  </Select>
+              </FormControl>
 
                 <TextField
                   fullWidth
@@ -197,14 +259,20 @@ const Home = () => {
                   onChange={handleTestIDChange}
                 />
 
-                <TextField
-                  required
-                  fullWidth
-                  id="OrgAssignment"
-                  label="OrgAssignment"
-                  variant="standard"
-                  onChange={handleOrgAssignmentChange}
-                />
+                <FormControl sx={{ width: 200 }}>
+                  <InputLabel id="OrgAssignment">Organization(s)*</InputLabel>
+                  <Select
+                    labelID="OrgAssignment"
+                    id="OrgAssignment"
+                    value={orgAssignment}
+                    onChange={handleOrgAssignmentChange}
+                    label="Organization(s)*"
+                  >
+                  {userOrgs.map((val) => {
+                    return <MenuItem value={val}>{val}</MenuItem>
+                  })}
+                </Select>
+              </FormControl>
 
                 <TextField
                   required

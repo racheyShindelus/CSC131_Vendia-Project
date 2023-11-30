@@ -30,7 +30,7 @@ const navigation = [
 ]
 
 const userNavigation = [
-  { name: 'Your Profile', to: '/Organizations' },
+  { name: 'Your Profile', to: '/UserProfile' },
 ]
 
 function classNames(...classes) {
