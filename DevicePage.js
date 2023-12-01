@@ -18,10 +18,10 @@ const { client } = vendiaClient();
 const DevicePage = () => {
 
     let { DeviceName, DeviceTitle } = useParams();
-    const {userData} = useData();
+    const { userData } = useData();
     const [rows, setRows] = useState([]);
     const [rowSelection, setRowSelection] = useState([]);
-    
+
 
 
     useEffect(() => {
@@ -29,15 +29,15 @@ const DevicePage = () => {
 
             const tempFilteredTestList = await client.entities.test.list({
                 filter: {
-                  Device: {
-                    contains: DeviceName,
-                  }
+                    Device: {
+                        contains: DeviceName,
+                    }
                 },
                 readMode: 'NODE_LEDGERED',
             });
 
 
-            
+
             const tempRows = tempFilteredTestList?.items.map((test) => ({
                 ID: test._id,
                 Device: test.Device,
@@ -50,45 +50,43 @@ const DevicePage = () => {
                 UpdatedBy: test.UpdatedBy
             }));
 
-    
-            setRows(tempRows); 
 
-            
-            
-    
-                //console.log(trueDeviceTests);
-                //console.log(allDeviceTests);
+            setRows(tempRows);
 
-            
+
+
+
+            //console.log(trueDeviceTests);
+            //console.log(allDeviceTests);
+
+
 
         }
 
         loadData();
 
-        
+
     }, [DeviceName]);
 
     const columns = [
-        {field: 'ID', headerName: 'ID', width: 90, editable: false},
-        {field: 'Device', headerName: 'Device', width: 150, editable: false},
-        {field: 'TestID', headerName: 'TestID', width: 70, editable: false},
-        {field: 'OrgAssignment', headerName: 'OrgAssignment', width: 200, editable: true,},
-        {field: 'TestName', headerName: 'TestName', width: 150, editable: true,},
-        {field: 'TestMethod', headerName: 'TestMethod', width: 150, editable: true,},
-        {field: 'Notes', headerName: 'Notes', width: 200, editable: true,},
-        {field: 'Completed', headerName: 'Completed', width: 120, editable: true,},
-        {field: 'UpdatedBy', headerName: 'UpdatedBy', width: 200, editable: true,},
+        { field: 'ID', headerName: 'ID', width: 90, editable: false },
+        { field: 'Device', headerName: 'Device', width: 150, editable: false },
+        { field: 'TestID', headerName: 'TestID', width: 70, editable: false },
+        { field: 'OrgAssignment', headerName: 'OrgAssignment', width: 200, editable: true, },
+        { field: 'TestName', headerName: 'TestName', width: 150, editable: true, },
+        { field: 'TestMethod', headerName: 'TestMethod', width: 150, editable: true, },
+        { field: 'Notes', headerName: 'Notes', width: 200, editable: true, },
+        { field: 'Completed', headerName: 'Completed', width: 120, editable: true, },
+        { field: 'UpdatedBy', headerName: 'UpdatedBy', width: 200, editable: true, },
     ];
 
-    const stringToBoolCheck = (value) =>
-    {
+    const stringToBoolCheck = (value) => {
         var output;
         if (value === true)
             output = true;
         else if (value === false)
             output = false;
-        else if(value === 'true')
-        {
+        else if (value === 'true') {
             output = true;
         }
         else
@@ -102,7 +100,7 @@ const DevicePage = () => {
         var oldIsCompleted = (await client.entities.test.get(oldRow.ID)).Completed;
         console.log("old: " + oldIsCompleted);
         var newIsCompleted;
-        
+
         await client.entities.test.update({
             _id: oldRow.ID,
             Device: oldRow.Device,
@@ -113,103 +111,82 @@ const DevicePage = () => {
             Notes: oldRow.Notes,
             Completed: stringToBoolCheck(oldRow.Completed),
             UpdatedBy: userData.displayName
-        });    
+        });
         oldRow.UpdatedBy = userData.displayName;
 
         newIsCompleted = (await client.entities.test.get(oldRow.ID)).Completed;
         console.log("new: " + newIsCompleted);
 
-        
 
-        if (oldIsCompleted !== newIsCompleted)
-        {
-            console.log('Completed has changed!')
-            const trueDeviceTests = (await client.entities.test.list({
+
+
+        const trueDeviceTests = (await client.entities.test.list({
             filter: {
                 Device: {
                     eq: DeviceName,
                 },
-                _and:{
-                    Completed:{
-                    eq: true,
-                },
+                _and: {
+                    Completed: {
+                        eq: true,
+                    },
                 }
             },
-                readMode: 'NODE_LEDGERED',
-            })).items.length;
+            readMode: 'NODE_LEDGERED',
+        })).items.length;
 
-            const allDeviceTests = (await client.entities.test.list({
+        const allDeviceTests = (await client.entities.test.list({
             filter: {
                 Device: {
                     contains: DeviceName,
                 },
             },
-                readMode: 'NODE_LEDGERED',
-            })).items.length;  
+            readMode: 'NODE_LEDGERED',
+        })).items.length;
 
-            const findDeviceID = (await client.entities.devices.list({
+        const findDeviceID = (await client.entities.devices.list({
             filter: {
                 DeviceName: {
                     eq: DeviceName,
                 },
             },
-                readMode: 'NODE_LEDGERED',
-            })).items[0]._id;  
-          
-        
-            await client.entities.devices.update({
-                _id: findDeviceID,
-                Completion: Math.round(trueDeviceTests / allDeviceTests * 100),
-            });    
-
-            console.log("EDIT trueDeviceTests: " + trueDeviceTests);
-            console.log("EDIT allDeviceTests: " + allDeviceTests);
-            console.log("EDIT Progress: "+ Math.round(trueDeviceTests / allDeviceTests * 100) + "%");
+            readMode: 'NODE_LEDGERED',
+        })).items[0]._id;
 
 
-        }
+        await client.entities.devices.update({
+            _id: findDeviceID,
+            Completion: Math.round(trueDeviceTests / allDeviceTests * 100),
+        });
+
+        console.log("EDIT trueDeviceTests: " + trueDeviceTests);
+        console.log("EDIT allDeviceTests: " + allDeviceTests);
+        console.log("EDIT Progress: " + Math.round(trueDeviceTests / allDeviceTests * 100) + "%");
+
 
         return row;
     };
 
-    
 
-    const deleteRow = async () =>
-    {
+
+    const deleteRow = async () => {
 
         var tempRows;
         var tempFilteredRows;
+
         var trueDeviceTests = (await client.entities.test.list({
             filter: {
                 Device: {
                     eq: DeviceName,
                 },
-                _and:{
-                    Completed:{
-                    eq: true,
-                },
+                _and: {
+                    Completed: {
+                        eq: true,
+                    },
                 }
             },
-                readMode: 'NODE_LEDGERED',
-            })).items.length;
-        var  allDeviceTests;
-
-        for (let i = 0; i < rowSelection.length; i++) 
-        {
-            //console.log(await client.entities.test.get(rowSelection[i]));
-            if(i === 0)
-                tempRows = rows;
-            else
-                tempRows = tempFilteredRows;
-        
-            if((await client.entities.test.get(rowSelection[i])).Completed === true)
-                trueDeviceTests = trueDeviceTests - 1;
-            
-            tempFilteredRows = tempRows.filter((entry) => entry.ID !== rowSelection[i]);
-            await client.entities.test.remove(rowSelection[i]);
-            
-        }
-
+            readMode: 'NODE_LEDGERED',
+        })).items.length;
+        var allDeviceTests;
 
         allDeviceTests = (await client.entities.test.list({
             filter: {
@@ -217,26 +194,41 @@ const DevicePage = () => {
                     contains: DeviceName,
                 },
             },
-                readMode: 'NODE_LEDGERED',
-            })).items.length;  
+            readMode: 'NODE_LEDGERED',
+        })).items.length;
 
-            const findDeviceID = (await client.entities.devices.list({
+        for (let i = 0; i < rowSelection.length; i++) {
+            //console.log(await client.entities.test.get(rowSelection[i]));
+            if (i === 0)
+                tempRows = rows;
+            else
+                tempRows = tempFilteredRows;
+
+            if ((await client.entities.test.get(rowSelection[i])).Completed === true)
+                trueDeviceTests = trueDeviceTests - 1;
+            allDeviceTests = allDeviceTests - 1;
+
+            tempFilteredRows = tempRows.filter((entry) => entry.ID !== rowSelection[i]);
+            await client.entities.test.remove(rowSelection[i]);
+
+        }
+
+        const findDeviceID = (await client.entities.devices.list({
             filter: {
                 DeviceName: {
                     eq: DeviceName,
                 },
             },
-                readMode: 'NODE_LEDGERED',
-            })).items[0]._id;  
-          
-        
-            await client.entities.devices.update({
-                _id: findDeviceID,
-                Completion: Math.round((trueDeviceTests / (allDeviceTests-1)) * 100),
-            });    
-            console.log("DELETE trueDeviceTests: " + trueDeviceTests);
-            console.log("DELETE allDeviceTests: " + (allDeviceTests - 1));
-            console.log("DELETE Progress: " + Math.round((trueDeviceTests / (allDeviceTests-1)) * 100) + "%");
+            readMode: 'NODE_LEDGERED',
+        })).items[0]._id;
+
+        await client.entities.devices.update({
+            _id: findDeviceID,
+            Completion: Math.round((trueDeviceTests / (allDeviceTests - 1)) * 100),
+        });
+        console.log("DELETE trueDeviceTests: " + trueDeviceTests);
+        console.log("DELETE allDeviceTests: " + (allDeviceTests));
+        console.log("DELETE Progress: " + Math.round((trueDeviceTests / (allDeviceTests)) * 100) + "%");
 
 
         setRows(tempFilteredRows);
@@ -244,11 +236,9 @@ const DevicePage = () => {
     };
 
 
-    const isOrgAssigned = (orgAssignment) =>
-    {
+    const isOrgAssigned = (orgAssignment) => {
         var output = false;
-        for (let i = 0; i < userData.orgs.length; i++)
-        {
+        for (let i = 0; i < userData.orgs.length; i++) {
             if (orgAssignment === userData.orgs[i])
                 output = true;
         }
@@ -264,7 +254,7 @@ const DevicePage = () => {
         <div className="min-h-full">
             <header className="bg-white shadow">
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900">{DeviceTitle} Tests</h1>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">{DeviceTitle} Tests</h1>
                 </div>
             </header>
             <main>
@@ -272,36 +262,36 @@ const DevicePage = () => {
                     <div>
                         <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
                     </div>
-                    <Button color="primary" startIcon={<RemoveCircleIcon/>} onClick={deleteRow}>
+                    <Button color="primary" startIcon={<RemoveCircleIcon />} onClick={deleteRow}>
                         Remove Entry
                     </Button>
-                <DataGrid
-                    rows = {rows}
-                    columns = {columns}
-                    getRowId={(rows) =>  rows?.ID}
-                    initialState={{
-                        columns: {
-                        columnVisibilityModel: {
-                            ID: false,
-                            Device: false,
-                        },
-                        },
-                    }}
-                    isCellEditable={(params) => isOrgAssigned(params.row.OrgAssignment) === true}
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        getRowId={(rows) => rows?.ID}
+                        initialState={{
+                            columns: {
+                                columnVisibilityModel: {
+                                    ID: false,
+                                    Device: false,
+                                },
+                            },
+                        }}
+                        isCellEditable={(params) => isOrgAssigned(params.row.OrgAssignment) === true}
 
-                    disableColumnFilter
-                    disableColumnSelector
-                    disableDensitySelector
-                    disableRowSelectionOnClick
+                        disableColumnFilter
+                        disableColumnSelector
+                        disableDensitySelector
+                        disableRowSelectionOnClick
 
-                    checkboxSelection
-                    onRowSelectionModelChange={(newRowSelection) => {
-                        setRowSelection(newRowSelection);
-                    }}
-                    slots={{ toolbar: GridToolbarQuickFilter }}
-                    processRowUpdate={editRow}
-                    onProcessRowUpdateError={handleProcessRowUpdateError}
-                />
+                        checkboxSelection
+                        onRowSelectionModelChange={(newRowSelection) => {
+                            setRowSelection(newRowSelection);
+                        }}
+                        slots={{ toolbar: GridToolbarQuickFilter }}
+                        processRowUpdate={editRow}
+                        onProcessRowUpdateError={handleProcessRowUpdateError}
+                    />
                 </div>
             </main>
         </div>
