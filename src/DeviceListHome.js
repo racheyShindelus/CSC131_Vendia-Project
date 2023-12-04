@@ -44,8 +44,7 @@ const DeviceListHome = (deviceProps) => {
     const [deviceList, setDeviceList2] = useState([]);
     const [userOrgs, setUserOrgs] = useState([]);
 
-    const addDummyData = false;
-    const numDummyData = 50;
+    const [time, setTime] = useState(Date.now());
  
     useEffect(() => {
         const listDevices = async () => {
@@ -75,7 +74,11 @@ const DeviceListHome = (deviceProps) => {
 
         console.log("reload");
 
-    }, [reload]);
+        const interval = setInterval(() => setTime(Date.now()), 2000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, [reload, time]);
 
     const addDevice = async () => {
         await client.entities.devices.add({
@@ -85,7 +88,6 @@ const DeviceListHome = (deviceProps) => {
             DeviceTitle: deviceTitle,
         });
         setAddDeviceState(false);
-        // console.log("Page successfully reloaded.");
     };
     
     const addDeviceStateOpen = () => {
