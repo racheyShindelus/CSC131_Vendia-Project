@@ -72,7 +72,7 @@ const DevicePage = () => {
         { field: 'ID', headerName: 'ID', width: 90, editable: false },
         { field: 'Device', headerName: 'Device', width: 150, editable: false },
         { field: 'TestID', headerName: 'TestID', width: 70, editable: false },
-        { field: 'OrgAssignment', headerName: 'OrgAssignment', width: 200, editable: true, },
+        { field: 'OrgAssignment', headerName: 'OrgAssignment', width: 200, editable: false, },
         { field: 'TestName', headerName: 'TestName', width: 150, editable: true, },
         { field: 'TestMethod', headerName: 'TestMethod', width: 150, editable: true, },
         { field: 'Notes', headerName: 'Notes', width: 200, editable: true, },
@@ -82,13 +82,11 @@ const DevicePage = () => {
 
     const stringToBoolCheck = (value) => {
         var output;
-        if (value === true)
+
+        if (String(value) === "true")
             output = true;
-        else if (value === false)
+        else if (String(value) === "false")
             output = false;
-        else if (value === 'true') {
-            output = true;
-        }
         else
             output = false;
         return output;
@@ -96,9 +94,10 @@ const DevicePage = () => {
 
     const editRow = async (row) => {
         var oldRow = await row;
+        //console.log(typeof(oldRow.Completed));
+        //console.log("stringToBoolCheck: " + stringToBoolCheck(oldRow.Completed));
 
         var oldIsCompleted = (await client.entities.test.get(oldRow.ID)).Completed;
-        console.log("old: " + oldIsCompleted);
         var newIsCompleted;
 
         await client.entities.test.update({
@@ -113,11 +112,12 @@ const DevicePage = () => {
             UpdatedBy: userData.displayName
         });
         oldRow.UpdatedBy = userData.displayName;
+        oldRow.Completed = stringToBoolCheck(oldRow.Completed);
 
         newIsCompleted = (await client.entities.test.get(oldRow.ID)).Completed;
+
+        console.log("old: " + oldIsCompleted);
         console.log("new: " + newIsCompleted);
-
-
 
 
         const trueDeviceTests = (await client.entities.test.list({
@@ -170,8 +170,8 @@ const DevicePage = () => {
 
     const deleteRow = async () => {
 
-        var tempRows;
-        var tempFilteredRows;
+        //var tempRows;
+        var tempFilteredRows = rows;
 
         var trueDeviceTests = (await client.entities.test.list({
             filter: {
@@ -186,9 +186,8 @@ const DevicePage = () => {
             },
             readMode: 'NODE_LEDGERED',
         })).items.length;
-        var allDeviceTests;
 
-        allDeviceTests = (await client.entities.test.list({
+        var allDeviceTests = (await client.entities.test.list({
             filter: {
                 Device: {
                     contains: DeviceName,
@@ -197,20 +196,27 @@ const DevicePage = () => {
             readMode: 'NODE_LEDGERED',
         })).items.length;
 
+
+
         for (let i = 0; i < rowSelection.length; i++) {
-            //console.log(await client.entities.test.get(rowSelection[i]));
-            if (i === 0)
-                tempRows = rows;
-            else
-                tempRows = tempFilteredRows;
 
-            if ((await client.entities.test.get(rowSelection[i])).Completed === true)
-                trueDeviceTests = trueDeviceTests - 1;
-            allDeviceTests = allDeviceTests - 1;
 
-            tempFilteredRows = tempRows.filter((entry) => entry.ID !== rowSelection[i]);
-            await client.entities.test.remove(rowSelection[i]);
+            if(isOrgAssigned((await client.entities.test.get(rowSelection[i])).OrgAssignment) === true)
+            {
+                //console.log("isOrgAssigned: " + isOrgAssigned((await client.entities.test.get(rowSelection[i])).OrgAssignment))
+                if ((await client.entities.test.get(rowSelection[i])).Completed === true) {
 
+                    trueDeviceTests = trueDeviceTests - 1;
+    
+                }
+    
+                allDeviceTests = allDeviceTests - 1;
+    
+
+                tempFilteredRows = tempFilteredRows.filter((entry) => entry.ID !== rowSelection[i]);
+                console.log(tempFilteredRows);
+                await client.entities.test.remove(rowSelection[i]);
+            }   
         }
 
         const findDeviceID = (await client.entities.devices.list({
@@ -222,10 +228,21 @@ const DevicePage = () => {
             readMode: 'NODE_LEDGERED',
         })).items[0]._id;
 
-        await client.entities.devices.update({
-            _id: findDeviceID,
-            Completion: Math.round((trueDeviceTests / (allDeviceTests - 1)) * 100),
-        });
+
+        if (allDeviceTests === 0) {
+            await client.entities.devices.update({
+                _id: findDeviceID,
+                Completion: 0,
+            });
+        }
+        else {
+            await client.entities.devices.update({
+                _id: findDeviceID,
+                Completion: Math.round((trueDeviceTests / (allDeviceTests)) * 100),
+            });
+        }
+
+
         console.log("DELETE trueDeviceTests: " + trueDeviceTests);
         console.log("DELETE allDeviceTests: " + (allDeviceTests));
         console.log("DELETE Progress: " + Math.round((trueDeviceTests / (allDeviceTests)) * 100) + "%");
@@ -248,6 +265,8 @@ const DevicePage = () => {
     const handleProcessRowUpdateError = React.useCallback((error) => {
         console.log(error.message);
     }, []);
+
+    
 
 
     return (
@@ -290,6 +309,7 @@ const DevicePage = () => {
                         }}
                         slots={{ toolbar: GridToolbarQuickFilter }}
                         processRowUpdate={editRow}
+                        rowSelectionModel={rowSelection}
                         onProcessRowUpdateError={handleProcessRowUpdateError}
                     />
                 </div>
