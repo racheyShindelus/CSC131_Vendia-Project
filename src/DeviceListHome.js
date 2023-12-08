@@ -6,18 +6,10 @@ import './App.css'
 import './Home.js'
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
-
+import FeedbackMessage from "./components/generic/FeedbackMessage.js";
 import { useData } from "./DataContext";
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, MenuItem, Select } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-
+import {Typography, Button, TextField, Grid, LinearProgress, InputLabel, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 const { client } = vendiaClient();
 
 const DeviceListHome = (deviceProps) => {
@@ -32,18 +24,25 @@ const DeviceListHome = (deviceProps) => {
     const { userData } = useData();
     const [addDeviceState, setAddDeviceState] = useState(false);
     const [addTestState, setAddTestState] = useState(false);
-    const [deviceTitle, setDeviceTitle] = useState("");
-    const [deviceName2, setdeviceName2] = useState("");
     const [device, setDevice] = useState("");
-    const [testID, setTestID] = useState(0);
-    const [orgAssignment, setOrgAssignment] = useState("");
-    const [testName, setTestName] = useState("");
-    const [testMethod, setTestMethod] = useState("");
-    const [notes, setNotes] = useState("");
-
+    const [newTest, setNewTest] = useState({
+        ID: 0,
+        orgAssignment: "",
+        testName: "",
+        testMethod: "",
+        notes: "",
+    })
+    const [newDevice, setNewDevice] = useState({
+        title: "",
+        name: "",
+    })
     const [deviceList, setDeviceList2] = useState([]);
     const [userOrgs, setUserOrgs] = useState([]);
-
+    const [feedback, setFeedback] = useState({
+        open: false,
+        message: "",
+        severity: "",
+    })
     const [time, setTime] = useState(Date.now());
  
     useEffect(() => {
@@ -61,13 +60,19 @@ const DeviceListHome = (deviceProps) => {
 
         const loadData = async () => {
             var tempDeviceList = await client.entities.devices.list({ readMode: 'NODE_LEDGERED' });
+            var orgs = await client.entities.organizations.list({readMode: 'NODE_LEDGERED'})
             var tempArr = [];
             for (let i = 0; i < tempDeviceList.items.length; i++) {
-                tempArr[i] = tempDeviceList.items[i].DeviceName;
-
+                if(tempDeviceList.items[i].Completion < 100) {
+                    tempArr[i] = tempDeviceList.items[i].DeviceName;
+                }
             }
             setDeviceList2(tempArr);
-            setUserOrgs(userData.orgs);
+            tempArr = [];
+            for (let i = 0; i < orgs.items.length; i++) {
+                tempArr[i] = orgs.items[i].OrgName;
+            }
+            setUserOrgs(tempArr);
         }
         loadData();
         listDevices();
@@ -81,13 +86,22 @@ const DeviceListHome = (deviceProps) => {
     }, [reload, time]);
 
     const addDevice = async () => {
+        try {
+        if (!newDevice.name || !newDevice.title) {
+            setFeedback({open: true, message: "Missing required attributes", severity: "error"})
+            return;
+        }
         await client.entities.devices.add({
-            DeviceName: deviceName2,
+            DeviceName: newDevice.name,
             Completion: 0,
             Archived: false,
-            DeviceTitle: deviceTitle,
+            DeviceTitle: newDevice.title,
         });
         setAddDeviceState(false);
+        setFeedback({open: true, message: `${newDevice.name} has been successfully added`, severity: "success"})
+        } catch (error) {
+            setFeedback({open: true, message: error.message, severity: "error"})
+        } 
     };
     
     const addDeviceStateOpen = () => {
@@ -107,32 +121,62 @@ const DeviceListHome = (deviceProps) => {
 
     const addTestStateClose = () => {
         setDevice("");
-        setOrgAssignment("");
+        setNewTest({
+            ID: 0,
+            orgAssignment: "",
+            testName: "",
+            testMethod: "",
+            notes: "",
+        });
         setAddTestState(false);
         console.log("close");
     };
 
-    const handleDeviceTitleChange = event => {
-        setDeviceTitle(event.target.value);
+    const handleDeviceTitleChange = (event) => {
+        setNewDevice((prevData) => ({
+            ...prevData, 
+            title: event.target.value,})
+            );
     }
 
-    const handledeviceName2Change = event => {
-        setdeviceName2(event.target.value);
+    const handledeviceName2Change = (event) => {
+        setNewDevice((prevData) => ({
+            ...prevData,
+            name: event.target.value,
+        }));
     }
 
     const addTest = async () => {
+        try {
+            console.log(newTest)
+            if(!device) {
+                setFeedback({open: true, message: "Missing Required Attribute: device", severity: "error"})
+                return
+            }
+            if(!newTest.orgAssignment && !newTest.testName){
+                setFeedback({open: true, message: "Missing Required Attributes: orgAssignment, testName", severity: "error"})
+                return
+            }
+            if(!newTest.testName){
+                setFeedback({open: true, message: "Missing Required Attribute: testName", severity: "error"}) 
+                return
+            }
+            if(!newTest.orgAssignment){
+                setFeedback({open: true, message: "Missing Required Attribute: orgAssignment", severity: "error"})
+                return
+            }
         await client.entities.test.add({
             Device: device,
-            TestID: parseInt(testID),
-            OrgAssignment: orgAssignment,
-            TestName: testName,
-            TestMethod: testMethod,
-            Notes: notes,
+            TestID: parseInt(newTest.ID),
+            OrgAssignment: newTest.orgAssignment,
+            TestName: newTest.testName,
+            TestMethod: newTest.testMethod,
+            Notes: newTest.notes,
             Completed: Boolean(false),
             UpdatedBy: userData.displayName,
 
         });
-
+        setFeedback({open: true, message: `${newTest.testName} successfully added to ${device}`, severity: "success"})
         const trueDeviceTests = (await client.entities.test.list({
             filter: {
                 Device: {
@@ -189,38 +233,29 @@ const DeviceListHome = (deviceProps) => {
         setReload(reload + 1);
         //console.log(reload)
         //console.log(listDevicesResponse?.items)
+        } catch (error) {
+            setFeedback({open: true, message: error.message, severity: "error"})
+        }
     };
 
     const handleDeviceChange = event => {
         setDevice(event.target.value);
     }
 
-    const handleTestIDChange = event => {
-        setTestID(event.target.value);
-    }
-
-    const handleOrgAssignmentChange = event => {
-        setOrgAssignment(event.target.value);
-    }
-
-    const handleTestNameChange = event => {
-        setTestName(event.target.value);
-    }
-
-    const handleTestMethodChange = event => {
-        setTestMethod(event.target.value);
-    }
-
-    const handleNotesChange = event => {
-        setNotes(event.target.value);
-    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewTest((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      };
 
     return (
         <div className="mx-auto max-w-7xl pb-6 sm:px-6 lg:px-8">
         <div className="flex justify-end my-3 mr-[30px] space-x-3">
-            <Button variant="outlined" onClick={addDeviceStateOpen}>
+            {userData?.isAdmin && <Button variant="outlined" onClick={addDeviceStateOpen}>
                 Add Device
-            </Button>
+            </Button>}
 
             <Dialog open={addDeviceState} onClose={addDeviceStateClose}>
                 <DialogTitle>Add Device</DialogTitle>
@@ -255,20 +290,20 @@ const DeviceListHome = (deviceProps) => {
                 </DialogActions>
             </Dialog>
 
-            <Button variant="outlined" onClick={addTestStateOpen}>
+            {userData?.isAdmin && <Button variant="outlined" onClick={addTestStateOpen}>
                 Assign Test
-            </Button>
+            </Button>}
             </div>
             <Dialog open={addTestState} onClose={addTestStateClose}>
                 <DialogTitle>Assign Testing</DialogTitle>
                 <DialogContent>
 
-                    <DialogContentText>
+                    <DialogContentText >
                         Assign a new test to a device, fill in required the fields below. Required fields are indicated with an asterisk (*).
                     </DialogContentText>
 
 
-                    <FormControl sx={{ width: 200 }}>
+                    <FormControl sx={{ width: 200, marginTop: 2, marginBottom: 2 }} >
                         <InputLabel id="Device">Device*</InputLabel>
                         <Select
                             labelID="Device"
@@ -289,18 +324,21 @@ const DeviceListHome = (deviceProps) => {
                         fullWidth
                         id="TestID"
                         label="TestID"
+                        name="ID"
                         variant="standard"
                         type="number"
-                        onChange={handleTestIDChange}
+                        value={newTest.ID}
+                        onChange={handleInputChange}
                     />
 
-                    <FormControl sx={{ width: 200 }}>
+                    <FormControl sx={{ width: 200, marginTop: 2 }}>
                         <InputLabel id="OrgAssignment">Organization(s)*</InputLabel>
                         <Select
                             labelID="OrgAssignment"
                             id="OrgAssignment"
-                            value={orgAssignment}
-                            onChange={handleOrgAssignmentChange}
+                            name="orgAssignment"
+                            value={newTest.orgAssignment}
+                            onChange={handleInputChange}
                             label="Organization(s)*"
                         >
                             {userOrgs.map((val) => {
@@ -315,8 +353,10 @@ const DeviceListHome = (deviceProps) => {
                         fullWidth
                         id="TestName"
                         label="TestName"
+                        name="testName"
+                        value={newTest.testName}
                         variant="standard"
-                        onChange={handleTestNameChange}
+                        onChange={handleInputChange}
                     />
 
                     <TextField
@@ -324,7 +364,9 @@ const DeviceListHome = (deviceProps) => {
                         id="TestMethod"
                         label="TestMethod"
                         variant="standard"
-                        onChange={handleTestMethodChange}
+                        name="testMethod"
+                        value={newTest.testMethod}
+                        onChange={handleInputChange}
                     />
 
                     <TextField
@@ -332,7 +374,9 @@ const DeviceListHome = (deviceProps) => {
                         id="Notes"
                         label="Notes"
                         variant="standard"
-                        onChange={handleNotesChange}
+                        name="notes"
+                        value={newTest.notes}
+                        onChange={handleInputChange}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -340,22 +384,52 @@ const DeviceListHome = (deviceProps) => {
                     <Button onClick={addTest}>Create Test</Button>
                 </DialogActions>
             </Dialog>
-
+            <FeedbackMessage
+                open={feedback.open}
+                message={feedback.message}
+                severity={feedback.severity}
+                handleClose={() => setFeedback({ open: false, message: feedback.message, severity: feedback.severity })}
+                />
 
         <div className="items-start w-auto pb-5 h-auto grid gap-y-[30px] grid-cols-2 lg:grid-cols-4 lg:grid-rows-3 md:grid-cols-2 md:grid-rows-6">
             {currentItems?.map((item, index) => (
             <div className="shadow-custom w-[90%] flex p-[16px] border border-gray-300 max-w-[MaxWidth] transition-transform transition-shadow transition duration-300 items-start flex-col justify-start bg-white hover:scale-[1.02] hover:shadow-indigo-400" key={index}>
-                <h2 className="mb-[5px] text-[20px] mt-0 font-bold">
-                    #{(page - 1) * itemsPerPage + index + 1}: {item?.DeviceTitle}
-                </h2>
-                <p className="text-[16px] mb-[18px]">
-                    Status: {item?.Completion}%
-                </p>
-                <Link to={`/DevicePage/${item?.DeviceName}/${item?.DeviceTitle}`}
-                className="min-w-[40%] h-[35px] flex text-inherit text-[10px] sm:text-[10px] md:text-[12px] lg:text-[16px] xl:text-[16px] items-center justify-center rounded-[10px] bg-gray-200 border border-black no-underline hover:bg-gray-300"
-                type="button">
-                    View tests
-                </Link>
+                <Grid
+                            container
+                            spacing={1}
+                            justifyContent="center"
+                            direction="column"
+                        
+                    >
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <h2 className="mb-[5px] text-[20px] mt-0 font-bold">
+                            #{(page - 1) * itemsPerPage + index + 1}: {item?.DeviceTitle}
+                        </h2>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3} className="relative">
+                        <LinearProgress
+                                variant="determinate"
+                                value={parseInt(item?.Completion, 10)}
+                                sx={{ height: 25, borderRadius: 5 }}
+                                />
+                                    <Typography  style={{left: `${
+                                                            parseInt(item?.Completion, 10) <= 20
+                                                            ? 'calc(10% + 7.5%)'
+                                                            : parseInt(item?.Completion, 10) >= 90
+                                                            ? 'calc(90% - 7.5%)'
+                                                            : `calc(${parseInt(item?.Completion, 10)}% - 6.5%)`
+                                                        }`,
+                                                        color: "white",
+                                                        }} variant="body2" color="Primary" className="absolute top-5 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{`${parseInt(item?.Completion, 10)}%`}</Typography>  
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <Link to={`/DevicePage/${item?.DeviceName}/${item?.DeviceTitle}`}
+                        className="min-w-[40%] h-[35px] flex text-inherit text-[10px] sm:text-[10px] md:text-[12px] lg:text-[16px] xl:text-[16px] items-center justify-center rounded-[10px] bg-gray-200 border border-black no-underline hover:bg-gray-300"
+                        type="button">
+                            View tests
+                        </Link>
+                    </Grid>
+                </Grid>
             </div>
             ))}
         </div>

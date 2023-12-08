@@ -89,7 +89,39 @@ export const SignIn = () => {
             Need an account? 
             <Link to= "/signup" className ="text-base text-blue-500"> Sign Up</Link>
           </div>
+        {/* <Link to="/forgotpassword" className="block flex items-left w-36 px-0 mt-4 text-base text-gray-700 text-black">Forgot Password?</Link>
+        {error && <div className="text-red-500">{error}</div>} */}
       </form>
     </div>
   );
 };
+
+// import React, { useState } from 'react';
+// import { signInWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "../../firebase";
+// import '../../login.css'
+
+// export const SignIn = () => {
+//     const [email, setEmail] = useState("")
+//     const [password, setPassword] = useState("")
+//     const login = (e) => {
+//         e.preventDefault();
+//         signInWithEmailAndPassword(auth, email, password)
+//             .then((userCredential) => {
+//                 console.log(userCredential);
+//             })
+//             .catch((error) => {
+//                 console.log(error);
+//             })
+//     }
+//     return(
+//         <div className = 'signin--container'>
+//             <form onSubmit={login} className = 'login--fields'>
+//                 <input type= 'email' placeholder='Email...' value={email} onChange={(e)=>setEmail(e.target.value)}></input>
+//                 <input type= 'password' placeholder ='Password...'value={password} onChange={(e)=> setPassword(e.target.value)}></input>
+//                 <button className='signin--button' type = "submit">Sign In</button>
+
+//             </form>
+//         </div>
+//     )
+// }

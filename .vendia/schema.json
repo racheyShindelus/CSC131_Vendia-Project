@@ -16,6 +16,9 @@
     },
     "Devices-acls": {
       "type": "Devices"
+    },
+    "Organizations-acls": {
+      "type": "Organizations"
     }
   },
   "properties": {
@@ -100,6 +103,35 @@
       },
       "description": "Lists all individual devices to be used for testing.",
       "title": "Devices"
+    },
+    "Organizations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "OrgName": {
+            "title": "OrgName",
+            "type": "string",
+            "description": ""
+          },
+          "Users": {
+            "title": "Users",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "OrgID": {
+            "title": "OrgID",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "OrgName"
+        ],
+        "x-vendia-unique": []
+      },
+      "title": "Organizations"
     }
   }
 }

@@ -16,6 +16,7 @@ export const OrganizationDetails = ({ match }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -41,9 +42,12 @@ export const OrganizationDetails = ({ match }) => {
   }, []);
 
   const handleDeleteOrg = async () => {
+    
     const response = await client.entities.organizations.remove(org._id)
     setDeleteDialog(false)
-    setRedirect(true)
+    setTimeout(() => {
+      setRedirect(true)
+    }, 1000)
   }
 
   if (redirect){
