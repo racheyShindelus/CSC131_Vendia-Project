@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useData } from "./DataContext";
-import { Alert, Avatar, Typography, Paper, Button, TextField } from "@mui/material";
+import { Paper, Avatar, Typography, Button, TextField } from "@mui/material";
+import FeedbackMessage from "./components/generic/FeedbackMessage";
 import { Link } from "react-router-dom";
 import { db, auth } from "./firebase";
 import { updateEmail } from "firebase/auth";
@@ -13,24 +14,25 @@ export const UserProfile = () => {
     username: userData.displayName,
     email: userData.email,
   });
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [feedback, setFeedback] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
   const handleEditClick = () => {
     setEditMode(true);
   };
 
   const handleSaveClick = async () => {
-    setError(null);
-    setMessage(null);
     try {
       await updateEmail(auth.currentUser, editedUserData.email);
       const userId = auth.currentUser.uid;
-      console.log(auth.currentUser.uid)
       const userDocRef = doc(db, "users", userId);
       const userDoc = await getDoc(userDocRef);
+
       if (!userDoc.exists()) {
-        setError("Profile does not exist");
-        console.error("User document not found.");
+        setFeedback({ open: true, message: "Profile does not exist", severity: "error" });
         return;
       }
 
@@ -41,15 +43,18 @@ export const UserProfile = () => {
 
       await updateDoc(userDocRef, updatedData);
 
-      setMessage("Successfully updated profile!");
+      setFeedback({
+        open: true,
+        message: "Successfully updated profile!",
+        severity: "success",
+      });
       setEditMode(false);
     } catch (error) {
       console.error("Error saving data:", error);
-      console.error('Stack trace:', error.stack);
-      setError(error.message);
+      console.error("Stack trace:", error.stack);
+      setFeedback({ open: true, message: error.message, severity: "error" });
     }
-      setEditMode(false);
-};
+  };
 
   const handleCancelClick = () => {
     setEditMode(false);
@@ -67,6 +72,7 @@ export const UserProfile = () => {
     }));
   };
 
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md p-8 rounded-lg w-full md:w-2/3 lg:w-1/2">
@@ -83,7 +89,7 @@ export const UserProfile = () => {
             Back to Home
           </Link>
           <div className="flex flex-col md:flex-row">
-          <Paper elevation={3} className="flex-grow mr-0 md:mr-4 mb-4 md:mb-0">
+            <Paper elevation={3} className="flex-grow mr-0 md:mr-4 mb-4 md:mb-0">
               <div className="flex flex-col items-center p-4">
                 <Avatar
                   alt="User Avatar"
@@ -152,16 +158,12 @@ export const UserProfile = () => {
               </div>
             </Paper>
           </div>
-          {error && (
-            <Alert severity="error" className="mt-4">
-              {error}
-            </Alert>
-          )}
-          {message && (
-            <Alert severity="success" className="mt-4">
-              {message}
-            </Alert>
-          )}
+          <FeedbackMessage
+              open={feedback.open}
+              message={feedback.message}
+              severity={feedback.severity}
+              handleClose={() => setFeedback({ open: false, message: feedback.message, severity: feedback.severity })}
+            />
         </main>
       </div>
     </div>

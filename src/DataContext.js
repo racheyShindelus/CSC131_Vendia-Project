@@ -41,7 +41,7 @@ export function DataProvider({ children }) {
   }, []);
 
   return (
-    <DataContext.Provider value={{userData}}>
+    <DataContext.Provider value={{userData, loading}}>
       {!loading && children}
     </DataContext.Provider>
   );

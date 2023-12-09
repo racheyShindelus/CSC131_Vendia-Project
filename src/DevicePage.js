@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 import { vendiaClient } from "./vendiaClient";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import Button from '@mui/material/Button';
+import {TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@mui/material';
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Link } from 'react-router-dom';
 //import { filterStateInitializer } from "@mui/x-data-grid/internals";
 import "./Archive.css";
 import "./App.css";
 import { useData } from "./DataContext";
 import { useParams } from 'react-router-dom';
-
+import FeedbackMessage from "./components/generic/FeedbackMessage";
 
 const { client } = vendiaClient();
 
@@ -21,9 +23,16 @@ const DevicePage = () => {
     const { userData } = useData();
     const [rows, setRows] = useState([]);
     const [rowSelection, setRowSelection] = useState([]);
-
-
-
+    const [openNotes, setOpenNotes] = useState(false);
+    const [selectedNote, setSelectedNote] = useState();
+    const [editNote, setEditNote] = useState(
+        selectedNote?.Notes
+    );
+    const [feedback, setFeedback] = useState({
+        open: false,
+        message: "",
+        severity: "",
+    })
     useEffect(() => {
         const loadData = async () => {
 
@@ -69,17 +78,39 @@ const DevicePage = () => {
     }, [DeviceName]);
 
     const columns = [
-        { field: 'ID', headerName: 'ID', width: 90, editable: false },
-        { field: 'Device', headerName: 'Device', width: 150, editable: false },
-        { field: 'TestID', headerName: 'TestID', width: 70, editable: false },
-        { field: 'OrgAssignment', headerName: 'OrgAssignment', width: 200, editable: false, },
-        { field: 'TestName', headerName: 'TestName', width: 150, editable: true, },
-        { field: 'TestMethod', headerName: 'TestMethod', width: 150, editable: true, },
-        { field: 'Notes', headerName: 'Notes', width: 200, editable: true, },
-        { field: 'Completed', headerName: 'Completed', width: 120, editable: true, },
-        { field: 'UpdatedBy', headerName: 'UpdatedBy', width: 200, editable: true, },
+        {field: 'Device', headerName: 'Device', width:90, editable: false, hide: 'smDown'},
+        {field: 'TestID', headerName: 'TestID', width:90, editable: false},
+        {field: 'OrgAssignment', headerName: 'OrgAssignment', flex:2, editable: userData.isAdmin,},
+        {field: 'TestName', headerName: 'TestName', width:150, editable: true,},
+        {field: 'TestMethod', headerName: 'TestMethod', width:150, editable: true,},
+        {field: 'Notes', headerName: 'Notes', width:80, editable: true, renderCell: (params) => (
+            <div className="mx-auto">
+              <button className="text-blue-400 hover:text-blue-500"onClick={() => handleViewNotes(params.row)}>
+                View/Edit
+              </button>
+            </div>
+          ),},
+        {field: 'Completed', headerName: 'Completed', width:160, editable: true, renderCell: (params) => (
+            <div className="flex mx-auto">
+                {params.value ? (
+                    <CheckCircleOutlineIcon className="text-green-500" />
+                    ) : (
+                    <HighlightOffIcon className="text-red-500" />
+                )}
+            </div>
+            ),
+        },
+        {field: 'UpdatedBy', headerName: 'UpdatedBy', width:200, editable: true, renderCell: (params) => (
+            <div className="mx-auto font-bold">
+                {params.value}
+            </div>
+          ),},
     ];
-
+    const handleViewNotes = (test) => {
+        setSelectedNote(test);
+        setEditNote(test?.Notes)
+        setOpenNotes(true);
+      };
     const stringToBoolCheck = (value) => {
         var output;
 
@@ -158,14 +189,14 @@ const DevicePage = () => {
         console.log("EDIT allDeviceTests: " + allDeviceTests);
         console.log("EDIT Progress: " + Math.round(trueDeviceTests / allDeviceTests * 100) + "%");
 
-
+        setFeedback({open: true, message: `${oldRow.TestName} successfully edited`, severity: "success"})
         return row;
     };
 
 
 
     const deleteRow = async () => {
-
+        
         //var tempRows;
         var tempFilteredRows = rows;
 
@@ -234,7 +265,7 @@ const DevicePage = () => {
         console.log("DELETE allDeviceTests: " + (allDeviceTests));
         console.log("DELETE Progress: " + Math.round((trueDeviceTests / (allDeviceTests)) * 100) + "%");
 
-
+        setFeedback({open: true, message: `Tests successfully removed`, severity: "error"})
         setRows(tempFilteredRows);
         setRowSelection([]);
     };
@@ -243,7 +274,7 @@ const DevicePage = () => {
     const isOrgAssigned = (orgAssignment) => {
         var output = false;
         for (let i = 0; i < userData.orgs.length; i++) {
-            if (orgAssignment === userData.orgs[i])
+            if (orgAssignment.includes(userData.orgs[i]))
                 output = true;
         }
         return output;
@@ -253,6 +284,25 @@ const DevicePage = () => {
         console.log(error.message);
     }, []);
 
+    const handleSaveNote = async () => {
+        const response = await client.entities.test.update({
+            _id: selectedNote.ID,
+            Device: selectedNote.Device,
+            TestID: selectedNote.TestID,
+            OrgAssignment: selectedNote.OrgAssignment,
+            TestName: selectedNote.TestName,
+            TestMethod: selectedNote.TestMethod,
+            Notes: editNote,
+            Completed: selectedNote.Completed,
+            UpdatedBy: userData.displayName
+        })
+        setFeedback({open: true, message: `${selectedNote?.TestName}'s notes have been updated`, severity: "success"})
+        setEditNote("");
+        setOpenNotes(false);
+    }
+    const handleCancelNote = () => {
+        setEditNote(selectedNote?.Notes)
+    }
 
     return (
         <div className="min-h-full">
@@ -266,9 +316,9 @@ const DevicePage = () => {
                     <div>
                         <Link to="/Home" class="w-32 h-8 text-base flex items-center justify-center font-bold no-underline mb-3 mt-3 rounded-2xl bg-indigo-800 text-white shadow-md">Back to Home</Link>
                     </div>
-                    <Button color="primary" startIcon={<RemoveCircleIcon />} onClick={deleteRow}>
+                    {userData?.isAdmin && <Button color="primary" startIcon={<RemoveCircleIcon />} onClick={deleteRow}>
                         Remove Entry
-                    </Button>
+                    </Button>}
                     <DataGrid
                         rows={rows}
                         columns={columns}
@@ -297,6 +347,45 @@ const DevicePage = () => {
                         rowSelectionModel={rowSelection}
                         onProcessRowUpdateError={handleProcessRowUpdateError}
                     />
+                    <FeedbackMessage
+                                open={feedback.open}
+                                message={feedback.message}
+                                severity={feedback.severity}
+                                handleClose={() => setFeedback({ open: false, message: feedback.message, severity: feedback.severity })}
+                                />
+                    <Dialog open={openNotes} onClose={()=>{setOpenNotes(false)}}>
+                                <DialogTitle className="flex justify-between">
+                                    <div>
+                                        {selectedNote?.TestName} Notes
+                                    </div>
+                                </DialogTitle>
+                                <DialogContent>
+                                    <div className="items-center w-80 md:w-128">
+                                        <TextField
+                                        value={editNote}
+                                        onChange={(e) => setEditNote(e.target.value)}
+                                        multiline
+                                        fullWidth
+                                        />
+                                    </div>
+                                </DialogContent>
+                                <DialogActions>
+                                {!(selectedNote?.Notes === editNote) ? 
+                                    <div>
+                                        <Button onClick={handleSaveNote} color="success">
+                                            Save
+                                        </Button>
+                                        <Button onClick={handleCancelNote} color="error">
+                                            Cancel
+                                        </Button>
+                                    </div>
+                                         :
+                                    <Button onClick={()=>{setOpenNotes(false)}} color="primary">
+                                    Close
+                                    </Button>
+                                    }
+                                </DialogActions>
+                            </Dialog>
                 </div>
             </main>
         </div>
