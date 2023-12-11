@@ -59,7 +59,16 @@ const DeviceListHome = (deviceProps) => {
         }
 
         const loadData = async () => {
-            var tempDeviceList = await client.entities.devices.list({ readMode: 'NODE_LEDGERED' });
+            // var tempDeviceList = await client.entities.devices.list({ readMode: 'NODE_LEDGERED' });
+            var tempDeviceList = await client.entities.devices.list({
+                filter: {
+                    Completion: {
+                        lt: 100
+                    }
+                },
+                readMode: 'NODE_LEDGERED',
+            });
+            
             var orgs = await client.entities.organizations.list({readMode: 'NODE_LEDGERED'})
             var tempArr = [];
             for (let i = 0; i < tempDeviceList.items.length; i++) {
